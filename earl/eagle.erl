@@ -120805,7 +120805,6 @@ regex:	Y7998
 
 action:	X7998
 	priority: 7
-	url: http://50.56.98.23:8080/jfredbot/chatmenu.html
 	Acknowledged.
 
 
