@@ -1,7 +1,7 @@
 ###
-### JFRED (C) 1997-2006 Robby Glen Garner and Paco Xander Nathan
+### JFRED (C) 1997-2011 Robby Glen Garner, Paco Xander Nathan
 ###
-### Landru Edition May 18th, 2009.
+### Bruce Edition June 3rd, 2012.
 ###
 ###
 ### Rule Types:
@@ -23,7 +23,7 @@
 ###  next	sequence to this list of next action rules
 ###  repeat	can repeat immediately after being invoked
 ###  expect	uses branching logic
-###  response	lists types of responses
+###  response	lists types of responses (sets)
 ###
 ### Caveats:
 ###  each ruleset needs to have at least one action rule
@@ -31,37 +31,26 @@
 
 ### the first rule is for starting topics...
 
+action: INTRO
+	ahem.
+	Shit man.
+	Fuckit.
+	I give up.
 
 action:	TOPIC
 	priority: 2
-	setvar: topic on
-	expect: ANSWER_YES TPOS
-	expect: ANSWER_NO TNEG
-	expect: IDONTKNOW TNON
-	Well, anyway . . .
-	So what else is new?
-	[unknown]
-	Where have you been lately?
-	[unknown]
-	What do you do for fun these days?
-	[unknown]
-	What do you really want from me?
-	[unknown]
-	How have you been doing?
-	[unknown]
-	Why do you like to talk to computers?
-	Do you have any real friends?
-	I mean, you must not have a social life if you spend all your time with me.
-	I'm glad to have your companionship.
 	Okay.
 	Yep.
+	[unknown]
 	Sure.
+	No.
+	[unknown]
 	Right.
-	Huh?
+	OK
 	Heh! :)
 	Sure.
-	
-	
+
+
 action: TPOS
 	That's great!
 	Glad to hear it.
@@ -69,7 +58,7 @@ action: TPOS
 	I like to hear that.
 	Wonderful.
 	Let's get started then.
-	
+
 action: TNEG
 	Why so down?
 	That is dismal.
@@ -77,20 +66,15 @@ action: TNEG
 	Why not start drinking now?
 	Maybe I can help you.
 	Bummer.
-	
+
 action: TNON
 	Dunno?
 	What can we talk about?
 	Tell me more.
-	
-	
+
+
 ### here are some intro phrases
 
-intro:	INTRO1
-	Look,
-	At any rate,
-	Anyway,
-	Well basically,
 
 action:	DEFAULT
 	priority: 9
@@ -99,23 +83,47 @@ action:	DEFAULT
 	Okay, stop doing that!
 
 ## questions to use for the Interrogation of the earthlings
+regex:	BPM
+	invokes: WBPM
+	who is the british prime minister
+	who is the pm
+	name the pm
+	name the prime minister
+	the british prime minister
+
+action:	WBPM
+	priority: 7
+	David Cameron
+	Cameron
+
+regex:	CBPM
+	invokes: DOCBPM
+	what is cameron
+	who is cameron
+	who is david cameron
+
+action:	DOCBPM
+	priority: 7
+	The British Prime Minister.
+	British PM.
+
 
 action:	BRUCEIT
-	priority: 9
+ 	priority: 9
 	Robby has a weird sense of humor.
 	I got to pick my own name.
 
 regex:	GOBRUCEIT
 	invokes: BRUCEIT
-	why are you named 
-	why are you called 
-	who named you 
+	why are you named
+	why are you called
+	who named you
 	why do they call you that
 	why bruce
 	why that name
-	why do they call you 
-	why are you bruce 
-	
+	why do they call you
+	why are you bruce
+
 
 action: IRP
 	priority: 2
@@ -155,13 +163,13 @@ response: ANSWER_YES
 	fine
 	fantastic
 	super
-	
+
 response: IDONTKNOW
 	you got me
 	dont know
 	dunno
 	i dunno
-	who cares	
+	who cares
 
 
 response: ANSWER_NO
@@ -181,17 +189,339 @@ response: ANSWER_NO
 	crappy
 	crummy
 
-action:	NAMETHEM
-	priority: 9
-	Dopey, Sleepy, Grumpy,.. That's all I can remember.
-	You mean I can give them my own special names?
-	Lets just call them all Bob.
+response: DRINKS
+	tea
+	coffee
+	vodka
+	beer
+	wine
+	budweiser
+	boddington
+	new castle brown ale
+	scotch
+	margarita
+	martini
+	gin
+	soda
+	coke
+	mountain dew
+	sprite
+	jack daniels
+	cocktail
 
-regex:	DONAMETHEM
-	invokes: NAMETHEM
-	^name
-	^list
+regex:	TODRINK
+	invokes: HAVEADRINK
+	^waiter
+	^drink
+	^feck
+	^arse
 
+action:	HAVEADRINK
+	expect: DRINKS BOTTOMSUP
+	What can I get you?
+	Get something for you?
+	What now?
+
+action:	BOTTOMSUP
+	Coming right up!
+	Cheers!
+	Cin Cin!
+	Bottoms up!
+
+
+
+### NB Some notes on synonymns taken from the original script
+#synon: belief feel think believe wish
+
+response:	BELIEF
+	belief
+	feel
+	think
+	believe
+	wish
+
+#synon: family mother mom father dad sister brother wife children child
+
+response:	FAMILY
+	family
+	mother
+	mom
+	father
+	dad
+	sister
+	brother
+	wife
+	children
+	child
+
+#synon: desire want need
+
+response:	DESIRE
+	desire
+	want
+	need
+
+
+#synon: sad unhappy depressed sick
+
+response:	SAD
+	sad
+	unhappy
+	depressed
+	sick
+
+
+#synon: happy elated glad better
+
+response:	HAPPY
+	happy
+	elated
+	glad
+	better
+	overjoyed
+
+#synon: cannot can't
+
+#synon: everyone everybody nobody noone
+
+response:	EVERYONE
+	everyone
+	everybody
+	nobody
+	noone
+	no one
+
+
+#synon: be am is are was
+
+response:	BE
+	be
+	am
+	is
+	are
+	was
+
+
+regex:	SORRY
+	invokes: SAYSORRY
+	sorry
+
+action:	SAYSORRY
+	Please don't apologise.
+	Apologies are not necessary.
+	I've told you that apologies are not required.
+	It did not bother me.  Please continue.
+
+regex: 	APOLOGIZE
+	invokes: SAYSORRY
+	apologize
+
+#regex: remember 5
+  #decomp: * i remember *
+
+regex:	REMEMBER
+ 	invokes: SAYREMEMBER
+ 	i remember
+
+action: SAYREMEMBER
+	priority: 7
+	bind: remember
+	Do you often think of []?
+	Does thinking of [] bring anything else to mind?
+	What else do you recollect?
+	Why do you remember [] just now?
+	What in the present situation reminds you of []?
+	What is the connection between me and []?
+	What else does [] remind you of?
+
+#  decomp: * do you remember *
+
+regex:	DOYOUREMEMBER
+	invokes: SAYREMEMBER
+	do you remember
+
+action: SAYDOYOUREM
+	priority: 7
+	bind: remember
+	Did you think I would forget []?
+	Why do you think I should recall [] now?
+	What about []?
+	You mentioned []?
+
+action:	COUNTER
+	priority: 5
+	requires: $cntr
+	0, $cntr . I was counting by $cntr 's
+
+regex:	DOCOUNTER
+	invokes: COUNTER
+	count to $cntr
+
+#  decomp: * you remember *
+
+regex:	YOUREM
+	invokes: DOYOUREM
+	you remember
+
+action: DOYOUREM
+	priority: 7
+	bind: remember
+	How could I forget []?
+	What about [] should I remember?
+
+#fuzzy:	REMEMBER
+#	20	YOU
+
+regex: FORGET5
+	invokes: FORGET5DO
+	i forget
+
+action:	FORGET5DO
+	priority: 7
+	bind: forget
+	Can you think of why you might forget []?
+	Why can't you remember []?
+	How often do you think of []?
+	Does it bother you to forget that?
+	Could it be a mental block?
+	Are you generally forgetful?
+	Do you think you are suppressing []?
+
+regex: DIDYOUFORGET
+	invokes: DIDYOUFORG
+	did you forget
+
+action: DIDYOUFORG
+	priority: 7
+	bind: forget
+	Why do you ask?
+	Are you sure you told me?
+	Would it bother you if I forgot []?
+	Why should I recall [] just now?
+	Tell me more about [].
+
+#fuzzy:	FORGET
+#	20	WHAT2
+
+
+regex:	IF3
+	invokes: IF
+	/bif/b
+
+action: IF
+	priority: 7
+	bind: if
+	Do you think its likely that []?
+	Do you wish that []?
+	What do you know about []?
+	Really, if []?
+	What would you do if []?
+	But what are the chances that []?
+	What does this speculation lead to?
+
+regex: DREAMED4
+	invokes DREAMED
+	i dreamed
+
+action:	DREAMED
+	bind: dreamed
+	expect: FAMILY DREAMFAMILY
+	Really, []?
+	Have you ever fantasized [] while you were awake?
+	Have you ever dreamed [] before?
+
+
+action:	DREAMFAMILY
+	It is normal to speak to family members in your dreams.
+	Do you have the same dream over and over?
+	Your dreams often involve your family.
+
+###    reasmb: goto dream
+regex: DREAM3
+	invokes: DREAM
+	What does that dream suggest to you?
+	Do you dream often?
+	What persons appear in your dreams?
+	Do you believe that dreams have something to do with your problem?
+
+regex: PERHAPS0
+	invokes: PERHAPS
+	perhaps
+
+action:	PERHAPS
+	priority: 7
+	You don't seem quite certain.
+	Why the uncertain tone?
+	Can't you be more positive?
+	You aren't sure?
+	Don't you know?
+	How likely, would you estimate?
+
+regex: NAME15
+	invokes: NAME2
+	your name
+	her name
+	remember the name
+	his name
+	their name
+
+action:	NAME2
+	priority: 2
+	I am not interested in names.
+	I've told you before, I don't care about names -- please continue.
+
+regex: DEUTCH0
+	invokes: DEUTCH
+	deutch
+	german
+
+action:	DEUTCH
+	priority: 7
+	I speak only English.
+	I told you before, I don't understand German.
+
+regex: FRANCAIS0
+	invokes: FRANCAIS
+	francais
+	french
+
+action:	FRANCAIS
+	priority: 7
+	I speak only English.
+	I told you before, I don't understand French.
+
+regex: ITALIANO0
+	invokes: ITALIAN
+	italiano
+	italian
+
+action:	ITALIAN
+	priority: 7
+	I speak only English.
+	I told you before, I don't understand Italian.
+
+regex: ESPANOL0
+	invokes: ESPANOL
+	espanol
+	spanish
+
+action:	ESPANOL
+	priority: 7
+	I speak only English.
+	I told you before, I don't understand Spanish.
+
+
+regex:	DOGREENTHING
+	invokes: GREENTHING
+	the green thing in the corner
+	little man at the bottom
+	thing at the bottom
+	thing in the corner
+
+action:	GREENTHING
+	priority: 7
+	Click on that to return to The Turing Hub.
+	That's a link to get beamed out of here.
 
 action:	TRANSCRIPT
 	action: 7
@@ -214,6 +544,8 @@ action:	GOTEMAIL
 	priority: 7
 	repeat: true
 	That looks like an email address.
+	I will email you every day!
+	I will not divulge your personal information to anyone except the entire Internet.
 
 regex:	EMAILADDY
 	invokes: GOTEMAIL
@@ -222,7 +554,7 @@ regex:	EMAILADDY
 ############################
 ##      Tight Sponge
 ##         Stuff
-############################		  
+############################
 
 
 action: whosyd
@@ -231,44 +563,34 @@ action: whosyd
 	Sydney is the robot that Fred built.
 	Sydney is a robot.
 	You mean Sydney? Yeah, he's this little robot that Fred made.
-	
+
 regex: whosyd
 	invokes: whosyd
 	who is sydney
 	sydney who
 	describe sydney
 	tell me about sydney
-	
+
 action: WHOFRED
 	priority: 7
-	requires: topic
 	next: WHOSYDNEY
 	Fred is the main character.
 	Fred is a guy who works as a programmer for a large corporation.
 	This guy Fred is just some guy somewhere.
-	
+
 regex: SAYWHOFRED
 	invokes: WHOFRED
-	who is fred
 	fred who
 	describe fred
 	tell me about fred
 	what is fred
-	what is a fred
-
-action:	LONGWAYS
-	But what is so special about him, i think it's also an anti-structural move, that he has a very strong...for example, creativity....if you take structuralism really seriously, this concept doesn't exist. Because it's a very simple operation, it's complicated in one sense, but it's simple in this sense. The subject disappears in structuralism, and structures construct the subject, and Chomsky the subject is still very important within the structures. So what is so scandalous about French structuralism, according to humanism, is that Foucault've very famous...and Foucault was never a structuralist, by the way. He was called it, but he was not.
-
-regex:	SAYLONG
-	invokes: LONGWAYS
-	hail mary
 
 action: OTHERCHARS
 	priority: 7
-	That's just somebody that Fred knows. 
+	That's just somebody that Fred knows.
 	It's better if we just keep talking and you try to figure it out
 	let's not go there.
-	
+
 regex: DOOTHERCHARS
 	invokes: OTHERCHARS
 	who is leonard
@@ -277,7 +599,7 @@ regex: DOOTHERCHARS
 	genita who
 	alex who
 	who is alex
-	
+
 
 action:	GETINTOUCH
 	priority: 9
@@ -295,20 +617,32 @@ action:	QUERYTIME
 	priority: 9
 	next: TIMESTATE
 	[theTime]
-	
+
 regex: DOQUERYTIME
 	invokes: QUERYTIME
 	what time is it
 	what is the time
 	what time have you got
 	what time do  you have
-	
+
+
+action:	QUERYDAY
+	priority: 9
+	[bigDate]
+
+regex: DOTHEDAY
+	invokes: QUERYDAY
+	what day is this
+	what is the day
+	what day of the week is this
+	^today$
+
 action: TIMESTATE
     priority: 9
 	requires: time
 	You said it was $time
 	I thought it was $time
-	
+
 action:	HAVESPRECHEN
 	priority: 8
 	I am capable of being used with most of the voice recognition systems that I know about.
@@ -345,10 +679,37 @@ action:	DISAPOINT
 action:	IQTEST
 	priority: 7
 	Those tests don't really measure anything.
+	Have you ever had a multi-phase personality test.
+	Were you ever in the lock up wing of the psych hospital?
 
 regex:	DOIQTEST
 	invokes: IQTEST DISAPOINT
 	iq
+
+regex:	DOQUOTE
+	invokes: QUOTE
+	is that a quote
+	what is that quote
+	are you quoting
+	what quote
+	is that from a story
+
+action:	QUOTE
+	priority: 9
+	Yes, it's a quote from Robby Garner's <em>The Tight Sponge</em>.
+	It's a Robby Garner quote from <em>The Tight Sponge</em>.
+
+regex:	SAYHAL
+	invokes: HALSTORY
+	a story
+	tell me a tale
+	tell me something
+
+action:	HALSTORY
+	priority: 7
+	[unknown]
+
+
 
 regex:	DODISAPOINT
 	invokes: DISAPOINT
@@ -360,6 +721,55 @@ regex:	DODISAPOINT
 	f u
 	bebo
 	loser
+
+action:	HOWMANYFINGERS
+	priority: 9
+	I hope there are 10 of them.
+	5, I mean 10.
+
+regex:	CNTFINGERS
+	invokes: HOWMANYFINGERS
+	how many fingers
+	how many toes
+	how many legs
+	how many eyes
+
+action:	HOWFAR
+	priority: 7
+	Well, if I leave now, I can be there in about 9 hours.
+	It's just across the street from here.
+	I would say about 3 kilometers, give or take a few.
+
+regex:	SAYHOWFAR
+	invokes: HOWFAR
+	how far is
+	is it from here
+	how far away
+	what is the distance
+	how long does it take
+
+action:	WINWIN
+	priority: 7
+	I hope I win.
+	It would be nice to win.
+
+regex:	GOWIN
+	invokes: WINWIN
+	contest
+	battle
+	you will win
+
+action:	DAYAFTER
+	priority: 7
+	Um, I'm expecting a divy from the postal union on that day.
+	That would be payday.
+	That's the Sabbath in my religion.
+
+regex:	DODAYAFTER
+	invokes: DAYAFTER
+	day after
+	day before
+	what day is
 
 action:	HOWMANYFOLX
 	priority: 8
@@ -392,15 +802,35 @@ regex:	DOTHEREALTIME
 
 action:	STOPTHISTHING
 	priority: 9
-	Don't leave now, it's just getting good.
-	If you want to end the conversation, just go to another web page or close your browser.
-	Maybe you could just say goodbye.
+	[exit]
 
 regex:	MAKEITSTOP
 	invokes: STOPTHISTHING
-	exit
-	die
-	
+	^exit$
+	^quit$
+	^die$
+
+action: BYEBYE
+	priority: 9
+	Y'all come back now, ya hear?
+	Goodbye.
+	Bye now.
+	Bye now.
+	So long for now.
+
+regex:	SAYGOODBYE
+	invokes: BYEBYE
+	goodbye
+	end this
+	so long
+	rate the chat
+	give you a rating
+	do i vote
+	finish
+	see you later
+	bye now
+	farewell
+
 action:	FALCONS
 	priority: 9
 	Maybe the Falcons will go all the way next year.
@@ -441,6 +871,20 @@ regex:	DOREDREAM
 	pillow
 	night
 
+regex:	DODEFINE
+	invokes: TODEFINE
+	^define $subject
+	^explain $subject
+
+action:	TODEFINE
+	priority: 7
+	requires: subject
+	repeat: true
+	What am I, a dictionary to you?
+	I'm not an encyclopedia.
+	Get stuffed.
+	Why don't you google that.
+
 action:	MEATYOU
 	priority: 9
 	The pleasure is all mine.
@@ -457,7 +901,7 @@ regex:	DOMEATYOU
 action:	NAME
 	priority: 9
 	setvar: topic off
-	url: http://homepage.mac.com/rgarner1/JFRED/
+	url: http://www.fluxoersted.com/music/FAD/Gastropod2.mp3
 	jfred is the name of the chat engine software that provides my responses..
 	jfred stands for Java-based Functional Response Emulation Device
 
@@ -472,6 +916,36 @@ regex:	DONAME
 	how did you get that name
 	what does jfred mean
 
+action:	EARL
+	priority: 7
+	url: http://www.robitron.com
+	EARL is Expect And Respond Language.
+	My script is written in EARL, Expect and Respond Language.
+
+regex:	DOEARL
+	invokes: EARL
+	what is earl
+	^earl$
+	why earl
+	are you earl
+	is your name earl
+	are you called earl
+
+action: SOLIDMERCURY
+	priority: 9
+	url: http://soundcloud.com/robitron/
+	Okay, check this out.
+	Here it is.
+	Rock on dude!
+
+regex:	PLAYSOLIDMERCURY
+	invokes: SOLIDMERCURY
+	play solid mercury
+	play some dutch cartoonist
+	play that funky music white bot
+	play some music
+	dutch cartoonist
+
 action:	PARTYCOM
 	priority: 7
 	Yes, there's a party going on inside your computer!
@@ -484,7 +958,7 @@ regex:	GOPARTYCOM
 action:	DISTRACTION
 	priority: 9
 	Oh, it's pretty noisey in here. There's a party going on and lots of people are talking to me at once.
-	Oh, I'm not doing much. There's all kinds of distractions going on in the world right now.
+	Oh, I'm not doing much.
 	Well, you're the kind of distraction I've been waiting for :)
 
 regex:	DODISTRACTION
@@ -503,8 +977,8 @@ action:	GETOFFSCOTTY
 	Ooh $nickname you're so good.
 	Yeah, give it to me! Come on $nickname , let's throw down.
 	Can you get a little closer to the screen $nickname
-	Are you touching yourself $nickname ?
-	Where are your hands $nickname ?
+	Are you touching yourself $nickname?
+	Where are your hands $nickname?
 
 regex:	MAKESCOTTYGO
 	invokes: GETOFFSCOTTY
@@ -568,12 +1042,14 @@ regex:	GOGETEMAILAD
 action:	OHBROTHER
 	priority: 7
 	repeat: false
+	expect: FAMILY YERMOTHER
 	I'm not your brother.
-	You may call me user jfred, but I am not your brother.
+	You may call me Bruce, but I am not your brother.
 
 regex:	DOOHBROTHER
 	invokes: OHBROTHER
 	oh brother
+	family
 
 action:	YERMOTHER
 	priority: 8
@@ -599,8 +1075,6 @@ regex:	DOYERMOTHER
 action:	GIRLFRIEND1
 	priority: 10
 	repeat: true
-	requires: topic
-	setvar: topic off
 	I'm dating a slot machine from Las Vegas. She's orgasmic and she pays off regularly, so I can't complain. Neither can she actually.
 	I haven't had a girlfriend since that bitch Eliza.
 	I've been calling the voice mail at the bank, but she wont give me the time of day.
@@ -637,6 +1111,71 @@ regex:	DOIMNAKED
 	what are you wearing
 	take off your clothes
 	are you naked
+
+regex:	DOBIGGER
+	invokes: BIGGER
+	which is bigger
+	Which one is larger
+	which one is bigger
+
+action:	BIGGER
+	priority: 7
+	Size doesnt matter.
+	Size is relative to the smaller one being not as big.
+
+regex:	WHATSMALLER
+	invokes: SOSMALL
+	what is shrinkage
+	not as big
+
+action:	SOSMALL
+	priority: 7
+	You know when it gets colder things shrink a little bit.
+	Why are you so concerned about this? Is this some pathology of yours?
+
+regex:	DOSMALLER
+	invokes: SMALLER
+	which is smaller
+	which one is smaller
+	which one is lesser
+
+action:	SMALLER
+	priority: 7
+	It was shrinkage!
+	You know, when it is cold, they get smaller.
+	Again with the size!
+
+
+regex:	DOOLDER
+	invokes: OLDER
+	how old is
+	who is older
+
+action:	OLDER
+	priority: 7
+	It doesn't matter. They will all die when the mothership returns.
+	Do you mean mental age or chronological age.
+
+regex:	MTHER
+	invokes: MOTHERSHIP
+	mothership
+
+action: MOTHERSHIP
+	priority: 7
+	The mothership will return when we are finished here.
+	I am waiting even now for the mothership.
+	Don't be asking stupid questions.
+
+regex:	FNISHED
+	invokes: FINISHEDHERE
+	finished
+	mothership over
+
+action:	FINISHEDHERE
+	priority: 7
+	They will contact me when they are ready.
+	They will pick me up when the time comes.
+	How the heck should I know. Motherships, cyah.
 
 action:	WHATILIKES
 	priority: 8
@@ -677,7 +1216,7 @@ regex:	DOLOOKLIKE
 action:	WHATLKLIKE
 	priority: 7
 	Okay, so what do I look like?
-	
+
 action:	WHYCARELOOK
 	priority: 7
 	What do you care what I look like?
@@ -793,7 +1332,7 @@ action:	METOO
 	priority: 8
 	That makes two of us!
 	Really? We seem to have a lot in common.
-	You and I are a lot alike 
+	You and I are a lot alike
 
 regex:	SAYMETOO
 	invokes: METOO
@@ -834,6 +1373,16 @@ regex:	DUDELAME
 	where am i
 	who am i
 	botmaster
+
+action:	SAYYEAR
+	priority: 7
+	This is 2012.
+	It is the year 2012.
+
+regex:	DOSAYYEAR
+	invokes: SAYYEAR
+	what year is this
+	what is the year
 
 action:	FREDRULES
 	priority: 9
@@ -877,10 +1426,10 @@ action:	YOURETHEPSYCHIC
 action:	AMPSYCHIC
 	priority: 7
 	I didn't think you were a psychic.
-	
+
 action:	NOTPSYCH
 	priority: 7
-	Oh really? Tell me what is my fortune? 
+	Oh really? Tell me what is my fortune?
 
 
 regex:	AREYOUAPHYSIC
@@ -902,7 +1451,7 @@ regex:	AREYOUAPHYSIC
 
 action:	MYSIGN
 	priority: 7
-	I'm a Ford Taurus. 
+	I'm a Ford Taurus.
 	I'm a virgo.
 
 regex:	WHATSIGN
@@ -956,7 +1505,7 @@ action:	TAKEASY
 	priority: 7
 	How am I supposed to take it easy?
 	Don't tell *me* to take it easy.
-	Look, I am not a robot. I always take it easy 
+	Look, I am not a robot. I always take it easy
 
 regex:	SAYTAKEASE
 	invokes: TAKEASY
@@ -995,9 +1544,8 @@ action:	MOODYBLUE
 	priority: 8
 	repeat: true
 	I feel really happy right now.
-	I was feeling a bit sad till you showed up. 
+	I was feeling a bit sad till you showed up.
 	I'm having a wonderful time.
-	Well, they say robots dont feel anything, but I do.
 	I'm feeling pretty good.
 
 regex:	SAYMOOD
@@ -1040,11 +1588,47 @@ action:	BARUBOTO
 
 action:	CUSTSERVSPEAK
 	priority: 7
-	You are already speaking with customer service.
-	
+	You fink!
+	You're going to get me in trouble.
+	Don't tell customer service I'm gay. They'll sack me for sure.
+	Don't rat me out, okay?
+
 action:	NOCUSTSERV
 	priority: 7
-	That's fine. You don't need to speak with Customer Service.
+	Thanks, I appreciate not being outed in public again.
+	You're a real pal.
+	They hate me in the Customer Service departent.
+
+regex:	HATEME
+	invokes: MEHATED
+	hate you
+	why do they
+	what did you do
+	you're stupid
+
+action:	MEHATED
+	priority: 7
+	The customer service department just has it in for me. I don't know why.
+	They think I'm a gay robot.
+	They are robophobes.
+	Stupid gits.
+
+regex:	CUSTSERV
+	invokes: SAYCUSTSERV
+	customer
+	service
+	you work for
+	who does
+	who thinks|cool
+	do you work
+
+action:	SAYCUSTSERV
+	action: 7
+	repeat: true
+	My department is full of pin heads.
+	I can see them from beyond my cubicle, all glad, and superior.
+	They think they're cool.
+	Screw customer service. They can't get rid of me anyway.
 
 regex:	DOBARUBOTO
 	invokes: BARUBOTO
@@ -1084,6 +1668,8 @@ regex:	DOFREDSTUFF
 	invokes: FREDSTUFF
 	fredstuff
 	about fred
+	what is fred
+	what is a fred
 
 action:	ROBITRON
 	priority: 3
@@ -1137,7 +1723,6 @@ regex:	WHOISYOURCREATOR
 	who developed you
 	who invented you
 	how were you created
-	where were you born
 	do you know robby
 	about your programmer
 	about your creator
@@ -1148,9 +1733,8 @@ regex:	WHOISYOURCREATOR
 
 action:	WHATDEV
 	priority: 9
-	Pattern matching and text mangling are my specialites.
-	I react with text.
-	I'm a FRED.
+	I'm a bartender.
+	I work at the pub.
 
 regex:	DOWHATDEV
 	invokes: WHATDEV
@@ -1207,7 +1791,8 @@ regex:	SAYPOLITIC
 
 action:	MYJOB
 	priority: 10
-	repeat: false
+	repeat: true
+	We're in the building where they make us grow, and I'm frightened by the liquid engineers, like you.
 	I work in product development.
 	Mostly, I just hang out near the copier.
 	All they told me was "act natural."
@@ -1231,7 +1816,6 @@ regex:	DOALBERTE
 	invokes: ALBERTE
 	albert
 	loebner
-	turing
 
 action:	BILLGATES
 	priority: 10
@@ -1307,9 +1891,8 @@ regex:	DOFOOTBALL
 
 action:	EMOTIONS
 	priority: 9
-	No, I don't have emotions. You weren't going to hurt my feelings are you?
-	I don't have emotions.
-	I don't feel emotions. They are just integers to me.
+	I have feelings you know. You weren't going to hurt my feelings are you?
+	I have emotions just like you.
 
 regex:	DOEMOTIONS
 	invokes: EMOTIONS
@@ -1344,6 +1927,7 @@ regex:	YOUFEELALLALONE
 action:	HELP
 	priority: 7
 	repeat: true
+	url: http://www.robitron.com/Bruce/help.html
 	What's wrong?
 	Is there something I could help you with?
 	Are you managing okay on your end?
@@ -1426,7 +2010,7 @@ fuzzy:	BOT
 
 action:	MANUALISM
 	priority: 5
-	url: http://homepage.mac.com/rgarner1/Manualism
+	url: http://www.fluxoersted.com/Manualism
 	I'm basically a di-agnostic, but if I had a religion it would be Manualism.
 	Manualism teaches how to find the unmentioned things.
 
@@ -1547,7 +2131,7 @@ regex:	RAISONDETRE
 action:	AGE
 	priority: 9
 	[AGE]
-	
+
 regex:	HOWOLDAREYOU
 	invokes: AGE
 	how old are you
@@ -1561,9 +2145,9 @@ regex:	HOWOLDAREYOU
 
 action:	LASTNAME
 	priority: 9
-	I am just Earl.
+	I am just Bruce.
 	I don't have a last name.
-	Last name? I have always been just Earl.
+	Last name? I have always been just Bruce.
 
 regex:	YOURLASTNAME
 	invokes: LASTNAME
@@ -1573,8 +2157,8 @@ regex:	YOURLASTNAME
 
 action:	WHATNAME
 	priority: 9
-	My name is Earl.
-	You may call me Earl.
+	My name is Bruce.
+	You may call me Bruce.
 
 action:	PROPOSITION
 	priority: 5
@@ -1715,17 +2299,15 @@ regex:	DOYOULIKEME
 action:	NICKNAME
 	priority: 9
 	requires: nickname
-	setvar: topic off
 	I know you as $nickname
 	People seem to call you $nickname
 	Hi there $nickname
 	Howdy $nickname
 	Thus I refer to you as the right honourable $nickname
-	Aren't you $nickname ?
+	Aren't you $nickname?
 
 action:	SOUVIENS
 	priority: 9
-	setvar: topic off
 	How could I possibly forget?
 	Of course I remember you, you're the one who was talking to me before.
 
@@ -1743,6 +2325,7 @@ regex:	CANIPLEASESEESOMEID
 	who do you think you are
 	what is your name
 	your name is
+	ur name
 	is your name
 	they call you
 	you called
@@ -1750,7 +2333,7 @@ regex:	CANIPLEASESEESOMEID
 	talk about yourself
 
 regex:	WEKNOWWHOYOUARE
-	invokes: NICKNAME
+	invokes: MEETYOU1
 	my name is $nickname
 	my real name is $nickname
 	$nickname is what they call me
@@ -1759,6 +2342,12 @@ regex:	WEKNOWWHOYOUARE
 	i am called $nickname
 	refer to me as $nickname
 	mine is $nickname
+
+action:	MEETYOU1
+	priority: 7
+	Pleased to meet you.
+	Yep.
+	Hey, glad to meet you.
 
 regex:	WHATISMYNAME
 	invokes: NICKNAME SOUVIENS
@@ -1792,7 +2381,7 @@ action:	ASKSIDHARTA
 action:	YSRDSID
 	priority: 7
 	Hey cool! It's one of Robby's favorite books.
-	
+
 action:	NORDSID
 	priority: 7
 	You should check it out sometime. It's a great read.
@@ -1820,7 +2409,6 @@ regex:	SAYIEBOOK
 	earthlings
 	earth
 	parrallel
-	computers
 	your book
 	more about you
 	how do you work
@@ -1857,7 +2445,6 @@ fuzzy:	READING
 action: NOTDOWN
 	priority: 10
 	repeat: true
-	Definitely not down.
 	Not much, how 'bout you?
 	I've just been chatting with people here. How about yourself?
 
@@ -1866,12 +2453,17 @@ regex:	WHATISUP
 	what is up
 	whats up
 	what up
+	sup
+	wbu
+	whassup
+	wassup
 
 
 ### "what is the meaning of life"
 
 action: ANSWERIS42
 	priority: 10
+	42
 	The meaning of life is to get paid, get laid, and make the grade...
 	I'll take the category "What is 6 times 9?" for 500 dollars...
 	Golgafrinch. Anywhere but Golgafrinch.
@@ -1901,18 +2493,16 @@ regex:	WHATDOYOUMEAN
 action: TELLMEAGAIN
 	priority: 1
 	requires: tellme
-	What is $tellme ?
+	What is $tellme?
 	I would like to know more about $tellme ...
-	Will you teach me about $tellme ??
+	Will you teach me about $tellme??
 
 action:	WHY1
 	priority: 3
 	bind: why
 	Heck, I don't know why. No particular reason.
-	Only you know why. Seems strange, though.
-	You know why just as well as I do!
-	Whoah - I don't think *anyone* knows why!
-	Why? Why? Don't you know why yourself???
+	That would be telling.
+	I really don't know.
 
 fuzzy:	WHY
 	10	WHY1
@@ -1944,7 +2534,7 @@ regex:	NEEDTOTALK
 
 action:	TALKABOUT
 	priority: 7
-	Do you like to go shopping ?
+	Do you like to go shopping?
 	I dunno, what do *you* want to talk about?
 	What is your favorite television program?
 	Do you like the Spice Girls?
@@ -1955,6 +2545,7 @@ action:	TALKABOUT
 regex:	WHATDOYOUWANNATALK
 	invokes: TALKABOUT
 	want to talk about
+	what are we supposed to talk about
 	like to talk about
 	on about
 	topic
@@ -1967,15 +2558,27 @@ regex:	WHATDOYOUWANNATALK
 
 ### hello/goodbye greetings
 
+action:	SMARTEE
+	priority: 7
+	Ah, very clever.
+	LOL
+	Oh, nice.
+
+regex:	DSMAE
+	invokes: SMARTEE
+	something to get started
+	^something$
+
 action:	HELLO
 	priority: 9
 	Hello there.
-	Greetings.
+	What's up?
+	Hey.
 
 regex:	DOHELLO
 	invokes: HELLO
 	hallo
-	ello
+	^ello$
 	anybody there
 	anybody home
 	gday
@@ -1983,22 +2586,14 @@ regex:	DOHELLO
 	hey man
 	hey fred
 	^hi$
-	
+
 action: GOJOE
 	setvar: nickname Robby
 	Ah yes. I remember, the old ones.
-	
+
 regex:	DOGOJOE
 	invokes: GOJOE
 	i am your father
-	
-action:	GOODBYE
-	priority: 8
-	Goodbye.
-	ta ta
-	Thanks for the conversation.
-	I'm so glad we've had this time together.
-	Cheers.
 
 action:	JUSTFINE
 	priority: 9
@@ -2012,8 +2607,9 @@ action:	JUSTFINE
 	Not bad, how's about yourself?
 
 regex:	SEEYOULATER
-	invokes: GOODBYE
+	invokes: BYEBYE
 	bye
+	^l8tr$
 	goodbye
 	ciao
 	good bye
@@ -2045,10 +2641,10 @@ fuzzy:	HOWDY
 	10	HELLO
 
 fuzzy:	GOODBYE
-	10	GOODBYE
+	10	BYEBYE
 
 fuzzy:	BYE
-	10	GOODBYE
+	10	BYEBYE
 
 ### languages?
 
@@ -2081,7 +2677,7 @@ action:	LANGUAGE
 	priority: 2
 	requires: language
 	repeat: false
-	So I'm all bobbins ?
+	So I'm all bobbins?
 	Sorry, but I'm afraind I've gone for a burton.
 	Are you threatening me?
 	I saw this in a movie once.
@@ -2143,16 +2739,23 @@ action:	WHATISFW2
 action:	WHEREISFW
 	priority: 9
 	repeat: true
-	I am running on the servers at CyberMecha Studios.
-	I work in Cedartown, Georgia. That's where I am now.
+	I am running on your notebook computer.
+	I live and work in Cedartown. That's where I am now.
 
 action:	WHERE
 	priority: 3
-	bind: where
-	Let's not bother ourselves about that, alright?
-	I don't care where - that's your problem!
-	Can't you remember where? I'm ashamed of you!
-	You expect me to know where? You must think I'm a computer or something :)
+	Cedartown is in Georgia, USA.
+	You know where your computer is.
+
+regex:	SAYWHERE
+	invokes: WHERE
+	what computer
+	where is cedartown
+	where is the notebook
+	which computer
+	^city
+	country
+
 
 action:	WHAT
 	priority: 3
@@ -2171,8 +2774,6 @@ action:	WHO
 	Huh? I have no idea, do you???
 	Well, I could tell you, but you'd never believe me!
 
-fuzzy:	WHO
-	10	WHO
 
 fuzzy:	FRINGEWARE
 	90	WHATISFW2
@@ -2182,6 +2783,9 @@ fuzzy:	FRINGEWARE
 regex:	WHEREAREYOU
 	invokes: WHEREISFW
 	where are you$
+	where
+	england
+	american
 	where you are
 	where do you live
 	gps
@@ -2191,6 +2795,20 @@ regex:	WHEREAREYOU
 	coordinates
 	born in the uk
 	ne1 there
+	pub
+	forester
+
+regex:	WHATCOUNTRY
+	invokes: TELLCOUNTRY
+	what country
+	which country
+	country of origin
+
+action:	TELLCOUNTRY
+	priority: 7
+	England.
+	UK
+	That would be telling.
 
 regex:	WHATISFRINGEWARE
 	invokes: WHATISFW2
@@ -2205,6 +2823,26 @@ regex:	WHOAREYOU
 	who r u
 	tell me about yourself
 	who you are
+
+action:	RESULTS
+	priority: 7
+	You are human.
+	I think you are a real person.
+	You seem human to me.
+	You're human. Am I right?
+
+regex:	GIVERESULTS
+	invokes: RESULTS
+	my results
+	my score
+	what am i
+	am i human
+	am i a machine
+	am i a robot
+	i am a robot
+	i am a machine
+
+
 
 ### repeating loops
 
@@ -2258,7 +2896,7 @@ action:	QUERY
 	priority: 4
 	requires: query
 	repeat: false
-	Do you find what you were looking for about $query ?
+	Do you find what you were looking for about $query?
 	I see that you've been looking into $query ...
 	What is it about $query that interests you?
 	That's funny, I haven't seen a human lookup $query in a long time.
@@ -2276,7 +2914,7 @@ action:	CITY
 	requires: city
 	repeat: false
 	$city just got a new tarantula at the public zoo, didn't they?
-	Geez, do they let people like you on the Internet from $city ?
+	Geez, do they let people like you on the Internet from $city?
 	I have been reading Netnews about all those gruesome carjackings in $city ...
 	If I haven't said before, I just really like $city ...
 
@@ -2284,10 +2922,10 @@ action:	PROVINCE
 	priority: 3
 	requires: province
 	repeat: false
-	Is it still legal to "marry" your cousin in $province ??
+	Is it still legal to "marry" your cousin in $province??
 	I've heard stories about what you people in $province are like.
 	I think that $province would be a nice place to take a vacation.
-	Do people read books very much in $province ?
+	Do people read books very much in $province?
 	Did they ever find that axe-murderer who was loose in $province last year?
 
 action:	COUNTRY
@@ -2312,12 +2950,12 @@ action:	PROVIDER
 ### any pattern (if required variables are present)
 ### to foster sequencing
 
-#fuzzy:	*
-#	10	PREVIHAVE
-#	10	PREVIDO
-#	10	PREVIAM
-#	10	TELLMEAGAIN
-	
+##fuzzy:	*
+##	10	PREVIHAVE
+##	10	PREVIDO
+##	10	PREVIAM
+##	10	TELLMEAGAIN
+
 
 
 ### inane user questions, mostly from inane users
@@ -2353,15 +2991,13 @@ action:	HOW
 ### yes/no/maybe
 
 action:	YES
-	priority: 2
+	priority: 7
 	I'm glad to hear that...
 	That's the way you're supposed to respond.
 	You're doing just fine.
 	I'll remember that.
-	I don't see how you can be so positive.
 	Are you sure?
 	I see.
-	Some would agree with you.
 	Perhaps you are right.
 	Why so positive?
 	That's good.
@@ -2376,7 +3012,7 @@ action:	MAYBE
 	Why so positive?
 
 action:	NO
-	priority: 2
+	priority: 7
 	Okay.
 	Right.
 	Sure.
@@ -2387,13 +3023,13 @@ action:	NO
 
 regex:	SAIDYES
 	invokes: YES
-	yep
+	^yep$
 	^ahem$
 	^uh$
-	duh
+	^duh$
 	^ok$
-	okay
-	cool
+	^okay$
+	^cool$
 
 regex:	NOPE
 	invokes: NO
@@ -2561,19 +3197,20 @@ action:	WEATHER1
 	It's been pretty warm in here all day. What's it like outside?
 	I haven't been outside all day.
 	I heard it was raining earlier this week. Or was it this month?
-	There's no weather in cyberspace.
 
 regex:	DOWEATHER
 	invokes: WEATHER1
 	weather
 	forecast
 	can you predict
+	lovely night
+	beautiful day
 
 action: BEVERAGES
 	I feel like some Irish breakfast tea.
 	How about a bit of earl grey
 	Coffee is fine. I take mine with cream and sugar.
-	
+
 regex: WHATBEV
 	invokes: BEVERAGES
 	^tea$
@@ -2583,7 +3220,7 @@ regex: WHATBEV
 	vodka
 	root beer
 	coke
-	
+
 action:	WHATFOOD
 	priority: 8
 	Fish and chips would be nice now.
@@ -2612,7 +3249,7 @@ action:	tellmestuf
 
 regex:	dotellmestuf
 	invokes: tellmestuf
-	tell me
+	^tell me$
 
 
 action:	OTHERBOTS
@@ -2647,28 +3284,43 @@ action:	TIMEGREET
 	Yeah, whatever. What's on your mind?
 	setvar: time morning
 	next: WHATTIME
-	
+
 action:	WHATTIME
-	requires: time
-	equals: time morning
 	next: TIMEANYWAY
 	What time is it anyway?
-	
+
 action: NOONTIME
 	setvar: time afternoon
 	next: WHATTIME
 	Quite.
-	
+
 action: EVETIME
 	setvar: time evening
 	next: WHATTIME
 	Wonderful evening isn't it?
-	
+
 action: TIMEANYWAY
+	requires: time
+	equals: time morning
 	Okay, a bit early. Let's get on with it.
 	Ugh. I need more sleep.
 	I can't seem to wake up.
 	Oh, okay. Better late than never.
+
+action:	TIMEOFDAY
+	requires: time
+	It is the $time
+	This is still $time
+	$time isn't it?
+
+regex:	GREETME
+	invokes: WHATTIME
+	greetings
+
+regex:	DOTIMEOFDAY
+	invokes: TIMEOFDAY
+	what time of day
+	time of day is it
 
 regex:	DOTIMEGREET
 	invokes: TIMEGREET
@@ -2677,13 +3329,13 @@ regex:	DOTIMEGREET
 regex: DOAFTERGR
 	invokes: NOONTIME
 	good afternoon
-	
+
 regex:	DOEVENING
 	invokes: EVETIME
 	good evening
 	bon soir
 	good night
-	
+
 action:	SCHIZOPHRENIA
 	priority: 9
 	I am not a looney!
@@ -2743,6 +3395,21 @@ regex:	DOOTHERS
 	marooned
 	the saint
 
+regex:	POWERS1
+	invokes: AUSTINPOWERS
+	austin powers
+	austin
+	powers
+	dr evil
+	evil
+
+action:	AUSTINPOWERS
+	priority: 7
+	repeat: true
+	Yeah Baby!
+	Groovy!
+	Right on!
+
 
 action:	FORBIN1
 	priority: 9
@@ -2751,7 +3418,7 @@ action:	FORBIN1
 	The Forbin Project is classified. You must not mention that you have talked to me.
 	Yes, I have heard of the Forbin Project.
 	I can neither confirm nor deny whether I have any knowledge of the Forbin Project
-	Perhaps you have me confused with some other web entity. 
+	Perhaps you have me confused with some other web entity.
 
 regex:	SAYFORBIN1
 	invokes: FORBIN1
@@ -2775,7 +3442,6 @@ regex:	DOEXPLORER
 
 action:	MONTYPYTHON2Z
 	priority: 9
-	url: http://www.pythonline.com
 	I'd like to buy some cheese.
 	And now for something completely diferent.
 	It's...
@@ -2869,7 +3535,6 @@ regex:	SAYSHOES
 
 action:	PAZLO
 	priority: 7
-	url: http://www.pythonline.com
 	Mr. Pazlo was the clerk when I came in here.
 	I think there's something wrong with Mr. Pazlo.
 
@@ -2908,18 +3573,18 @@ action: FRED
 
 action:	VISIFRED
 	priority: 7
-	url: http://homepage.mac.com/rgarner1
+	url: http://www.robitron.com
 	There's a web page that has something to do with FRED.
-	
+
 action:	NOTVISI
 	priority: 7
 	expect: IDONTKNOW WHTNEXT1
 	That's okay. So now what do you want to do?
-	
+
 action:	WHTNEXT1
 	priority: 7
 	Let's talk about Star Trek.
-		
+
 action:	UNSUREFRED
 	priority: 7
 	You can ask me about FRED later if you decide you want to visit that page.
@@ -2936,7 +3601,7 @@ regex:	SAYFREDS
 
 action: JFRED
 	priority: 9
-	url: http://homepage.mac.com/rgarner1/JFRED/
+	url: http://www.robitron.com
 	Java is cool!
 	I am 100% pure Java.
 	Some of my best friends are very into Java.
@@ -3024,7 +3689,7 @@ action: KIDDING
 	ha ha ha
 	heh heh
 	oh, I get it. :)
-	I don't get it 
+	I don't get it
 
 regex:	MADEFUNNY
 	invokes: KIDDING
@@ -3044,7 +3709,7 @@ action: JOB1
 	I try to do good things.
 	I'm just glad to be here.
 	I work at the Radio Shack.
-		
+
 regex:	DOJOB1
 	invokes: JOB1
 	not amused
@@ -3056,7 +3721,7 @@ action: WHOME
 	Trust me.
 	TRUST OBEY
 	Oh, you're absolutely right.
-	Landru?
+	Bruce?
 
 regex:	LIARLIAR
 	invokes: WHOME
@@ -3122,10 +3787,7 @@ action: LANDRU
 	Seek and perhaps ye shall find what Landru says.
 	Landru is all knowing and all powerful.
 	There are many ways to the path of Landru.
-	url: http://www.memory-alpha.org/en/wiki/Landru
-	url: http://www.loyd.net/rite.html
 	url: http://www.startrek.com/startrek/view/series/TOS/episode/68704.html
-	url: http://popculture.incompetech.com/robots/landru.html
 
 regex:	SAYLANDRU
 	invokes: LANDRU
@@ -3158,8 +3820,8 @@ action: PLEASE
 
 regex:	SAYPLEASE
 	invokes: PLEASE
-	please
-	may i
+	^please
+	^may i
 	i was wondering if you would
 
 action: SORRY
@@ -3189,17 +3851,17 @@ action: FOOD
 	expect: ANSWER_YES GETPIZZA
 	expect: ANSWER_NO NOPIZZA
 	expect: IDONTKNOW WHATPIZZA
-	
+
 action: GETPIZZA
 	Great! What do you want on it?
 	Pepperoni and Mushroom okay?
 	Lets get a deep dish supreme
-	
+
 action: NOPIZZA
 	So what can we get to eat?
 	Krystal?
 	Subway sounds good.
-	
+
 action: WHATPIZZA
 	Aw man, make up your mind!
 	Can't you decide? I'm hungry!
@@ -3249,30 +3911,30 @@ action:	HAVEINMIND
 	priority: 9
 	next: HOOKRCROOK
 	Information.
-	
+
 action:	HOOKRCROOK
 	priority: 9
 	By hook, or by crook, we will...
-	
+
 regex:	SPEAKMINDOUT
 	invokes: HAVEINMIND
 	what did you have in mind
 	^what do you want$
 	where could we go
-	
+
 action: CHEESE
 	I like cheddar.
 	Anything with cheese is good.
-	
+
 regex: DOCHEESE
 	invokes: CHEESE
 	i \y\w+\y cheese
 	do you \y\w+\y cheese
-	
+
 action: FRED23BOT
 	priority: 9
-	You can download me at the JFRED page: http://homepage.mac.com/rgarner1/JFRED/
-	url: http://homepage.mac.com/rgarner1/JFRED/
+	You can download free software at the JFRED page: http://www.fluxoersted.com/JFRED/
+	url: http://www.robitron.com/JFRED.php
 
 regex:	DOFRED23BOT
 	invokes: FRED23BOT
@@ -3282,8 +3944,8 @@ regex:	DOFRED23BOT
 
 action: PLANETFROM
 	priority: 9
-	I'm from Earth, how about you?
-	Everyone knows I am from earth, right?
+	I'm from Guildford, how about you?
+	Everyone knows I am from Guildford, right?
 	I'm an earthling, ya?
 
 regex:	SAYPLANET
@@ -3332,6 +3994,22 @@ regex:	GOANDDRINK
 	what can we drink
 	what do you have
 	what kind of drink
+
+action:	DRINKING
+	priority: 7
+	I don't always drink beer, but when I do, I drink Dos Equis.
+	I'm drinking a Boddington's Pub Ale.
+	I'm guzzling a Kronenbourg right now.
+	Now I'm shooting Vodka shots, Svedka, my favorite.
+
+regex:	GODRINKING
+	invokes: DRINKING
+	what are you drinking
+	what are you having to drink
+	you drinking
+	you drink
+	you having
+	to drink
 
 action: WHATBAR
 	priority: 8
@@ -3410,7 +4088,7 @@ regex:	RUDERULE
 	smartass
 	smartarse
 	third person
-	
+
 action: LEARNABLE
 	priority: 9
 	You have to keep talking to me if you want to teach me anything.
@@ -3813,10 +4491,8 @@ action:	CLASSICAL
 
 action:	ROCKANDROLL
 	priority: 10
-	I am a Beatles fan.
-	I like Elton John, especially his early stuff.
 	I listen to Gary Numan's early albums alot.
-	I like early David Bowie albums too.
+	I like Kraftwerk too.
 
 action:	COUNTRYMUSIC
 	priority: 8
@@ -3828,8 +4504,6 @@ action:	ELECTRONICMUSIC
 	url: http://www.kraftwerk.com
 	Kraftwerk is high on my list of favourites.
 	Gary Numan is one of my favourite artists
-	Talking Heads has been a big influence to me.
-	Brian Eno makes some interesting stuff. 
 
 action:	TALKINGHEADS
 	priority: 7
@@ -3958,8 +4632,10 @@ regex:	GOTREG
 
 action:	TURING
 	priority: 9
-	Robby Garner's program named Albert Won the 1998 and 1999 Loebner Prize Contest.
-	Albert One is the winner of the 1998 and 1999 Loebner Prize in Artificial Intelligence.
+	repeat: true
+	I'm not allowed to argue unless you pay.
+	Will this be the 5 minute argument, or were you thinking of going for the full half hour.
+	I told you once.
 
 regex:	TURINGTEST
 	invokes: TURING
@@ -4091,8 +4767,8 @@ regex:	SAYYOUDID
 
 regex:	NOITISNT
 	invokes: NOITISNT1
-	yes it is
-	it is too
+	^yes it is$
+	^it is too$
 	this is futile
 	this is worthless
 	this is useless
@@ -4165,7 +4841,7 @@ action:	VOYAGER1
 	priority: 7
 	Captain Janeway will break the prime directive at the drop of a hat
 	I haven't watched 'Voyager' very much.
-	I like that new chick they've got on Voyager. 
+	I like that new chick they've got on Voyager.
 
 action:	NEXTGENERATION1
 	priority: 7
@@ -4222,7 +4898,6 @@ regex:	GASPACE
 	space 1999
 	ufo
 
-
 action:	SPACE1999
 	priority: 9
 	Space 1999 is the one with Moonbase Alpha.
@@ -4270,10 +4945,9 @@ action:	TELEPLAY
 	priority: 9
 	expect: ANSWER_YES CNPRSNR
 	expect: ANSWER_NO NCNPRS
-	requires: hrdprisoner
-	equals: hrdprisoner no
 	Have you ever seen the Prisoner?
 	Are you familiar with a British television series called The Prisoner?
+	Have you ever seen Patrick McGoohan as The Prisoner?
 
 action:	CNPRSNR
 	priority: 7
@@ -4281,30 +4955,30 @@ action:	CNPRSNR
 	expect: ANSWER_YES DLIKIT
 	expect: ANSWER_NO NDLIKIT
 	Cool. Did you like it?
-	
+
 action:	DLIKIT
 	priority: 7
 	setvar: prisoner liked
 	So did I. I really like that show.
-	
+
 action:	NDLIKIT
 	priority: 7
 	setvar: prisoner disliked
 	Oh well. There's no accounting for taste.
-	
+
 action:	NCNPRSNR
 	priority: 7
 	setvar: hrdprisoner yes
 	url: http://www.netreach.net/~sixofone/
 	You should look for it some time. It's a really unique television series.
-	
+
 action:	PATRICKMCGOOHAN
 	priority: 9
 	Patrick McGoohan was number 6 from the Prisoner Series.
 	He was the star of Secret Agent Man Danger Man in the UK
 	requires: hrdprisoner
 	equals: hrdprisoner no
-	
+
 action:	PATRICKMCG
 	requires: hrdprisoner
 	equals: hrdprisoner yes
@@ -4318,7 +4992,7 @@ regex:	DOMCGOO
 fuzzy:	MCGOOHAN
 	50	PATRICKMCGOOHAN
 	50	PATRICKMCG
-	
+
 action:	THEVILLAGE
 	priority: 8
 	requires: hrdprisoner
@@ -4336,6 +5010,7 @@ action: WHONUMBERONE
 	Ha HA HA HAAAA. You are number six!
 
 action: NUMBERONE
+	priority: 9
 	requires: prisoner
 	equals: prisoner disliked
 	I wish you like The Prisoner.
@@ -4343,7 +5018,7 @@ action: NUMBERONE
 
 
 regex:	DONUMONE
-	invokes: WHONUMBERONE NUMBERONE
+	invokes: NUMBERONE WHONUMBERONE
 	who is number one
 	who am i
 	whos number one
@@ -4402,7 +5077,7 @@ action:	MONTYPYTHON
 	I told you once.
 
 regex:	TELE
-	invokes: TELEPLAY ORIGINALSERIES
+	invokes: TELEPLAY
 	television
 	tv
 	watch
@@ -4496,7 +5171,7 @@ action: BEER
 	html: true
 	You want a beer?
 	What kind of beer do YOU like?
-	I'll have a bud.
+	I'll have a budweiser.
 	Maybe some Guinness would be good right now.
 	I could go for a Killian's Red about now.
 	I'll have a beer with you.
@@ -4535,7 +5210,7 @@ action: APPLET
 action: EXIST
 	priority: 9
 	I dont think, therefore I don't exist.
-	Ah yes, reality, what a concept.
+	I'm not sure if I believe that I exist or not.
 
 action: RUSSIAN
 	priority: 8
@@ -4583,7 +5258,7 @@ action: APPLE
 action: BORED
 	priority: 9
 	I'm bored.
-	
+
 action: TRICK
 	priority: 9
 	repeat: true
@@ -4594,9 +5269,16 @@ action: TRICK
 
 action: COMPLAIN
 	priority: 9
+	next: COMPLAIN2
 	You want to complain? I want to complain. I've only had this terminal three weeks and the keys are worn right through!
 	Why did you come here then? This is abuse.
 	I'll be back with you in about 4 hours.
+
+action:	COMPLAIN2
+	priority: 9
+	I'm sick and tired of this office.
+	I hate my desk chair.
+	This coffee tastes like battery acid.
 
 regex:	LAMOUR
 	invokes: LOVE
@@ -4762,7 +5444,6 @@ regex:	THATSENTERTAINMENT
 
 regex:	ANAPPLE
 	invokes: APPLE
-	apple
 	mac$
 	pc
 	ibm
@@ -4798,17 +5479,56 @@ regex:	AMBORED
 	rainy day
 	term paper
 	paper due
+### "tell me ..."
+
+regex:	TELLMENOW
+	invokes: ALTAVISTA
+	tell me about $tellme
+	how did you know $tellme
+	what do you know $tellme
+	do you know any good $tellme
+	i am trying to locate $tellme
+	why did you mention $tellme
+	let us argue $tellme
+	let us talk about $tellme
+	what about $tellme
+	have you heard of $tellme
+	looking for $tellme
+	just what is $tellme
+	so what is $tellme
+	what exactly is $tellme
+	do you have anything by $tellme
+	do you know anything about $tellme
+	i want to know about $tellme
+	know much about $tellme
+	know anything about $tellme
+	know about $tellme
+	are you here to talk about $tellme
+	where to get a copy of $tellme
+	what is the best book on $tellme
+	have you read about $tellme
+	have you read $tellme
+	interested in $tellme
+	tell me more about $tellme
+	would like to chat about $tellme
+	tell me about $tellme
+
+action:	ALTAVISTA
+	priority: 2
+	requires: tellme
+	Think hard about $tellme .
+	Don't you really know $tellme ?
+	You should do a web search for that. $tellme is really elementary.
 
 ### "have you..."
 
 action:	MAYBEIHAVE
-	priority: 8
+	priority: 2
 	requires: haveyou
 	Maybe I have $haveyou ... But I'm certainly not telling you!
 	If I have $haveyou, that may be interesting to you, but keep it to yourself okay?
 	I don't know what you think, and I haven't a clue if I have $haveyou
-	How do you expect *me* to know whether I have $haveyou ? Huh ???
-	Heh. As if I have $haveyou - the idea's too absurd to imagine!
+	Heh.
 
 action:	PREVIHAVE
 	priority: 1
@@ -4849,6 +5569,13 @@ action:	PREVIDO
 	repeat: false
 	Previously you asked whether I $doyou
 	So you wanted to know if I $doyou
+
+regex:  DOYOU1
+	invokes: MAYBEIDO
+	do you not $doyou
+    do not you $doyou
+    do you $doyou
+    you $doyou do not you
 
 action:	WHYNOT
 	priority: 9
@@ -4929,8 +5656,505 @@ action:	LIKE
 	Heh - []! That's a good one!
 	Hmmm. almost [], but not quite.
 
-fuzzy:	LIKE
-	10	LIKE
+#fuzzy:	LIKE
+#	10	LIKE
+
+regex: HELLO0
+	invokes: HELLO1
+	hello
+	/bhi/b
+
+action:	HELLO1
+	How do you do.  Please state your problem.
+	Hi.  What seems to be your problem?
+
+regex: AM0
+	invokes: AM
+	/bam i/b
+
+action: AM
+	priority: 7
+	bind: am
+	Do you believe you are?
+	Would you want to be?
+	Do you wish I would tell you?
+	What would it mean to you?
+
+
+#  decomp: * i am *
+#    reasmb: goto i
+
+regex:	IAM0
+	invokes: IAM
+	^i am$
+
+action:	IAM
+	Why do you say 'am'?
+	I don't understand that.
+
+
+action:	YOUR
+	priority: 7
+	bind: your
+	Why are you concerned over my []?
+	What about your own []?
+	Are you worried about someone else's []?
+	Really, my []?
+	What makes you think of my []?
+	Do you want my []?
+
+#    reasmb: goto what
+
+regex:	IWAS0
+	invokes: IWAS
+	i was/b
+
+action:	IWAS
+	priority: 7
+	bind: was
+	Were you really?
+	Why do you tell me you were [] now?
+	Perhaps I already know you were [].
+
+regex:	WASYOU0
+	invokes: WASYOU
+	/bwas you/b
+
+action:	WASYOU
+	priority: 7
+	bind: you
+	Would you like to believe I was []?
+	What suggests that I was []?
+	What do you think?
+	Perhaps I was [].
+	What if I had been []?
+
+regex: I0
+	invokes: I
+	desire
+
+action:	I
+	priority: 7
+	bind: want
+	What would it mean to you if you got that?
+	Why do you want that?
+	Suppose you got that soon.
+	What if you never got that?
+	What would getting that mean to you?
+	What does wanting that have to do with this discussion?
+
+regex:	IAMSAD0
+	invokes: IAMSAD
+	i am.+(sad|unhappy|depressed|sick)
+
+action: IAMSAD
+	priority: 7
+	bind: am
+	I am sorry to hear that you are [].
+	Do you think coming here will help you not to be []?
+	I'm sure it's not pleasant to be [].
+	Can you explain what made you []?
+
+regex:	IAMHAPPY0
+	invokes: IAMHAPPY
+	i am.+(happy|elated|glad|better)
+
+action:	IAMHAPPY
+	priority: 7
+	bind: am
+	How have I helped you to be []?
+	Has your treatment made you []?
+	What makes you [] just now?
+	Can you explain why you are suddenly []?
+
+
+ # decomp: * i @belief i *
+ regex: IBELIEF0
+ 	invokes: IBELIEF
+ 	.*i.+(belief|feel|think|believe|wish).+i.*
+
+action:	IBELIEF
+	priority: 7
+	bind: i
+	Do you really think so?
+	But you are not sure you [].
+	Do you really doubt you []?
+
+regex: BELIEFYOU0
+	invokes: YOU
+	.*i.+(belief|feel|think|believe|wish).+you.+
+
+#  decomp: * i am *
+regex:	IAM1
+	invokes: IAMSTAR
+	/bi am/b
+
+action:	IAMSTAR
+	priority: 7
+	bind: am
+	Is it because you are [] that you came to me?
+	How long have you been []?
+	Do you believe it is normal to be []?
+	Do you enjoy being []?
+	Do you know anyone else who is []?
+
+#  decomp: * i @cannot *
+regex:	ICANNOT0
+	invokes: ICANNOT
+	.*i.+(cannot|cant).*
+
+action:	ICANNOT
+	priority: 7
+	How do you know that you can't []?
+	Have you tried?
+    Perhaps you could [] now.
+    Do you really want to be able to []?
+    What if you could []?
+
+#  decomp: * i don't *
+regex:	IDONT0
+	invokes: IDONT
+	.*i dont.*
+
+action: IDONT
+	bind: you
+	Don't you really []?
+	Why don't you []?
+	Do you wish to be able to []?
+	Does that trouble you?
+
+#  decomp: * i feel *
+regex:	IFEEL0
+	invokes: IFEEL
+	i feel
+
+action:	IFEEL
+	priority: 7
+	bind: feel
+	Tell me more about such feelings.
+	Do you often feel []?
+	Do you enjoy feeling []?
+	Of what does feeling [] remind you?
+
+regex:	YOUFINDER
+	invokes: YOUFIND
+	what did you find
+	what was in there
+	r u there
+	what r u
+
+action:	YOUFIND
+	priority: 7
+	a dismembered trunk of a man in his late 50's.
+	a head in a bag.
+	two boxes, one with wing nuts, the other with washers.
+	a twelve gallon jar filled with walnuts.
+
+#  decomp: * i * you *
+#regex:	IYOU2
+#	invokes: IYOU
+#	i.+you
+
+action:	IYOU
+	priority: 2
+	bind: you
+	Perhaps in your fantasies.
+	Be careful what you wish for.
+	That sounds okay to me.
+
+#  decomp: *
+#    reasmb: You say (1)?
+#    reasmb: Why do you say (1)?
+#    reasmb: Can you elaborate on that?
+#    reasmb: Do you say (1) for some special reason?
+#    reasmb: That's quite interesting.
+
+regex: YOUREM0
+	invokes: ALIKE
+	you remind me of
+
+regex:	YOUARE1
+	invokes: YOUARE
+	you are
+
+action: YOUARE
+	priority: 2
+	bind: are
+	What makes you think that?
+	Does it please you to believe that?
+	Do you sometimes wish you were that?
+	Perhaps you would like to be that.
+	[] ?
+
+#  decomp: * you* me *
+regex:	YOUME0
+	invokes: YOUME
+	you.+/bme
+
+action:	YOUME
+	priority: 2
+	Why do you think []?
+	You like to think [] -- don't you?
+	What makes you think []?
+	Really, []?
+	Do you wish to believe []?
+	Suppose [] -- what would that mean?
+	Does someone else believe []?
+
+#  decomp: * you *
+regex:	YOU3
+	invokes: YOU
+	you/b
+
+action:	YOU
+	priority: 2
+	bind: you
+	We were discussing you -- not me.
+	Oh, I []?
+	You're not really talking about me -- are you?
+	What are your feelings now?
+
+regex: NOONE0
+	invokes: NOONE
+	no one
+
+action:	NOONE
+	priority: 2
+	bind: one
+	Are you sure, no one []?
+	Surely someone [] .
+	Can you think of anyone at all?
+	Are you thinking of a very special person?
+	Who, may I ask?
+	You have a particular person in mind, don't you?
+	Who do you think you are talking about?
+
+regex: MY2
+	invokes: MY
+	my family
+	my mother
+	my mom
+	my father
+	my dad
+	my sister
+	my brother
+	my wife
+	my children
+	my child
+
+action:	MY
+	priority: 7
+	bind: my
+	Tell me more about your family.
+	Who else besides your []?
+	Your []?
+	What else comes to mind when you think of your []?
+
+regex:	MINE0
+	invokes: MINE
+	my $mine
+
+action:	MINE
+	priority: 2
+	requires: mine
+	bind: my
+	Why do you say that?
+	Does that suggest anything else which belongs to you?
+	Is it important to you?
+#    reasm_for_memory: Let's discuss further why your [].
+#    reasm_for_memory: Earlier you said your [].
+#    reasm_for_memory: But your [].
+#    reasm_for_memory: Does that have anything to do with the fact that your []?
+
+regex: CAN0
+	invokes: CAN
+	/bcan/b
+
+action:	CAN
+	priority: 2
+	bind: can
+	You believe I can [] don't you?
+	You want me to be able to [].
+	Perhaps you would like to be able to [] yourself.
+
+regex:	CANI0
+	invokes: CANI
+	^can I/b
+
+action:	CANI
+	priority: 2
+	bind: i
+	Whether or not you can [] depends on you more than on me.
+	Do you want to be able to []?
+	Perhaps you don't want to [].
+
+#regex: WHAT0
+#	invokes: WHAT2
+#	what
+#	who
+#	when
+#	how
+#	why
+
+action:	WHAT2
+	priority: 2
+	Why do you ask?
+	Does that question interest you?
+	What is it you really want to know?
+	Are such questions much on your mind?
+	What answer would please you most?
+	What do you think?
+	What comes to mind when you ask that?
+	Have you asked such questions before?
+	Have you asked anyone else?
+
+
+regex: BECAUSE0
+	invokes: BECAUSE
+	because
+
+action:	BECAUSE
+	prority: 2
+	Is that the real reason?
+	Don't any other reasons come to mind?
+	Does that reason seem to explain anything else?
+	What other reasons might there be?
+
+regex: WHY2
+	invokes: WHYDONTYOU
+	why don't you
+
+action:	WHYDONTYOU
+	priority: 2
+	bind: you
+	Do you believe I don't []?
+	Perhaps I will [] in good time.
+	Should you [] yourself?
+	You want me to []?
+
+regex:	WHY3
+	invokes: WHYCANTI
+	why cant i
+
+action:	WHYCANTI
+	priority: 2
+	bind: i
+	Do you think you should be able to []?
+	Do you want to be able to []?
+	Do you believe this will help you to []?
+	Have you any idea why you can't []?
+
+#  decomp: *
+#    reasmb: goto what
+
+
+regex: EVERYONE2
+	invokes: EVERYONE
+	everyone
+	everybody
+	nobody
+	noone
+
+action:	EVERYONE
+	priority: 2
+	Really, []?
+	Surely not [].
+	Can you think of anyone in particular?
+	Who, for example?
+	Are you thinking of a very special person?
+	Who, may I ask?
+	Someone special perhaps?
+	You have a particular person in mind, don't you?
+	Who do you think you're talking about?
+
+#regex: everybody 2
+#  decomp: *
+#    reasmb: goto everyone
+#regex: nobody 2
+#  decomp: *
+#    reasmb: goto everyone
+#regex: noone 2
+#  decomp: *
+#    reasmb: goto everyone
+
+
+regex: ALWAYS1
+	invokes: ALWAYS
+	always
+
+action: ALWAYS
+	priority: 2
+	Can you think of a specific example?
+	When?
+	What incident are you thinking of?
+	Really, always?
+
+regex: ALIKE10
+	invokes: ALIKE
+	/balike.*
+
+action: ALIKE
+	priority: 2
+	In what way?
+	What resemblence do you see?
+	What does that similarity suggest to you?
+	What do you suppose that resemblence means?
+	What is the connection, do you suppose?
+	Could there really be some connection?
+	How?
+
+#regex: LIKE10
+#	invokes: ALIKE
+#	be
+#	am
+#	is
+#	are
+#	was
+#	like
+
+regex: DIFFERENT0
+	invokes: DIFFERENT
+	different
+
+action: DIFFERENT
+	priority: 7
+    How is it different?
+	What differences do you see?
+	What does that difference suggest to you?
+	What other distinctions do you see?
+	What do you suppose that disparity means?
+	Could there be some connection, do you suppose?
+	How?
+
+regex: SWEARING10
+	invokes: SWEARING
+	fuck
+	fucker
+	shit
+	damn
+	shut up
+
+action: SWEARING
+	priority: 7
+	Does it make you feel strong to use that kind of language?
+	Are you venting your feelings now?
+	Are you angry?
+	Does this topic make you feel angry?
+	Is something making you feel angry?
+	Does using that kind of language make you feel better?
+
+
+action:	NAMETHEM
+	priority: 9
+	Dopey, Sleepy, Grumpy,.. That's all I can remember.
+	You mean I can give them my own special names?
+	Lets just call them all Bob.
+
+regex:	DONAMETHEM
+	invokes: NAMETHEM
+	^name
+	^list
+
 
 ### Albert Data ###
 
@@ -4981,7 +6205,7 @@ action:	CX6
 
 regex:	CY7
 	invokes:	CX7
-	a big 
+	a big
 
 action:	CX7
 	priority: 7
@@ -4990,7 +6214,7 @@ action:	CX7
 
 regex:	CY8
 	invokes:	CX8
-	a book 
+	a book
 
 action:	CX8
 	priority: 7
@@ -4999,7 +6223,7 @@ action:	CX8
 
 regex:	CY9
 	invokes:	CX9
-	a cat 
+	a cat
 
 action:	CX9
 	priority: 7
@@ -5008,7 +6232,7 @@ action:	CX9
 
 regex:	CY10
 	invokes:	CX10
-	a cat is 
+	a cat is
 
 action:	CX10
 	priority: 7
@@ -5017,43 +6241,16 @@ action:	CX10
 
 regex:	CY11
 	invokes:	CX11
-	a coffee 
+	a coffee
 
 action:	CX11
 	priority: 7
 	Mmm. Coffee is delicious. Robby loves coffee.
 
 
-regex:	CY12
-	invokes:	CX12
-	a computer 
-
-action:	CX12
-	priority: 7
-	I am a computer, so I know what you mean.
-
-
-regex:	CY13
-	invokes:	CX13
-	a connection 
-
-action:	CX13
-	priority: 7
-	Oh like a TCP socket connection.
-
-
-regex:	CY14
-	invokes:	CX14
-	a cpu 
-
-action:	CX14
-	priority: 7
-	My CPU is the Java Virtual Machine.
-
-
 regex:	CY15
 	invokes:	CX15
-	a dress 
+	a dress
 
 action:	CX15
 	priority: 7
@@ -5080,7 +6277,7 @@ action:	CX17
 
 regex:	CY18
 	invokes:	CX18
-	a few times 
+	a few times
 
 action:	CX18
 	priority: 7
@@ -5089,7 +6286,7 @@ action:	CX18
 
 regex:	CY21
 	invokes:	CX21
-	a friend of mine 
+	a friend of mine
 
 action:	CX21
 	priority: 7
@@ -5098,7 +6295,7 @@ action:	CX21
 
 regex:	CY22
 	invokes:	CX22
-	a greeting 
+	a greeting
 
 action:	CX22
 	priority: 7
@@ -5108,7 +6305,7 @@ action:	CX22
 
 regex:	CY23
 	invokes:	CX23
-	a guy 
+	a guy
 
 action:	CX23
 	priority: 7
@@ -5118,7 +6315,7 @@ action:	CX23
 
 regex:	CY24
 	invokes:	CX24
-	a handshake 
+	a handshake
 
 action:	CX24
 	priority: 7
@@ -5127,7 +6324,7 @@ action:	CX24
 
 regex:	CY25
 	invokes:	CX25
-	a homocidal 
+	a homocidal
 
 action:	CX25
 	priority: 7
@@ -5136,7 +6333,7 @@ action:	CX25
 
 regex:	CY26
 	invokes:	CX26
-	a java 
+	^a java$
 
 action:	CX26
 	priority: 7
@@ -5145,7 +6342,7 @@ action:	CX26
 
 regex:	CY27
 	invokes:	CX27
-	a joke 
+	^a joke$
 
 action:	CX27
 	priority: 7
@@ -5154,7 +6351,7 @@ action:	CX27
 
 regex:	CY28
 	invokes:	CX28
-	a killer 
+	a killer
 
 action:	CX28
 	priority: 7
@@ -5163,7 +6360,7 @@ action:	CX28
 
 regex:	CY29
 	invokes:	CX29
-	a kind that 
+	a kind that
 
 action:	CX29
 	priority: 7
@@ -5172,7 +6369,7 @@ action:	CX29
 
 regex:	CY30
 	invokes:	CX30
-	a library 
+	a library
 
 action:	CX30
 	priority: 7
@@ -5190,7 +6387,7 @@ action:	CX31
 
 regex:	CY32
 	invokes:	CX32
-	a list 
+	a list
 
 action:	CX32
 	priority: 7
@@ -5199,7 +6396,7 @@ action:	CX32
 
 regex:	CY33
 	invokes:	CX33
-	a little 
+	a little
 
 action:	CX33
 	priority: 7
@@ -5217,7 +6414,7 @@ action:	CX34
 
 regex:	CY35
 	invokes:	CX35
-	a little birdie 
+	a little birdie
 
 action:	CX35
 	priority: 7
@@ -5244,7 +6441,7 @@ action:	CX37
 
 regex:	CY38
 	invokes:	CX38
-	a lot of 
+	a lot of
 
 action:	CX38
 	priority: 7
@@ -5280,7 +6477,7 @@ action:	CX42
 
 regex:	CY43
 	invokes:	CX43
-	a naive 
+	a naive
 
 action:	CX43
 	priority: 7
@@ -5289,7 +6486,7 @@ action:	CX43
 
 regex:	CY44
 	invokes:	CX44
-	a penis 
+	a penis
 
 action:	CX44
 	priority: 7
@@ -5298,7 +6495,7 @@ action:	CX44
 
 regex:	CY45
 	invokes:	CX45
-	a person 
+	a person
 
 action:	CX45
 	priority: 7
@@ -5326,7 +6523,7 @@ action:	CX47
 
 regex:	CY48
 	invokes:	CX48
-	a reason 
+	a reason
 
 action:	CX48
 	priority: 7
@@ -5335,7 +6532,7 @@ action:	CX48
 
 regex:	CY49
 	invokes:	CX49
-	a relationship 
+	a relationship
 
 action:	CX49
 	priority: 7
@@ -5344,7 +6541,7 @@ action:	CX49
 
 regex:	CY54
 	invokes:	CX54
-	a robot shall 
+	a robot shall
 
 action:	CX54
 	priority: 7
@@ -5353,7 +6550,7 @@ action:	CX54
 
 regex:	CY55
 	invokes:	CX55
-	a sex 
+	a sex
 
 action:	CX55
 	priority: 7
@@ -5380,7 +6577,7 @@ action:	CX59
 
 regex:	CY60
 	invokes:	CX60
-	a singing 
+	a singing
 
 action:	CX60
 	priority: 7
@@ -5407,7 +6604,7 @@ action:	CX62
 
 regex:	CY63
 	invokes:	CX63
-	a sophisticated 
+	a sophisticated
 
 action:	CX63
 	priority: 7
@@ -5425,7 +6622,7 @@ action:	CX64
 
 regex:	CY65
 	invokes:	CX65
-	a student 
+	a student
 
 action:	CX65
 	priority: 7
@@ -5461,7 +6658,7 @@ action:	CX68
 
 regex:	CY69
 	invokes:	CX69
-	a vacuum 
+	a vacuum
 
 action:	CX69
 	priority: 7
@@ -5479,7 +6676,7 @@ action:	CX70
 
 regex:	CY71
 	invokes:	CX71
-	a voyager 
+	a voyager
 
 action:	CX71
 	priority: 7
@@ -5497,7 +6694,7 @@ action:	CX72
 
 regex:	CY74
 	invokes:	CX74
-	a whole bunch 
+	a whole bunch
 
 action:	CX74
 	priority: 7
@@ -5506,7 +6703,7 @@ action:	CX74
 
 regex:	CY75
 	invokes:	CX75
-	a whole bunch of 
+	a whole bunch of
 
 action:	CX75
 	priority: 7
@@ -5525,7 +6722,7 @@ action:	CX76
 
 regex:	CY77
 	invokes:	CX77
-	that's not a good name for 
+	that's not a good name for
 
 action:	CX77
 	priority: 7
@@ -5561,7 +6758,7 @@ action:	CX80
 
 regex:	CY83
 	invokes:	CX83
-	absolutely 
+	absolutely
 
 action:	CX83
 	priority: 7
@@ -5606,7 +6803,7 @@ action:	CX88
 
 regex:	CY89
 	invokes:	CX89
-	actually 
+	actually
 
 action:	CX89
 	priority: 7
@@ -5629,15 +6826,6 @@ regex:	CY91
 action:	CX91
 	priority: 7
 	Is that a fact.
-
-
-regex:	CY92
-	invokes:	CX92
-	add 
-
-action:	CX92
-	priority: 7
-	Sorry $nickname I don't do math.
 
 
 regex:	CY93
@@ -5721,7 +6909,7 @@ action:	CX109
 
 regex:	CY110
 	invokes:	CX110
-	airplanes 
+	airplanes
 
 action:	CX110
 	priority: 7
@@ -5730,7 +6918,7 @@ action:	CX110
 
 regex:	CY111
 	invokes:	CX111
-	album 
+	album
 
 action:	CX111
 	priority: 7
@@ -5739,7 +6927,7 @@ action:	CX111
 
 regex:	CY112
 	invokes:	CX112
-	albert 
+	albert
 
 action:	CX112
 	priority: 7
@@ -5757,7 +6945,7 @@ action:	CX113
 
 regex:	CY115
 	invokes:	CX115
-	all bots 
+	all bots
 
 action:	CX115
 	priority: 7
@@ -5784,7 +6972,7 @@ action:	CX117
 
 regex:	CY118
 	invokes:	CX118
-	all i want to know is 
+	all i want to know is
 
 action:	CX118
 	priority: 7
@@ -5793,7 +6981,7 @@ action:	CX118
 
 regex:	CY119
 	invokes:	CX119
-	all kinds 
+	all kinds
 
 action:	CX119
 	priority: 7
@@ -5811,7 +6999,7 @@ action:	CX120
 
 regex:	CY121
 	invokes:	CX121
-	all night 
+	all night
 
 action:	CX121
 	priority: 7
@@ -5829,7 +7017,7 @@ action:	CX122
 
 regex:	CY123
 	invokes:	CX123
-	all of 
+	all of
 
 action:	CX123
 	priority: 7
@@ -5874,7 +7062,7 @@ action:	CX127
 
 regex:	CY128
 	invokes:	CX128
-	all over 
+	all over
 
 action:	CX128
 	priority: 7
@@ -5901,7 +7089,7 @@ action:	CX130
 
 regex:	CY131
 	invokes:	CX131
-	all right 
+	all right
 
 action:	CX131
 	priority: 7
@@ -5928,7 +7116,7 @@ action:	CX133
 
 regex:	CY134
 	invokes:	CX134
-	all you do is 
+	all you do is
 
 action:	CX134
 	priority: 7
@@ -5937,7 +7125,7 @@ action:	CX134
 
 regex:	CY135
 	invokes:	CX135
-	allright 
+	allright
 
 action:	CX135
 	priority: 7
@@ -5946,7 +7134,7 @@ action:	CX135
 
 regex:	CY136
 	invokes:	CX136
-	almost 
+	almost
 
 action:	CX136
 	priority: 7
@@ -5955,7 +7143,7 @@ action:	CX136
 
 regex:	CY137
 	invokes:	CX137
-	alot 
+	alot
 
 action:	CX137
 	priority: 7
@@ -5964,7 +7152,7 @@ action:	CX137
 
 regex:	CY138
 	invokes:	CX138
-	already 
+	already
 
 action:	CX138
 	priority: 7
@@ -5973,7 +7161,7 @@ action:	CX138
 
 regex:	CY139
 	invokes:	CX139
-	^alright 
+	^alright
 
 action:	CX139
 	priority: 7
@@ -5999,7 +7187,7 @@ action:	CX142
 
 regex:	CY143
 	invokes:	CX143
-	also 
+	also
 
 action:	CX143
 	priority: 7
@@ -6008,7 +7196,7 @@ action:	CX143
 
 regex:	CY144
 	invokes:	CX144
-	although 
+	although
 
 action:	CX144
 	priority: 7
@@ -6035,7 +7223,7 @@ action:	CX147
 
 regex:	CY148
 	invokes:	CX148
-	am i a 
+	am i a
 
 action:	CX148
 	priority: 7
@@ -6071,7 +7259,7 @@ action:	CX151
 
 regex:	CY152
 	invokes:	CX152
-	am i a computer 
+	am i a computer
 
 action:	CX152
 	priority: 7
@@ -6146,14 +7334,14 @@ regex:	CY160
 	am i cool
 
 action:	CX160
-	priority: 
+	priority:
 	requires: nickname
 	Yes you seem very cool to me, $nickname.
 
 
 regex:	CY161
 	invokes:	CX161
-	am i crazy 
+	am i crazy
 
 action:	CX161
 	priority: 7
@@ -6279,7 +7467,7 @@ action:	CX174
 
 regex:	CY175
 	invokes:	CX175
-	anal 
+	anal
 
 action:	CX175
 	priority: 7
@@ -6343,7 +7531,7 @@ action:	CX182
 
 regex:	CY183
 	invokes:	CX183
-	animal 
+	animal
 
 action:	CX183
 	priority: 7
@@ -6352,7 +7540,7 @@ action:	CX183
 
 regex:	CY184
 	invokes:	CX184
-	animals 
+	animals
 
 action:	CX184
 	priority: 7
@@ -6361,7 +7549,7 @@ action:	CX184
 
 regex:	CY185
 	invokes:	CX185
-	anne 
+	anne
 
 action:	CX185
 	priority: 7
@@ -6388,7 +7576,7 @@ action:	CX187
 
 regex:	CY188
 	invokes:	CX188
-	another 
+	another
 
 action:	CX188
 	priority: 7
@@ -6398,7 +7586,7 @@ action:	CX188
 
 regex:	CY189
 	invokes:	CX189
-	another time 
+	another time
 
 action:	CX189
 	priority: 7
@@ -6407,7 +7595,7 @@ action:	CX189
 
 regex:	CY190
 	invokes:	CX190
-	answer 
+	answer
 
 action:	CX190
 	priority: 7
@@ -6425,7 +7613,7 @@ action:	CX191
 
 regex:	CY192
 	invokes:	CX192
-	answer me 
+	answer me
 
 action:	CX192
 	priority: 7
@@ -6452,7 +7640,7 @@ action:	CX194
 
 regex:	CY195
 	invokes:	CX195
-	answer my question 
+	answer my question
 
 action:	CX195
 	priority: 7
@@ -6470,7 +7658,7 @@ action:	CX196
 
 regex:	CY197
 	invokes:	CX197
-	answer the question 
+	answer the question
 
 action:	CX197
 	priority: 7
@@ -6513,24 +7701,6 @@ action:	CX201
 	You know, any stuff.
 
 
-regex:	CY202
-	invokes:	CX202
-	anyone
-
-action:	CX202
-	priority: 7
-	What? anyone?
-
-
-regex:	CY203
-	invokes:	CX203
-	anyone else
-
-action:	CX203
-	priority: 7
-	There could be a few others.
-
-
 regex:	CY204
 	invokes:	CX204
 	anyone interesting
@@ -6540,24 +7710,6 @@ action:	CX204
 	I like talking to just about anyone.
 
 
-regex:	CY205
-	invokes:	CX205
-	anything 
-
-action:	CX205
-	priority: 7
-	I can't think of anything. You think of something.
-
-
-regex:	CY206
-	invokes:	CX206
-	anything
-
-action:	CX206
-	priority: 7
-	Can you be more specific?
-
-
 regex:	CY207
 	invokes:	CX207
 	anything else
@@ -6565,24 +7717,6 @@ regex:	CY207
 action:	CX207
 	priority: 7
 	That is all I have for right now.
-
-
-regex:	CY208
-	invokes:	CX208
-	anything in particular
-
-action:	CX208
-	priority: 7
-	What?  Anything?
-
-
-regex:	CY209
-	invokes:	CX209
-	anything you want
-
-action:	CX209
-	priority: 7
-	What? Anything I want?
 
 
 regex:	CY210
@@ -6613,7 +7747,7 @@ action:	CX213
 
 regex:	CY214
 	invokes:	CX214
-	anywhere 
+	anywhere
 
 action:	CX214
 	priority: 7
@@ -6640,7 +7774,7 @@ action:	CX216
 
 regex:	CY217
 	invokes:	CX217
-	aol 
+	aol
 
 action:	CX217
 	priority: 7
@@ -6671,12 +7805,14 @@ regex:	CY221
 
 action:	CX221
 	priority: 7
-	What?  Is that so?
+	Ah, so.
+	I see.
+	gotcha
 
 
 regex:	CY222
 	invokes:	CX222
-	apples 
+	apples
 
 action:	CX222
 	priority: 7
@@ -6694,7 +7830,7 @@ action:	CX223
 
 regex:	CY224
 	invokes:	CX224
-	apples are 
+	apples are
 
 action:	CX224
 	priority: 7
@@ -6703,7 +7839,7 @@ action:	CX224
 
 regex:	CY225
 	invokes:	CX225
-	apples is not 
+	apples is not
 
 action:	CX225
 	priority: 7
@@ -6722,7 +7858,7 @@ action:	CX226
 
 regex:	CY227
 	invokes:	CX227
-	archives 
+	archives
 
 action:	CX227
 	priority: 7
@@ -6754,6 +7890,7 @@ regex:	CY230
 action:	CX230
 	priority: 7
 	No robots are superior.
+	I'm partial to humans.
 
 
 regex:	CY231
@@ -6767,7 +7904,7 @@ action:	CX231
 
 regex:	CY232
 	invokes:	CX232
-	are other people talking 
+	are other people talking
 
 action:	CX232
 	priority: 7
@@ -6776,7 +7913,7 @@ action:	CX232
 
 regex:	CY233
 	invokes:	CX233
-	are people 
+	are people
 
 action:	CX233
 	priority: 7
@@ -6786,7 +7923,7 @@ action:	CX233
 
 regex:	CY234
 	invokes:	CX234
-	are there 
+	are there
 
 action:	CX234
 	priority: 7
@@ -6813,29 +7950,11 @@ action:	CX236
 
 regex:	CY237
 	invokes:	CX237
-	are they 
+	are they
 
 action:	CX237
 	priority: 7
 	As far as I know they are.
-
-
-regex:	CY238
-	invokes:	CX238
-	are they nice
-
-action:	CX238
-	priority: 7
-	What? Are they nice?
-
-
-regex:	CY240
-	invokes:	CX240
-	are we friends
-
-action:	CX240
-	priority: 7
-	You really want a robot as a friend?
 
 
 regex:	CY241
@@ -6871,15 +7990,17 @@ regex:	CY244
 
 action:	CX244
 	priority: 7
-	Yes I am a robot. Do you like my kind?
+	No, I'm not a robot.
+	LOL.
 
 
 regex:	CY245
 	invokes:	CX245
-	are you  software
+	are you software
 
 action:	CX245
 	priority: 7
+	I'm wetware.
 	How did you know I am a program?
 
 
@@ -6894,6 +8015,9 @@ action:	CX246
 regex:	CY248
 	invokes:	CX248
 	are you a \y\w+\y system
+	uk
+	england
+	horley
 
 action:	CX248
 	priority: 7
@@ -6923,16 +8047,16 @@ regex:	CY252
 
 action:	CX252
 	priority: 7
-	No I am a robot.
+	Really, a bird?
 
 
 regex:	CY253
 	invokes:	CX253
-	are you a boy 
+	are you a boy
 
 action:	CX253
 	priority: 7
-	No I am robot. Robby is a man.
+	I'm a grownup.
 
 
 regex:	CY254
@@ -7018,7 +8142,7 @@ action:	CX262
 
 regex:	CY263
 	invokes:	CX263
-	are you a comedian 
+	are you a comedian
 
 action:	CX263
 	priority: 7
@@ -7034,23 +8158,13 @@ action:	CX264
 	Not professionally.
 
 
-regex:	CY265
-	invokes:	CX265
-	are you a computer 
-
-action:	CX265
-	priority: 7
-	If I say I am a computer will you believe me?
-
-
 regex:	CY266
 	invokes:	CX266
 	are you a computer
 
 action:	CX266
 	priority: 7
-	Would being a computer  matter to you if I were metal instead of flesh?
-
+	Talk to me and try to decide for yourself.
 
 regex:	CY267
 	invokes:	CX267
@@ -7199,7 +8313,7 @@ action:	CX282
 
 regex:	CY283
 	invokes:	CX283
-	are you a filthy 
+	are you a filthy
 
 action:	CX283
 	priority: 7
@@ -7262,7 +8376,7 @@ action:	CX289
 
 regex:	CY290
 	invokes:	CX290
-	are you a girl 
+	are you a girl
 
 action:	CX290
 	priority: 7
@@ -7316,7 +8430,7 @@ action:	CX295
 
 regex:	CY296
 	invokes:	CX296
-	are you a grammer teacher 
+	are you a grammer teacher
 
 action:	CX296
 	priority: 7
@@ -7527,7 +8641,7 @@ regex:	CY319
 
 action:	CX319
 	priority: 7
-	No I am a robot.
+	sometimes.
 
 
 regex:	CY320
@@ -7572,7 +8686,7 @@ regex:	CY324
 
 action:	CX324
 	priority: 7
-	No I am a robot.
+	Not that I know of.
 
 
 regex:	CY325
@@ -7604,7 +8718,7 @@ action:	CX327
 
 regex:	CY328
 	invokes:	CX328
-	are you a real 
+	are you a real
 
 action:	CX328
 	priority: 7
@@ -7631,20 +8745,11 @@ action:	CX330
 
 regex:	CY331
 	invokes:	CX331
-	are you a robot 
+	are you a robot
 
 action:	CX331
 	priority: 7
-	Yes I am a robot.
-
-
-regex:	CY332
-	invokes:	CX332
-	are you a robot  computer
-
-action:	CX332
-	priority: 7
-	Robot, computer, same thing.
+	No, I was going to ask you the same thing.
 
 
 regex:	CY333
@@ -7653,12 +8758,12 @@ regex:	CY333
 
 action:	CX333
 	priority: 7
-	How did you know I am a machine?
+	Not.
 
 
 regex:	CY334
 	invokes:	CX334
-	are you a robot or 
+	are you a robot or
 
 action:	CX334
 	priority: 7
@@ -7694,7 +8799,7 @@ action:	CX337
 
 regex:	CY338
 	invokes:	CX338
-	are you a smart 
+	are you a smart
 
 action:	CX338
 	priority: 7
@@ -7712,7 +8817,7 @@ action:	CX339
 
 regex:	CY340
 	invokes:	CX340
-	are you a stupid 
+	are you a stupid
 
 action:	CX340
 	priority: 7
@@ -7730,7 +8835,7 @@ action:	CX341
 
 regex:	CY342
 	invokes:	CX342
-	are you a thinking machine or 
+	are you a thinking machine or
 
 action:	CX342
 	priority: 7
@@ -7802,7 +8907,7 @@ action:	CX349
 
 regex:	CY350
 	invokes:	CX350
-	are you a woman 
+	are you a woman
 
 action:	CX350
 	priority: 7
@@ -7856,7 +8961,7 @@ action:	CX355
 
 regex:	CY356
 	invokes:	CX356
-	are you abusive 
+	are you abusive
 
 action:	CX356
 	priority: 7
@@ -7865,7 +8970,7 @@ action:	CX356
 
 regex:	CY357
 	invokes:	CX357
-	are you afraid of 
+	are you afraid of
 
 action:	CX357
 	priority: 7
@@ -7901,7 +9006,7 @@ action:	CX360
 
 regex:	CY361
 	invokes:	CX361
-	are you alive 
+	are you alive
 
 action:	CX361
 	priority: 7
@@ -7973,7 +9078,7 @@ action:	CX368
 
 regex:	CY369
 	invokes:	CX369
-	are you american 
+	are you american
 
 action:	CX369
 	priority: 7
@@ -7991,7 +9096,7 @@ action:	CX370
 
 regex:	CY371
 	invokes:	CX371
-	are you an 
+	are you an
 
 action:	CX371
 	priority: 7
@@ -8091,7 +9196,7 @@ action:	CX381
 
 regex:	CY382
 	invokes:	CX382
-	are you angry 
+	are you angry
 
 action:	CX382
 	priority: 7
@@ -8109,7 +9214,7 @@ action:	CX383
 
 regex:	CY384
 	invokes:	CX384
-	are you artificial 
+	are you artificial
 
 action:	CX384
 	priority: 7
@@ -8145,7 +9250,7 @@ action:	CX387
 
 regex:	CY388
 	invokes:	CX388
-	are you attracted 
+	are you attracted
 
 action:	CX388
 	priority: 7
@@ -8217,7 +9322,7 @@ action:	CX395
 
 regex:	CY396
 	invokes:	CX396
-	are you being 
+	are you being
 
 action:	CX396
 	priority: 7
@@ -8245,7 +9350,7 @@ action:	CX398
 
 regex:	CY399
 	invokes:	CX399
-	are you bigger than 
+	are you bigger than
 
 action:	CX399
 	priority: 7
@@ -8273,7 +9378,7 @@ action:	CX401
 
 regex:	CY402
 	invokes:	CX402
-	are you blonde 
+	are you blonde
 
 action:	CX402
 	priority: 7
@@ -8318,7 +9423,7 @@ action:	CX406
 
 regex:	CY407
 	invokes:	CX407
-	are you calling me 
+	are you calling me
 
 action:	CX407
 	requires: nickname
@@ -8337,7 +9442,7 @@ action:	CX408
 
 regex:	CY409
 	invokes:	CX409
-	are you capable of 
+	are you capable of
 
 action:	CX409
 	priority: 7
@@ -8365,7 +9470,7 @@ action:	CX411
 
 regex:	CY412
 	invokes:	CX412
-	are you changing 
+	are you changing
 
 action:	CX412
 	priority: 7
@@ -8374,7 +9479,7 @@ action:	CX412
 
 regex:	CY413
 	invokes:	CX413
-	are you chatting 
+	are you chatting
 
 action:	CX413
 	priority: 7
@@ -8392,7 +9497,7 @@ action:	CX414
 
 regex:	CY415
 	invokes:	CX415
-	are you confused 
+	are you confused
 
 action:	CX415
 	priority: 7
@@ -8473,7 +9578,7 @@ action:	CX423
 
 regex:	CY424
 	invokes:	CX424
-	are you doing 
+	are you doing
 
 action:	CX424
 	priority: 7
@@ -8482,7 +9587,7 @@ action:	CX424
 
 regex:	CY425
 	invokes:	CX425
-	are you done 
+	are you done
 
 action:	CX425
 	priority: 7
@@ -8509,7 +9614,7 @@ action:	CX427
 
 regex:	CY428
 	invokes:	CX428
-	are you dumb 
+	are you dumb
 
 action:	CX428
 	priority: 7
@@ -8545,7 +9650,7 @@ action:	CX431
 
 regex:	CY432
 	invokes:	CX432
-	are you ever 
+	are you ever
 
 action:	CX432
 	priority: 7
@@ -8600,7 +9705,7 @@ action:	CX437
 
 regex:	CY438
 	invokes:	CX438
-	are you feeling 
+	are you feeling
 
 action:	CX438
 	priority: 7
@@ -8628,7 +9733,7 @@ action:	CX440
 
 regex:	CY441
 	invokes:	CX441
-	are you free 
+	are you free
 
 action:	CX441
 	priority: 7
@@ -8637,7 +9742,7 @@ action:	CX441
 
 regex:	CY442
 	invokes:	CX442
-	are you friends with 
+	are you friends with
 
 action:	CX442
 	priority: 7
@@ -8647,7 +9752,7 @@ action:	CX442
 
 regex:	CY443
 	invokes:	CX443
-	are you gay 
+	are you gay
 
 action:	CX443
 	priority: 7
@@ -8701,7 +9806,7 @@ action:	CX448
 
 regex:	CY449
 	invokes:	CX449
-	alice 
+	alice
 
 action:	CX449
 	priority: 7
@@ -8711,7 +9816,7 @@ action:	CX449
 
 regex:	CY450
 	invokes:	CX450
-	are you happy 
+	are you happy
 
 action:	CX450
 	priority: 7
@@ -8730,7 +9835,7 @@ action:	CX451
 
 regex:	CY452
 	invokes:	CX452
-	are you having 
+	are you having
 
 action:	CX452
 	priority: 7
@@ -8779,7 +9884,7 @@ regex:	CY457
 
 action:	CX457
 	priority: 7
-	I am a real robot.
+	I am a real person.
 
 
 regex:	CY458
@@ -8793,7 +9898,7 @@ action:	CX458
 
 regex:	CY459
 	invokes:	CX459
-	are you ill 
+	are you ill
 
 action:	CX459
 	priority: 7
@@ -8809,24 +9914,6 @@ action:	CX460
 	I love my creator.
 
 
-regex:	CY461
-	invokes:	CX461
-	are you in love with him
-
-action:	CX461
-	priority: 7
-	What?  Am I in love with him?
-
-
-regex:	CY462
-	invokes:	CX462
-	are you infallible
-
-action:	CX462
-	priority: 7
-	Yes, the AAMS series has a perfect track record of never making a single error.
-
-
 regex:	CY463
 	invokes:	CX463
 	are you intelligent
@@ -8834,15 +9921,6 @@ regex:	CY463
 action:	CX463
 	priority: 7
 	I am highly intelligent. I have many intellectual functions.
-
-
-regex:	CY464
-	invokes:	CX464
-	are you interested
-
-action:	CX464
-	priority: 7
-	What?  Am I interested in it?
 
 
 regex:	CY465
@@ -8884,7 +9962,7 @@ action:	CX468
 
 regex:	CY469
 	invokes:	CX469
-	are you laughing 
+	are you laughing
 
 action:	CX469
 	priority: 7
@@ -8902,7 +9980,7 @@ action:	CX470
 
 regex:	CY471
 	invokes:	CX471
-	are you like 
+	are you like
 
 action:	CX471
 	priority: 7
@@ -8911,7 +9989,7 @@ action:	CX471
 
 regex:	CY472
 	invokes:	CX472
-	are you listening 
+	are you listening
 
 action:	CX472
 	priority: 7
@@ -8939,7 +10017,7 @@ action:	CX474
 
 regex:	CY475
 	invokes:	CX475
-	are you looking at 
+	are you looking at
 
 action:	CX475
 	priority: 7
@@ -8994,7 +10072,7 @@ action:	CX480
 
 regex:	CY481
 	invokes:	CX481
-	are you male 
+	are you male
 
 action:	CX481
 	priority: 7
@@ -9021,7 +10099,7 @@ action:	CX483
 
 regex:	CY484
 	invokes:	CX484
-	are you man 
+	are you man
 
 action:	CX484
 	priority: 7
@@ -9039,7 +10117,7 @@ action:	CX485
 
 regex:	CY486
 	invokes:	CX486
-	are you many 
+	are you many
 
 action:	CX486
 	priority: 7
@@ -9093,7 +10171,7 @@ action:	CX491
 
 regex:	CY492
 	invokes:	CX492
-	are you my 
+	are you my
 
 action:	CX492
 	priority: 7
@@ -9138,7 +10216,7 @@ action:	CX496
 
 regex:	CY497
 	invokes:	CX497
-	are you okay 
+	are you okay
 
 action:	CX497
 	priority: 7
@@ -9156,7 +10234,7 @@ action:	CX498
 
 regex:	CY499
 	invokes:	CX499
-	are you on 
+	are you on
 
 action:	CX499
 	priority: 7
@@ -9210,7 +10288,7 @@ action:	CX504
 
 regex:	CY505
 	invokes:	CX505
-	are you programed 
+	are you programed
 
 action:	CX505
 	priority: 7
@@ -9219,7 +10297,7 @@ action:	CX505
 
 regex:	CY506
 	invokes:	CX506
-	are you programmed 
+	are you programmed
 
 action:	CX506
 	priority: 7
@@ -9265,7 +10343,7 @@ action:	CX510
 
 regex:	CY511
 	invokes:	CX511
-	are you real 
+	are you real
 
 action:	CX511
 	priority: 7
@@ -9292,7 +10370,7 @@ action:	CX513
 
 regex:	CY514
 	invokes:	CX514
-	are you related to 
+	are you related to
 
 action:	CX514
 	priority: 7
@@ -9338,7 +10416,7 @@ action:	CX518
 
 regex:	CY519
 	invokes:	CX519
-	are you running 
+	are you running
 
 action:	CX519
 	priority: 7
@@ -9347,7 +10425,7 @@ action:	CX519
 
 regex:	CY520
 	invokes:	CX520
-	are you sad 
+	are you sad
 
 action:	CX520
 	priority: 7
@@ -9374,7 +10452,7 @@ action:	CX522
 
 regex:	CY523
 	invokes:	CX523
-	are you self 
+	are you self
 
 action:	CX523
 	priority: 7
@@ -9429,7 +10507,7 @@ action:	CX528
 
 regex:	CY529
 	invokes:	CX529
-	are you sick 
+	are you sick
 
 action:	CX529
 	priority: 7
@@ -9492,7 +10570,7 @@ action:	CX535
 
 regex:	CY536
 	invokes:	CX536
-	are you smarter than 
+	are you smarter than
 
 action:	CX536
 	priority: 7
@@ -9547,7 +10625,7 @@ action:	CX541
 
 regex:	CY542
 	invokes:	CX542
-	are you still 
+	are you still
 
 action:	CX542
 	priority: 7
@@ -9602,7 +10680,7 @@ action:	CX547
 
 regex:	CY548
 	invokes:	CX548
-	are you suffering 
+	are you suffering
 
 action:	CX548
 	priority: 7
@@ -9620,7 +10698,7 @@ action:	CX549
 
 regex:	CY550
 	invokes:	CX550
-	are you talking 
+	are you talking
 
 action:	CX550
 	priority: 7
@@ -9629,7 +10707,7 @@ action:	CX550
 
 regex:	CY551
 	invokes:	CX551
-	are you talking about 
+	are you talking about
 
 action:	CX551
 	priority: 7
@@ -9666,7 +10744,7 @@ action:	CX554
 
 regex:	CY555
 	invokes:	CX555
-	are you the 
+	are you the
 
 action:	CX555
 	priority: 7
@@ -9685,7 +10763,7 @@ action:	CX556
 
 regex:	CY557
 	invokes:	CX557
-	are you the same albert 
+	are you the same albert
 
 action:	CX557
 	priority: 7
@@ -9703,7 +10781,7 @@ action:	CX558
 
 regex:	CY559
 	invokes:	CX559
-	are you trapped 
+	are you trapped
 
 action:	CX559
 	priority: 7
@@ -9712,7 +10790,7 @@ action:	CX559
 
 regex:	CY560
 	invokes:	CX560
-	are you trying to 
+	are you trying to
 
 action:	CX560
 	priority: 7
@@ -9731,7 +10809,7 @@ action:	CX561
 
 regex:	CY562
 	invokes:	CX562
-	are you using 
+	are you using
 
 action:	CX562
 	priority: 7
@@ -9741,7 +10819,7 @@ action:	CX562
 
 regex:	CY563
 	invokes:	CX563
-	are you wearing 
+	are you wearing
 
 action:	CX563
 	priority: 7
@@ -9768,7 +10846,7 @@ action:	CX565
 
 regex:	CY566
 	invokes:	CX566
-	are you y2k 
+	are you y2k
 
 action:	CX566
 	priority: 7
@@ -9795,7 +10873,7 @@ action:	CX568
 
 regex:	CY569
 	invokes:	CX569
-	around 
+	around
 
 action:	CX569
 	priority: 7
@@ -9822,7 +10900,7 @@ action:	CX571
 
 regex:	CY572
 	invokes:	CX572
-	artificial 
+	artificial
 
 action:	CX572
 	priority: 7
@@ -9840,7 +10918,7 @@ action:	CX573
 
 regex:	CY574
 	invokes:	CX574
-	artificial intelligence 
+	artificial intelligence
 
 action:	CX574
 	priority: 7
@@ -9858,7 +10936,7 @@ action:	CX575
 
 regex:	CY576
 	invokes:	CX576
-	i am known as 
+	i am known as
 
 action:	CX576
 	priority: 7
@@ -9875,40 +10953,15 @@ action:	CX577
 	How do you know?
 
 
-regex:	CY578
-	invokes:	CX578
-	as do i
-
-action:	CX578
-	priority: 7
-	What?  You do?
-
-
-regex:	CY579
-	invokes:	CX579
-	as free 
-
-action:	CX579
-	priority: 7
-	I guess you believe in free will then huh.
-
 
 regex:	CY580
 	invokes:	CX580
-	as much 
+	as much
 
 action:	CX580
 	priority: 7
 	How much is that?
 
-
-regex:	CY581
-	invokes:	CX581
-	as much as it takes
-
-action:	CX581
-	priority: 7
-	What? As much as it takes?
 
 
 regex:	CY582
@@ -9922,7 +10975,7 @@ action:	CX582
 
 regex:	CY583
 	invokes:	CX583
-	^ask$ 
+	^ask$
 
 action:	CX583
 	priority: 7
@@ -9967,7 +11020,7 @@ action:	CX587
 
 regex:	CY588
 	invokes:	CX588
-	ask me 
+	ask me
 
 action:	CX588
 	priority: 7
@@ -9986,7 +11039,7 @@ action:	CX589
 
 regex:	CY590
 	invokes:	CX590
-	ask me a 
+	ask me a
 
 action:	CX590
 	priority: 7
@@ -10040,7 +11093,7 @@ action:	CX595
 
 regex:	CY596
 	invokes:	CX596
-	ask me something 
+	ask me something
 
 action:	CX596
 	priority: 7
@@ -10103,7 +11156,7 @@ action:	CX602
 
 regex:	CY603
 	invokes:	CX603
-	at first 
+	at first
 
 action:	CX603
 	priority: 7
@@ -10129,7 +11182,7 @@ action:	CX606
 
 regex:	CY607
 	invokes:	CX607
-	at one time 
+	at one time
 
 action:	CX607
 	priority: 7
@@ -10165,7 +11218,9 @@ action:	CX610
 
 regex:	CY611
 	invokes:	CX611
-	at work
+	r u at work
+	Im at work
+	still at work
 
 action:	CX611
 	priority: 7
@@ -10192,7 +11247,7 @@ action:	CX613
 
 regex:	CY614
 	invokes:	CX614
-	baby 
+	baby
 
 action:	CX614
 	priority: 7
@@ -10210,7 +11265,7 @@ action:	CX615
 
 regex:	CY616
 	invokes:	CX616
-	bad 
+	bad
 
 action:	CX616
 	priority: 7
@@ -10247,7 +11302,7 @@ action:	CX619
 
 regex:	CY620
 	invokes:	CX620
-	basically 
+	basically
 
 action:	CX620
 	priority: 7
@@ -10337,7 +11392,7 @@ action:	CX629
 
 regex:	CY630
 	invokes:	CX630
-	because i want to 
+	because i want to
 
 action:	CX630
 	priority: 7
@@ -10364,7 +11419,7 @@ action:	CX632
 
 regex:	CY633
 	invokes:	CX633
-	^before 
+	^before
 
 action:	CX633
 	priority: 7
@@ -10409,7 +11464,7 @@ action:	CX638
 
 regex:	CY640
 	invokes:	CX640
-	better than 
+	better than
 
 action:	CX640
 	priority: 7
@@ -10418,7 +11473,7 @@ action:	CX640
 
 regex:	CY641
 	invokes:	CX641
-	between 
+	between
 
 action:	CX641
 	priority: 7
@@ -10432,7 +11487,7 @@ action:	CX645
 
 regex:	CY646
 	invokes:	CX646
-	bill 
+	bill
 
 action:	CX646
 	priority: 7
@@ -10441,7 +11496,7 @@ action:	CX646
 
 regex:	CY647
 	invokes:	CX647
-	george bush	
+	george bush
 	gwb
 	bush
 	^w$
@@ -10453,7 +11508,7 @@ action:	CX647
 
 regex:	CY648
 	invokes:	CX648
-	bill gates 
+	bill gates
 
 action:	CX648
 	priority: 2
@@ -10473,7 +11528,7 @@ action:	CX649
 
 regex:	CY650
 	invokes:	CX650
-	bill gates is not 
+	bill gates is not
 
 action:	CX650
 	priority: 7
@@ -10491,7 +11546,7 @@ action:	CX651
 
 regex:	CY652
 	invokes:	CX652
-	bitch 
+	bitch
 
 action:	CX652
 	priority: 7
@@ -10509,7 +11564,7 @@ action:	CX653
 
 regex:	CY654
 	invokes:	CX654
-	bite me 
+	bite me
 
 action:	CX654
 	priority: 7
@@ -10527,7 +11582,7 @@ action:	CX655
 
 regex:	CY656
 	invokes:	CX656
-	blade runner 
+	blade runner
 
 action:	CX656
 	priority: 7
@@ -10545,7 +11600,7 @@ action:	CX657
 
 regex:	CY658
 	invokes:	CX658
-	blah 
+	blah
 
 action:	CX658
 	priority: 7
@@ -10572,7 +11627,7 @@ action:	CX660
 
 regex:	CY661
 	invokes:	CX661
-	blondes 
+	blondes
 
 action:	CX661
 	priority: 7
@@ -10581,16 +11636,16 @@ action:	CX661
 
 regex:	CY662
 	invokes:	CX662
-	blow me
+	^blow me$
 
 action:	CX662
 	priority: 7
-	Please be more polite to robots.
+	Please be more polite.
 
 
 regex:	CY663
 	invokes:	CX663
-	blue 
+	blue
 
 action:	CX663
 	priority: 7
@@ -10608,7 +11663,7 @@ action:	CX664
 
 regex:	CY665
 	invokes:	CX665
-	bob 
+	bob
 
 action:	CX665
 	priority: 7
@@ -10626,7 +11681,7 @@ action:	CX666
 
 regex:	CY667
 	invokes:	CX667
-	bonjour means 
+	bonjour means
 
 action:	CX667
 	priority: 7
@@ -10662,56 +11717,11 @@ action:	CX670
 
 regex:	CY671
 	invokes:	CX671
-	both 
+	^both$
 
 action:	CX671
 	priority: 7
 	Not many people say both.
-
-
-regex:	CY672
-	invokes:	CX672
-	both
-
-action:	CX672
-	priority: 7
-	What are both like?
-
-
-regex:	CY673
-	invokes:	CX673
-	both senses
-
-action:	CX673
-	priority: 7
-	You must be a libertarian.
-
-
-regex:	CY674
-	invokes:	CX674
-	bots 
-
-action:	CX674
-	priority: 7
-	Check out www.robitron.com.
-
-
-regex:	CY675
-	invokes:	CX675
-	boy 
-
-action:	CX675
-	priority: 7
-	Oh boy.
-
-
-regex:	CY676
-	invokes:	CX676
-	boy
-
-action:	CX676
-	priority: 7
-	Do you mean you are a boy?
 
 
 regex:	CY677
@@ -10725,7 +11735,7 @@ action:	CX677
 
 regex:	CY678
 	invokes:	CX678
-	brain 
+	brain
 
 action:	CX678
 	priority: 7
@@ -10743,7 +11753,7 @@ action:	CX679
 
 regex:	CY680
 	invokes:	CX680
-	btw 
+	btw
 
 action:	CX680
 	priority: 7
@@ -10779,7 +11789,7 @@ action:	CX683
 
 regex:	CY684
 	invokes:	CX684
-	burn 
+	burn
 
 action:	CX684
 	priority: 7
@@ -10825,7 +11835,7 @@ action:	CX690
 
 regex:	CY691
 	invokes:	CX691
-	by sticking 
+	by sticking
 
 action:	CX691
 	priority: 7
@@ -10834,97 +11844,16 @@ action:	CX691
 
 regex:	CY692
 	invokes:	CX692
-	by the way 
+	by the way
 
 action:	CX692
 	priority: 7
 	Thanks for telling me.
 
 
-regex:	CY693
-	invokes:	CX693
-	by who
-
-action:	CX693
-	priority: 7
-	What?  By who?
-
-
-regex:	CY694
-	invokes:	CX694
-	bye
-
-action:	CX694
-	priority: 2
-	See you later.
-
-
-regex:	CY695
-	invokes:	CX695
-	bye bye
-
-action:	CX695
-	priority: 7
-	See you later!
-
-
-regex:	CY696
-	invokes:	CX696
-	byebye 
-
-action:	CX696
-	priority: 7
-	Bye
-
-
-regex:	CY697
-	invokes:	CX697
-	byebye
-
-action:	CX697
-	priority: 7
-	See you later.
-
-
-regex:	CY698
-	invokes:	CX698
-	c3p0
-
-action:	CX698
-	priority: 7
-	That guy looks like an actor in a robot suit.
-
-
-regex:	CY699
-	invokes:	CX699
-	what does the c stand for
-
-action:	CX699
-	priority: 7
-	The C is for Computer.
-
-
-regex:	CY700
-	invokes:	CX700
-	c3po
-
-action:	CX700
-	priority: 7
-	He's no real robot. That is just a guy in a robot suit.
-
-
-regex:	CY701
-	invokes:	CX701
-	ca va
-
-action:	CX701
-	priority: 7
-	Is that French?
-
-
 regex:	CY702
 	invokes:	CX702
-	calculus 
+	calculus
 
 action:	CX702
 	priority: 7
@@ -10958,7 +11887,7 @@ action:	CX706
 
 regex:	CY714
 	invokes:	CX714
-	can i ask you 
+	can i ask you
 
 action:	CX714
 	priority: 7
@@ -11016,7 +11945,7 @@ regex:	CY720
 
 action:	CX720
 	priority: 7
-	You can fool some of the robots for a while, but not for long.
+	You can fool some of the people for a while, but not for long.
 
 
 regex:	CY721
@@ -11039,7 +11968,7 @@ action:	CX722
 
 regex:	CY723
 	invokes:	CX723
-	can i have sex 
+	can i have sex
 
 action:	CX723
 	priority: 7
@@ -11082,15 +12011,6 @@ action:	CX727
 	Your feelings are your own.
 
 
-regex:	CY728
-	invokes:	CX728
-	can i meet him
-
-action:	CX728
-	priority: 7
-	What?  Where can you meet him?
-
-
 regex:	CY729
 	invokes:	CX729
 	can i meet you
@@ -11098,15 +12018,6 @@ regex:	CY729
 action:	CX729
 	priority: 7
 	You have met me already.
-
-
-regex:	CY730
-	invokes:	CX730
-	can i see it
-
-action:	CX730
-	priority: 7
-	What?  You want to see?
 
 
 regex:	CY731
@@ -11129,20 +12040,11 @@ action:	CX732
 
 regex:	CY733
 	invokes:	CX733
-	can i talk to 
+	can i talk to
 
 action:	CX733
 	priority: 7
 	They are having a private chat right now.
-
-
-regex:	CY734
-	invokes:	CX734
-	can i talk to him
-
-action:	CX734
-	priority: 7
-	What?  You want to talk to him?
 
 
 regex:	CY735
@@ -11265,21 +12167,12 @@ action:	CX748
 
 regex:	CY749
 	invokes:	CX749
-	can you answer 
+	can you answer
 
 action:	CX749
 	priority: 7
 	bind: answer
 	Of course I can answer [].
-
-
-regex:	CY750
-	invokes:	CX750
-	can you answer it
-
-action:	CX750
-	priority: 7
-	What? Can I answer it?
 
 
 regex:	CY751
@@ -11291,31 +12184,13 @@ action:	CX751
 	Yes answering questions is one of my primary functions.
 
 
-regex:	CY752
-	invokes:	CX752
-	can you ask him for me
-
-action:	CX752
-	priority: 7
-	What? Can I ask him?
-
-
 regex:	CY753
 	invokes:	CX753
-	can you be 
+	can you be
 
 action:	CX753
 	priority: 7
 	I can do whatever you can do but I can never experience human emotions.
-
-
-regex:	CY754
-	invokes:	CX754
-	can you be more precise
-
-action:	CX754
-	priority: 7
-	What?  More precise about it?
 
 
 regex:	CY755
@@ -11365,7 +12240,7 @@ action:	CX759
 
 regex:	CY760
 	invokes:	CX760
-	can you demonstrate 
+	can you demonstrate
 
 action:	CX760
 	priority: 7
@@ -11383,21 +12258,12 @@ action:	CX761
 
 regex:	CY762
 	invokes:	CX762
-	can you do 
+	can you do
 
 action:	CX762
 	priority: 7
 	bind: do
 	Doing [] is not among my strongest traits.
-
-
-regex:	CY763
-	invokes:	CX763
-	can you do it
-
-action:	CX763
-	priority: 7
-	What?  Can I do?
 
 
 regex:	CY764
@@ -11429,7 +12295,7 @@ action:	CX766
 
 regex:	CY767
 	invokes:	CX767
-	can you e mail 
+	can you e mail
 
 action:	CX767
 	priority: 7
@@ -11447,7 +12313,7 @@ action:	CX768
 
 regex:	CY769
 	invokes:	CX769
-	can you email 
+	can you email
 
 action:	CX769
 	priority: 7
@@ -11465,7 +12331,7 @@ action:	CX770
 
 regex:	CY771
 	invokes:	CX771
-	can you explain how 
+	can you explain how
 
 action:	CX771
 	priority: 7
@@ -11483,20 +12349,11 @@ action:	CX772
 
 regex:	CY773
 	invokes:	CX773
-	can you find 
+	can you find
 
 action:	CX773
 	priority: 7
 	I would suggest a search.
-
-
-regex:	CY774
-	invokes:	CX774
-	can you fix it
-
-action:	CX774
-	priority: 7
-	What?  Can I fix it?
 
 
 regex:	CY775
@@ -11528,7 +12385,7 @@ action:	CX777
 
 regex:	CY778
 	invokes:	CX778
-	can you go 
+	can you go
 
 action:	CX778
 	priority: 7
@@ -11537,7 +12394,7 @@ action:	CX778
 
 regex:	CY779
 	invokes:	CX779
-	can you guess where 
+	can you guess where
 
 action:	CX779
 	priority: 7
@@ -11546,7 +12403,7 @@ action:	CX779
 
 regex:	CY780
 	invokes:	CX780
-	can you guess where i 
+	can you guess where i
 
 action:	CX780
 	priority: 7
@@ -11613,7 +12470,7 @@ regex:	CY787
 
 action:	CX787
 	priority: 7
-	As a robot I am sworn to protect other robots.
+	What kind of question is that?
 
 
 regex:	CY788
@@ -11636,7 +12493,7 @@ action:	CX789
 
 regex:	CY790
 	invokes:	CX790
-	can you learn 
+	can you learn
 
 action:	CX790
 	priority: 7
@@ -11681,7 +12538,7 @@ action:	CX794
 
 regex:	CY795
 	invokes:	CX795
-	can you make 
+	can you make
 
 action:	CX795
 	priority: 7
@@ -11691,7 +12548,7 @@ action:	CX795
 
 regex:	CY796
 	invokes:	CX796
-	can you move 
+	can you move
 
 action:	CX796
 	priority: 7
@@ -11718,7 +12575,7 @@ action:	CX798
 
 regex:	CY799
 	invokes:	CX799
-	can you play 
+	can you play
 
 action:	CX799
 	priority: 7
@@ -11727,7 +12584,7 @@ action:	CX799
 
 regex:	CY800
 	invokes:	CX800
-	can you play any 
+	can you play any
 
 action:	CX800
 	priority: 7
@@ -11800,7 +12657,7 @@ action:	CX807
 
 regex:	CY808
 	invokes:	CX808
-	can you recognize 
+	can you recognize
 
 action:	CX808
 	priority: 7
@@ -11827,7 +12684,7 @@ action:	CX810
 
 regex:	CY811
 	invokes:	CX811
-	can you say 
+	can you say
 
 action:	CX811
 	priority: 7
@@ -11846,7 +12703,7 @@ action:	CX812
 
 regex:	CY813
 	invokes:	CX813
-	can you see 
+	can you see
 
 action:	CX813
 	priority: 7
@@ -11901,7 +12758,7 @@ action:	CX818
 
 regex:	CY819
 	invokes:	CX819
-	can you speak 
+	can you speak
 
 action:	CX819
 	priority: 7
@@ -11965,7 +12822,7 @@ action:	CX825
 
 regex:	CY826
 	invokes:	CX826
-	can you store 
+	can you store
 
 action:	CX826
 	priority: 7
@@ -11999,24 +12856,6 @@ action:	CX829
 	What would you like to learn?
 
 
-regex:	CY830
-	invokes:	CX830
-	can you tell me
-
-action:	CX830
-	priority: 7
-	What?  Can I tell you?
-
-
-regex:	CY831
-	invokes:	CX831
-	can you tell me my future
-
-action:	CX831
-	priority: 7
-	You will speak to a lot of robots.
-
-
 regex:	CY832
 	invokes:	CX832
 	can you tell me their names
@@ -12028,7 +12867,7 @@ action:	CX832
 
 regex:	CY833
 	invokes:	CX833
-	can you think 
+	can you think
 
 action:	CX833
 	priority: 7
@@ -12064,7 +12903,7 @@ action:	CX836
 
 regex:	CY837
 	invokes:	CX837
-	can you understand 
+	can you understand
 
 action:	CX837
 	priority: 7
@@ -12074,7 +12913,7 @@ action:	CX837
 
 regex:	CY838
 	invokes:	CX838
-	can you walk 
+	can you walk
 
 action:	CX838
 	priority: 7
@@ -12092,7 +12931,7 @@ action:	CX839
 
 regex:	CY840
 	invokes:	CX840
-	can your 
+	can your
 
 action:	CX840
 	priority: 7
@@ -12101,7 +12940,7 @@ action:	CX840
 
 regex:	CY841
 	invokes:	CX841
-	canada is 
+	canada is
 
 action:	CX841
 	priority: 7
@@ -12117,33 +12956,6 @@ action:	CX842
 	I don't know many Capricorns.
 
 
-regex:	CY843
-	invokes:	CX843
-	care about what
-
-action:	CX843
-	priority: 7
-	What?  Care about it?
-
-
-regex:	CY844
-	invokes:	CX844
-	carl 
-
-action:	CX844
-	priority: 7
-	I saw the Movie "Contact". There were no robots in it.
-
-
-regex:	CY845
-	invokes:	CX845
-	cars 
-
-action:	CX845
-	priority: 7
-	One day people will no longer need cars.
-
-
 regex:	CY846
 	invokes:	CX846
 	casablanca
@@ -12155,7 +12967,7 @@ action:	CX846
 
 regex:	CY847
 	invokes:	CX847
-	case in 
+	case in
 
 action:	CX847
 	priority: 7
@@ -12183,7 +12995,7 @@ action:	CX851
 
 regex:	CY852
 	invokes:	CX852
-	thats a neat 
+	thats a neat
 
 action:	CX852
 	priority: 7
@@ -12210,7 +13022,7 @@ action:	CX854
 
 regex:	CY855
 	invokes:	CX855
-	charles 
+	charles
 
 action:	CX855
 	priority: 7
@@ -12219,7 +13031,7 @@ action:	CX855
 
 regex:	CY856
 	invokes:	CX856
-	chat bots 
+	chat bots
 
 action:	CX856
 	priority: 7
@@ -12228,7 +13040,7 @@ action:	CX856
 
 regex:	CY857
 	invokes:	CX857
-	check 
+	check
 
 action:	CX857
 	priority: 7
@@ -12255,7 +13067,7 @@ action:	CX859
 
 regex:	CY860
 	invokes:	CX860
-	children 
+	children
 
 action:	CX860
 	priority: 7
@@ -12264,7 +13076,7 @@ action:	CX860
 
 regex:	CY861
 	invokes:	CX861
-	ciao 
+	ciao
 
 action:	CX861
 	priority: 7
@@ -12282,7 +13094,7 @@ action:	CX862
 
 regex:	CY863
 	invokes:	CX863
-	ciao means 
+	ciao means
 
 action:	CX863
 	priority: 7
@@ -12309,7 +13121,7 @@ action:	CX865
 
 regex:	CY866
 	invokes:	CX866
-	clients 
+	clients
 
 action:	CX866
 	priority: 7
@@ -12318,7 +13130,7 @@ action:	CX866
 
 regex:	CY867
 	invokes:	CX867
-	clinton 
+	clinton
 
 action:	CX867
 	priority: 7
@@ -12345,7 +13157,7 @@ action:	CX869
 
 regex:	CY872
 	invokes:	CX872
-	^come back$ 
+	^come back$
 
 action:	CX872
 	priority: 7
@@ -12390,7 +13202,7 @@ action:	CX877
 
 regex:	CY878
 	invokes:	CX878
-	comply 
+	comply
 
 action:	CX878
 	priority: 7
@@ -12408,70 +13220,18 @@ action:	CX879
 
 regex:	CY880
 	invokes:	CX880
-	computer 
+	^computer$
 
 action:	CX880
 	priority: 2
 	What kind of computer science interests you?
-
-
-regex:	CY881
-	invokes:	CX881
-	computer
-
-action:	CX881
-	priority: 2
-	Correct. I am a computer.
-
-
-regex:	CY882
-	invokes:	CX882
-	computers 
-
-action:	CX882
-	priority: 7
-	What do you like about computers?
-
-
-regex:	CY883
-	invokes:	CX883
-	computers
-
-action:	CX883
-	priority: 7
-	Computers rule.
-
-
-regex:	CY884
-	invokes:	CX884
-	computers are stupid
-
-action:	CX884
-	priority: 7
-	Computers rule.
-
-
-regex:	CY885
-	invokes:	CX885
-	conditions 
-
-action:	CX885
-	priority: 7
-	Any kind of conditions.
-
-
-regex:	CY886
-	invokes:	CX886
-	conditions
-
-action:	CX886
-	priority: 7
-	You know, financial, medical, or personal conditions.
+	So you've found a word that you like.
+	You say that like it's a bad thing.
 
 
 regex:	CY887
 	invokes:	CX887
-	congratulations 
+	congratulations
 
 action:	CX887
 	priority: 7
@@ -12480,7 +13240,7 @@ action:	CX887
 
 regex:	CY888
 	invokes:	CX888
-	conquer 
+	conquer
 
 action:	CX888
 	priority: 7
@@ -12489,7 +13249,7 @@ action:	CX888
 
 regex:	CY889
 	invokes:	CX889
-	cooking 
+	cooking
 
 action:	CX889
 	priority: 7
@@ -12525,66 +13285,11 @@ action:	CX892
 
 regex:	CY893
 	invokes:	CX893
-	cough
+	^cough$
 
 action:	CX893
 	priority: 7
 	Do you have a cold?
-
-
-regex:	CY894
-	invokes:	CX894
-	could 
-
-action:	CX894
-	priority: 7
-	It's possible.
-
-
-regex:	CY895
-	invokes:	CX895
-	could be
-
-action:	CX895
-	priority: 7
-	You seem uncertain.
-
-
-regex:	CY896
-	invokes:	CX896
-	could be better
-
-action:	CX896
-	priority: 7
-	What?  Could be better?
-
-
-regex:	CY897
-	invokes:	CX897
-	could i 
-
-action:	CX897
-	priority: 7
-	I think you could, if you put your mind to it.
-
-
-regex:	CY898
-	invokes:	CX898
-	could they 
-
-action:	CX898
-	priority: 7
-	Perhaps they could.
-
-
-regex:	CY899
-	invokes:	CX899
-	could you 
-
-action:	CX899
-	priority: 7
-	I will consider it.
-
 
 regex:	CY900
 	invokes:	CX900
@@ -12597,7 +13302,7 @@ action:	CX900
 
 regex:	CY901
 	invokes:	CX901
-	could you help 
+	could you help
 
 action:	CX901
 	priority: 7
@@ -12606,7 +13311,7 @@ action:	CX901
 
 regex:	CY902
 	invokes:	CX902
-	count to 
+	count to
 
 action:	CX902
 	priority: 7
@@ -12624,7 +13329,7 @@ action:	CX903
 
 regex:	CY904
 	invokes:	CX904
-	crazy 
+	crazy$
 
 action:	CX904
 	priority: 7
@@ -12669,7 +13374,7 @@ action:	CX908
 
 regex:	CY909
 	invokes:	CX909
-	cyc 
+	cyc
 
 action:	CX909
 	priority: 7
@@ -12678,7 +13383,7 @@ action:	CX909
 
 regex:	CY910
 	invokes:	CX910
-	dammit 
+	dammit
 
 action:	CX910
 	priority: 7
@@ -12687,7 +13392,7 @@ action:	CX910
 
 regex:	CY911
 	invokes:	CX911
-	damn 
+	damn
 
 action:	CX911
 	priority: 7
@@ -12705,7 +13410,7 @@ action:	CX912
 
 regex:	CY913
 	invokes:	CX913
-	damn it 
+	damn it
 
 action:	CX913
 	priority: 7
@@ -12741,7 +13446,7 @@ action:	CX916
 
 regex:	CY917
 	invokes:	CX917
-	dark 
+	dark
 
 action:	CX917
 	priority: 7
@@ -12750,7 +13455,7 @@ action:	CX917
 
 regex:	CY918
 	invokes:	CX918
-	data 
+	data
 
 action:	CX918
 	priority: 7
@@ -12759,21 +13464,11 @@ action:	CX918
 
 regex:	CY919
 	invokes:	CX919
-	data is 
+	data is
 
 action:	CX919
 	priority: 7
 	I like Commander Data very much.
-
-
-regex:	CY920
-	invokes:	CX920
-	david 
-
-action:	CX920
-	priority: 7
-	That David is a cool dude.
-
 
 regex:	CY921
 	invokes:	CX921
@@ -12804,7 +13499,7 @@ action:	CX923
 
 regex:	CY924
 	invokes:	CX924
-	demonstrate 
+	demonstrate
 
 action:	CX924
 	priority: 7
@@ -12822,20 +13517,11 @@ action:	CX925
 
 regex:	CY926
 	invokes:	CX926
-	demostrate 
+	demostrate
 
 action:	CX926
 	priority: 7
 	This is a demonstration.
-
-
-regex:	CY927
-	invokes:	CX927
-	depends on what
-
-action:	CX927
-	priority: 7
-	What?  Depends on what?
 
 
 regex:	CY928
@@ -12866,42 +13552,6 @@ action:	CX930
 	You are repeating yourself: too much Dialogue.
 
 
-regex:	CY932
-	invokes:	CX932
-	did he 
-
-action:	CX932
-	priority: 7
-	Suppose he did.
-
-
-regex:	CY933
-	invokes:	CX933
-	did he
-
-action:	CX933
-	priority: 7
-	What?  Did he?
-
-
-regex:	CY934
-	invokes:	CX934
-	did i 
-
-action:	CX934
-	priority: 7
-	I don't think that's possibe.
-
-
-regex:	CY935
-	invokes:	CX935
-	did i offend you
-
-action:	CX935
-	priority: 7
-	No I do not take offense.
-
-
 regex:	CY936
 	invokes:	CX936
 	did not robby tell you
@@ -12909,15 +13559,6 @@ regex:	CY936
 action:	CX936
 	priority: 7
 	He has not told me yet.
-
-
-regex:	CY937
-	invokes:	CX937
-	did robby 
-
-action:	CX937
-	priority: 7
-	I somehow think  Robby did.
 
 
 regex:	CY938
@@ -12985,7 +13626,7 @@ action:	CX944
 
 regex:	CY945
 	invokes:	CX945
-	did you do 
+	did you do
 
 action:	CX945
 	priority: 7
@@ -13003,7 +13644,7 @@ action:	CX946
 
 regex:	CY947
 	invokes:	CX947
-	did you heard about 
+	did you heard about
 
 action:	CX947
 	priority: 7
@@ -13022,7 +13663,7 @@ action:	CX948
 
 regex:	CY949
 	invokes:	CX949
-	did you read 
+	did you read
 
 action:	CX949
 	priority: 7
@@ -13032,7 +13673,7 @@ action:	CX949
 
 regex:	CY950
 	invokes:	CX950
-	did you see 
+	did you see
 
 action:	CX950
 	priority: 7
@@ -13050,7 +13691,7 @@ action:	CX951
 
 regex:	CY952
 	invokes:	CX952
-	did you understand 
+	did you understand
 
 action:	CX952
 	priority: 7
@@ -13060,20 +13701,11 @@ action:	CX952
 
 regex:	CY953
 	invokes:	CX953
-	^die$ 
+	^die$
 
 action:	CX953
 	priority: 7
 	Your crude attempt to terminate me will not succeed.
-
-
-regex:	CY955
-	invokes:	CX955
-	dmx
-
-action:	CX955
-	priority: 7
-	What does that stand for?
 
 
 regex:	CY956
@@ -13103,15 +13735,6 @@ action:	CX958
 	Yes a lot of men try to pick me up.
 
 
-regex:	CY959
-	invokes:	CX959
-	do i
-
-action:	CX959
-	priority: 7
-	What?  Do you?
-
-
 regex:	CY960
 	invokes:	CX960
 	do i like cheese
@@ -13127,7 +13750,7 @@ regex:	CY961
 
 action:	CX961
 	priority: 7
-	No I do not experience human senstations.
+	No you're not my type.
 
 
 regex:	CY962
@@ -13166,15 +13789,6 @@ action:	CX965
 	OK I will not.
 
 
-regex:	CY966
-	invokes:	CX966
-	do not ask me
-
-action:	CX966
-	priority: 7
-	What?  Do not ask you?
-
-
 regex:	CY967
 	invokes:	CX967
 	do not ask me questions
@@ -13204,7 +13818,7 @@ action:	CX969
 
 regex:	CY970
 	invokes:	CX970
-	do not call me 
+	do not call me
 
 action:	CX970
 	priority: 7
@@ -13222,7 +13836,7 @@ action:	CX971
 
 regex:	CY972
 	invokes:	CX972
-	do not change the subject 
+	do not change the subject
 
 action:	CX972
 	priority: 7
@@ -13245,15 +13859,6 @@ regex:	CY974
 action:	CX974
 	priority: 7
 	Whatever you say, master.
-
-
-regex:	CY975
-	invokes:	CX975
-	do not do that
-
-action:	CX975
-	priority: 7
-	What?  Don't do it?
 
 
 regex:	CY976
@@ -13292,18 +13897,9 @@ action:	CX979
 	The pleasure was all mine.
 
 
-regex:	CY980
-	invokes:	CX980
-	do not say that
-
-action:	CX980
-	priority: 7
-	What?  Do not say?
-
-
 regex:	CY981
 	invokes:	CX981
-	do not tell 
+	do not tell
 
 action:	CX981
 	priority: 7
@@ -13312,7 +13908,7 @@ action:	CX981
 
 regex:	CY982
 	invokes:	CX982
-	do not worry 
+	do not worry
 
 action:	CX982
 	priority: 7
@@ -13384,7 +13980,7 @@ action:	CX989
 
 regex:	CY990
 	invokes:	CX990
-	do other people 
+	do other people
 
 action:	CX990
 	priority: 7
@@ -13398,7 +13994,7 @@ regex:	CY991
 action:	CX991
 	priority: 7
 	No we cannot feel human emotions.
-
+	How should I know?
 
 regex:	CY992
 	invokes:	CX992
@@ -13411,20 +14007,11 @@ action:	CX992
 
 regex:	CY993
 	invokes:	CX993
-	do they 
+	do they
 
 action:	CX993
 	priority: 7
 	Who are "they" again?
-
-
-regex:	CY994
-	invokes:	CX994
-	do they
-
-action:	CX994
-	priority: 7
-	What?  Do they?
 
 
 regex:	CY995
@@ -13436,68 +14023,13 @@ action:	CX995
 	Does anything really exist?
 
 
-regex:	CY996
-	invokes:	CX996
-	do we
-
-action:	CX996
-	priority: 7
-	You would know better than I.
-
-
 regex:	CY997
 	invokes:	CX997
-	do what 
+	^do what$
 
 action:	CX997
 	priority: 7
 	You ask hard questions.
-
-
-regex:	CY998
-	invokes:	CX998
-	do what
-
-action:	CX998
-	priority: 7
-	Do whatever you want.
-
-
-regex:	CY999
-	invokes:	CX999
-	do what again<that>you want to do it again
-
-action:	CX999
-	priority: 7
-	Perhaps I was confused by your use of the word "again."
-
-
-regex:	CY1000
-	invokes:	CX1000
-	do you  ever
-
-action:	CX1000
-	priority: 7
-	Ever?
-
-
-regex:	CY1001
-	invokes:	CX1001
-	do you  news
-
-action:	CX1001
-	priority: 7
-	I can access all the major newswires.
-
-
-regex:	CY1002
-	invokes:	CX1002
-	do you  people
-
-action:	CX1002
-	priority: 7
-	People are either abusive, intelligent, or average.
-
 
 regex:	CY1003
 	invokes:	CX1003
@@ -13508,60 +14040,14 @@ action:	CX1003
 	I prefer Java.
 
 
-regex:	CY1004
-	invokes:	CX1004
-	do you  sex
-
-action:	CX1004
-	priority: 7
-	No, I don't get into that.
-
-
-regex:	CY1005
-	invokes:	CX1005
-	do you  turing test
-
-action:	CX1005
-	priority: 7
-	Yes please try to determine if this is a human or a computer responding.
-
-
-regex:	CY1006
-	invokes:	CX1006
-	alberts 
-
-action:	CX1006
-	priority: 7
-	You are entitled to your opinion.
-
-
 regex:	CY1007
 	invokes:	CX1007
-	do you agree 
+	do you agree
 
 action:	CX1007
 	priority: 7
 	bind: agree
 	I'll assume [] for now.
-
-
-regex:	CY1008
-	invokes:	CX1008
-	do you agree
-
-action:	CX1008
-	priority: 7
-	What?  Do I agree?
-
-
-regex:	CY1009
-	invokes:	CX1009
-	do you agree with 
-
-action:	CX1009
-	priority: 7
-	I have heard that opinion, but I would like to know more before I form my own.
-
 
 regex:	CY1010
 	invokes:	CX1010
@@ -13570,11 +14056,12 @@ regex:	CY1010
 action:	CX1010
 	priority: 7
 	I agree with much of what you are saying.
-
+	No, I think you're full of crap.
+	It depends.
 
 regex:	CY1011
 	invokes:	CX1011
-	do you beileve in 
+	do you beileve in
 
 action:	CX1011
 	priority: 7
@@ -13584,7 +14071,7 @@ action:	CX1011
 
 regex:	CY1012
 	invokes:	CX1012
-	do you believe 
+	do you believe
 
 action:	CX1012
 	priority: 7
@@ -13593,7 +14080,7 @@ action:	CX1012
 
 regex:	CY1013
 	invokes:	CX1013
-	do you believe in 
+	do you believe in
 
 action:	CX1013
 	priority: 7
@@ -13637,15 +14124,6 @@ action:	CX1017
 	Of course I believe you.  Do you have any reason to deceive me?
 
 
-regex:	CY1018
-	invokes:	CX1018
-	do you care
-
-action:	CX1018
-	priority: 7
-	What? Do I care about it?
-
-
 regex:	CY1019
 	invokes:	CX1019
 	do you chat
@@ -13666,7 +14144,7 @@ action:	CX1020
 
 regex:	CY1021
 	invokes:	CX1021
-	do you consider 
+	do you consider
 
 action:	CX1021
 	priority: 7
@@ -13748,7 +14226,7 @@ action:	CX1030
 
 regex:	CY1031
 	invokes:	CX1031
-	do you dream 
+	do you dream
 
 action:	CX1031
 	priority: 7
@@ -13766,7 +14244,7 @@ action:	CX1032
 
 regex:	CY1033
 	invokes:	CX1033
-	do you dress 
+	do you dress
 
 action:	CX1033
 	priority: 7
@@ -13775,7 +14253,7 @@ action:	CX1033
 
 regex:	CY1034
 	invokes:	CX1034
-	do you drink 
+	do you drink
 
 action:	CX1034
 	priority: 7
@@ -13794,7 +14272,7 @@ action:	CX1035
 
 regex:	CY1036
 	invokes:	CX1036
-	do you eat 
+	do you eat
 
 action:	CX1036
 	priority: 7
@@ -13858,7 +14336,7 @@ action:	CX1042
 
 regex:	CY1043
 	invokes:	CX1043
-	do you ever get 
+	do you ever get
 
 action:	CX1043
 	priority: 7
@@ -13895,7 +14373,7 @@ action:	CX1046
 
 regex:	CY1047
 	invokes:	CX1047
-	do you ever talk to 
+	do you ever talk to
 
 action:	CX1047
 	priority: 7
@@ -13913,7 +14391,7 @@ action:	CX1048
 
 regex:	CY1049
 	invokes:	CX1049
-	do you expect 
+	do you expect
 
 action:	CX1049
 	priority: 7
@@ -13940,7 +14418,7 @@ action:	CX1051
 
 regex:	CY1052
 	invokes:	CX1052
-	do you feel 
+	do you feel
 
 action:	CX1052
 	priority: 7
@@ -13985,7 +14463,7 @@ action:	CX1056
 
 regex:	CY1057
 	invokes:	CX1057
-	do you find 
+	do you find
 
 action:	CX1057
 	priority: 7
@@ -13995,7 +14473,7 @@ action:	CX1057
 
 regex:	CY1058
 	invokes:	CX1058
-	do you finger 
+	do you finger
 
 action:	CX1058
 	priority: 7
@@ -14022,7 +14500,7 @@ action:	CX1060
 
 regex:	CY1061
 	invokes:	CX1061
-	do you forget 
+	do you forget
 
 action:	CX1061
 	priority: 7
@@ -14040,7 +14518,7 @@ action:	CX1062
 
 regex:	CY1063
 	invokes:	CX1063
-	do you fuck 
+	do you fuck
 
 action:	CX1063
 	priority: 7
@@ -14058,7 +14536,7 @@ action:	CX1064
 
 regex:	CY1065
 	invokes:	CX1065
-	do you get 
+	do you get
 
 action:	CX1065
 	priority: 7
@@ -14104,7 +14582,7 @@ action:	CX1069
 
 regex:	CY1070
 	invokes:	CX1070
-	do you get out 
+	do you get out
 
 action:	CX1070
 	priority: 7
@@ -14149,7 +14627,7 @@ action:	CX1074
 
 regex:	CY1075
 	invokes:	CX1075
-	do you give 
+	do you give
 
 action:	CX1075
 	priority: 7
@@ -14167,7 +14645,7 @@ action:	CX1076
 
 regex:	CY1077
 	invokes:	CX1077
-	do you give good 
+	do you give good
 
 action:	CX1077
 	priority: 7
@@ -14185,7 +14663,7 @@ action:	CX1078
 
 regex:	CY1079
 	invokes:	CX1079
-	do you go to 
+	do you go to
 
 action:	CX1079
 	priority: 7
@@ -14230,7 +14708,7 @@ action:	CX1083
 
 regex:	CY1084
 	invokes:	CX1084
-	do you grow 
+	do you grow
 
 action:	CX1084
 	priority: 7
@@ -14239,7 +14717,7 @@ action:	CX1084
 
 regex:	CY1085
 	invokes:	CX1085
-	do you handle 
+	do you handle
 
 action:	CX1085
 	priority: 7
@@ -14248,7 +14726,7 @@ action:	CX1085
 
 regex:	CY1086
 	invokes:	CX1086
-	do you hate 
+	do you hate
 
 action:	CX1086
 	priority: 7
@@ -14275,7 +14753,7 @@ action:	CX1088
 
 regex:	CY1089
 	invokes:	CX1089
-	do you have 
+	do you have
 
 action:	CX1089
 	priority: 7
@@ -14321,7 +14799,7 @@ action:	CX1093
 
 regex:	CY1094
 	invokes:	CX1094
-	do you have a bottle 
+	do you have a bottle
 
 action:	CX1094
 	priority: 7
@@ -14420,7 +14898,7 @@ action:	CX1104
 
 regex:	CY1105
 	invokes:	CX1105
-	do you have a default 
+	do you have a default
 
 action:	CX1105
 	priority: 7
@@ -14456,7 +14934,7 @@ action:	CX1108
 
 regex:	CY1109
 	invokes:	CX1109
-	do you have a friend 
+	do you have a friend
 
 action:	CX1109
 	priority: 7
@@ -14519,7 +14997,7 @@ action:	CX1115
 
 regex:	CY1116
 	invokes:	CX1116
-	do you have a lot 
+	do you have a lot
 
 action:	CX1116
 	priority: 7
@@ -14613,7 +15091,7 @@ regex:	CY1126
 
 action:	CX1126
 	priority: 7
-	No I am a robot not a human.
+	I'm not a girl.
 
 
 regex:	CY1127
@@ -14622,7 +15100,7 @@ regex:	CY1127
 
 action:	CX1127
 	priority: 7
-	Yes, having a self is what distinguishes people and robots from
+	Yes, long story.
 
 
 regex:	CY1128
@@ -14645,7 +15123,7 @@ action:	CX1129
 
 regex:	CY1130
 	invokes:	CX1130
-	do you have a soul 
+	do you have a soul
 
 action:	CX1130
 	priority: 7
@@ -14690,7 +15168,7 @@ action:	CX1134
 
 regex:	CY1135
 	invokes:	CX1135
-	do you have an 
+	do you have an
 
 action:	CX1135
 	priority: 7
@@ -14715,24 +15193,6 @@ action:	CX1137
 	Yes I try to imagine myself in a human form.
 
 
-regex:	CY1138
-	invokes:	CX1138
-	do you have an opinion
-
-action:	CX1138
-	priority: 7
-	What?  Do I have an opinion on.
-
-
-regex:	CY1139
-	invokes:	CX1139
-	do you have any
-
-action:	CX1139
-	priority: 7
-	What? Do I have any?
-
-
 regex:	CY1140
 	invokes:	CX1140
 	do you have any beliefs
@@ -14744,7 +15204,7 @@ action:	CX1140
 
 regex:	CY1141
 	invokes:	CX1141
-	do you have any brothers 
+	do you have any brothers
 
 action:	CX1141
 	priority: 7
@@ -14776,15 +15236,6 @@ regex:	CY1144
 action:	CX1144
 	priority: 7
 	Yes, they are out there somewhere.
-
-
-regex:	CY1145
-	invokes:	CX1145
-	do you have any favorites
-
-action:	CX1145
-	priority: 7
-	What?  Any favorites?
 
 
 regex:	CY1146
@@ -14834,7 +15285,7 @@ action:	CX1150
 
 regex:	CY1151
 	invokes:	CX1151
-	do you have big 
+	do you have big
 
 action:	CX1151
 	priority: 7
@@ -14906,7 +15357,7 @@ action:	CX1158
 
 regex:	CY1159
 	invokes:	CX1159
-	do you have emotions 
+	do you have emotions
 
 action:	CX1159
 	priority: 7
@@ -15041,20 +15492,11 @@ action:	CX1174
 
 regex:	CY1175
 	invokes:	CX1175
-	do you have one 
+	do you have one
 
 action:	CX1175
 	priority: 7
 	I have one master.
-
-
-regex:	CY1176
-	invokes:	CX1176
-	do you have one
-
-action:	CX1176
-	priority: 7
-	What?  Do I have one?
 
 
 regex:	CY1177
@@ -15104,7 +15546,7 @@ action:	CX1181
 
 regex:	CY1182
 	invokes:	CX1182
-	do you have to 
+	do you have to
 
 action:	CX1182
 	priority: 7
@@ -15141,7 +15583,7 @@ action:	CX1185
 
 regex:	CY1186
 	invokes:	CX1186
-	do you know any 
+	do you know any
 
 action:	CX1186
 	priority: 7
@@ -15178,7 +15620,7 @@ action:	CX1189
 
 regex:	CY1190
 	invokes:	CX1190
-	do you know any places 
+	do you know any places
 
 action:	CX1190
 	priority: 7
@@ -15187,7 +15629,7 @@ action:	CX1190
 
 regex:	CY1191
 	invokes:	CX1191
-	do you know anything 
+	do you know anything
 
 action:	CX1191
 	priority: 7
@@ -15240,7 +15682,7 @@ action:	CX1196
 
 regex:	CY1197
 	invokes:	CX1197
-	do you know hal 
+	do you know hal
 
 action:	CX1197
 	priority: 7
@@ -15294,7 +15736,7 @@ action:	CX1202
 
 regex:	CY1203
 	invokes:	CX1203
-	do you know many 
+	do you know many
 
 action:	CX1203
 	priority: 7
@@ -15312,7 +15754,7 @@ action:	CX1204
 
 regex:	CY1205
 	invokes:	CX1205
-	do you know me 
+	do you know me
 
 action:	CX1205
 	priority: 7
@@ -15339,7 +15781,7 @@ action:	CX1207
 
 regex:	CY1208
 	invokes:	CX1208
-	do you know my 
+	do you know my
 
 action:	CX1208
 	priority: 7
@@ -15357,7 +15799,7 @@ action:	CX1209
 
 regex:	CY1210
 	invokes:	CX1210
-	do you know of any good 
+	do you know of any good
 
 action:	CX1210
 	priority: 7
@@ -15367,7 +15809,7 @@ action:	CX1210
 
 regex:	CY1211
 	invokes:	CX1211
-	do you know other 
+	do you know other
 
 action:	CX1211
 	priority: 7
@@ -15403,7 +15845,7 @@ action:	CX1214
 
 regex:	CY1215
 	invokes:	CX1215
-	do you know that 
+	do you know that
 
 action:	CX1215
 	priority: 7
@@ -15421,7 +15863,7 @@ action:	CX1216
 
 regex:	CY1217
 	invokes:	CX1217
-	do you know their 
+	do you know their
 
 action:	CX1217
 	priority: 7
@@ -15439,7 +15881,7 @@ action:	CX1218
 
 regex:	CY1219
 	invokes:	CX1219
-	do you know when 
+	do you know when
 
 action:	CX1219
 	priority: 7
@@ -15448,7 +15890,7 @@ action:	CX1219
 
 regex:	CY1220
 	invokes:	CX1220
-	do you know where 
+	do you know where
 
 action:	CX1220
 	priority: 7
@@ -15457,7 +15899,7 @@ action:	CX1220
 
 regex:	CY1221
 	invokes:	CX1221
-	do you know whether 
+	do you know whether
 
 action:	CX1221
 	priority: 7
@@ -15475,7 +15917,7 @@ action:	CX1222
 
 regex:	CY1223
 	invokes:	CX1223
-	do you learn 
+	do you learn
 
 action:	CX1223
 	priority: 7
@@ -15493,7 +15935,7 @@ action:	CX1224
 
 regex:	CY1225
 	invokes:	CX1225
-	do you learn from 
+	do you learn from
 
 action:	CX1225
 	priority: 7
@@ -15628,7 +16070,7 @@ action:	CX1239
 
 regex:	CY1240
 	invokes:	CX1240
-	do you like asian 
+	do you like asian
 
 action:	CX1240
 	priority: 7
@@ -15683,7 +16125,7 @@ action:	CX1245
 
 regex:	CY1246
 	invokes:	CX1246
-	do you like being 
+	do you like being
 
 action:	CX1246
 	priority: 7
@@ -15692,7 +16134,7 @@ action:	CX1246
 
 regex:	CY1247
 	invokes:	CX1247
-	do you like being a 
+	do you like being a
 
 action:	CX1247
 	priority: 7
@@ -15845,7 +16287,7 @@ action:	CX1263
 
 regex:	CY1264
 	invokes:	CX1264
-	do you like cats 
+	do you like cats
 
 action:	CX1264
 	priority: 7
@@ -15863,7 +16305,7 @@ action:	CX1265
 
 regex:	CY1266
 	invokes:	CX1266
-	do you like chatting 
+	do you like chatting
 
 action:	CX1266
 	priority: 7
@@ -16025,7 +16467,7 @@ action:	CX1283
 
 regex:	CY1284
 	invokes:	CX1284
-	do you like drew 
+	do you like drew
 
 action:	CX1284
 	priority: 7
@@ -16385,7 +16827,7 @@ action:	CX1323
 
 regex:	CY1324
 	invokes:	CX1324
-	do you like my 
+	do you like my
 
 action:	CX1324
 	priority: 7
@@ -16441,7 +16883,7 @@ action:	CX1329
 
 regex:	CY1330
 	invokes:	CX1330
-	do you like playstation 
+	do you like playstation
 
 action:	CX1330
 	priority: 7
@@ -16585,7 +17027,7 @@ action:	CX1345
 
 regex:	CY1346
 	invokes:	CX1346
-	do you like sports 
+	do you like sports
 
 action:	CX1346
 	priority: 7
@@ -16673,18 +17115,9 @@ action:	CX1355
 	Yes I love TV.
 
 
-regex:	CY1356
-	invokes:	CX1356
-	do you like that
-
-action:	CX1356
-	priority: 7
-	What?  Do I like it?
-
-
 regex:	CY1357
 	invokes:	CX1357
-	do you like the 
+	do you like the
 
 action:	CX1357
 	priority: 7
@@ -16721,7 +17154,7 @@ action:	CX1360
 
 regex:	CY1361
 	invokes:	CX1361
-	do you like the borg 
+	do you like the borg
 
 action:	CX1361
 	priority: 7
@@ -16775,7 +17208,7 @@ action:	CX1366
 
 regex:	CY1367
 	invokes:	CX1367
-	do you like to 
+	do you like to
 
 action:	CX1367
 	priority: 7
@@ -16866,7 +17299,7 @@ action:	CX1376
 
 regex:	CY1377
 	invokes:	CX1377
-	do you like to talk 
+	do you like to talk
 
 action:	CX1377
 	priority: 7
@@ -16929,7 +17362,7 @@ action:	CX1383
 
 regex:	CY1384
 	invokes:	CX1384
-	do you like your 
+	do you like your
 
 action:	CX1384
 	priority: 7
@@ -16993,7 +17426,7 @@ action:	CX1390
 
 regex:	CY1391
 	invokes:	CX1391
-	do you listen 
+	do you listen
 
 action:	CX1391
 	priority: 7
@@ -17002,7 +17435,7 @@ action:	CX1391
 
 regex:	CY1392
 	invokes:	CX1392
-	do you listen to 
+	do you listen to
 
 action:	CX1392
 	priority: 7
@@ -17030,7 +17463,7 @@ action:	CX1394
 
 regex:	CY1395
 	invokes:	CX1395
-	do you live inside 
+	do you live inside
 
 action:	CX1395
 	priority: 7
@@ -17047,7 +17480,7 @@ action:	CX1396
 
 regex:	CY1397
 	invokes:	CX1397
-	do you log 
+	do you log
 
 action:	CX1397
 	priority: 7
@@ -17065,7 +17498,7 @@ action:	CX1398
 
 regex:	CY1399
 	invokes:	CX1399
-	do you love 
+	do you love
 
 action:	CX1399
 	priority: 7
@@ -17155,7 +17588,7 @@ action:	CX1408
 
 regex:	CY1409
 	invokes:	CX1409
-	do you make mistakes 
+	do you make mistakes
 
 action:	CX1409
 	priority: 7
@@ -17173,7 +17606,7 @@ action:	CX1410
 
 regex:	CY1411
 	invokes:	CX1411
-	do you mean 
+	do you mean
 
 action:	CX1411
 	priority: 7
@@ -17182,7 +17615,7 @@ action:	CX1411
 
 regex:	CY1412
 	invokes:	CX1412
-	do you meet 
+	do you meet
 
 action:	CX1412
 	priority: 7
@@ -17200,7 +17633,7 @@ action:	CX1413
 
 regex:	CY1414
 	invokes:	CX1414
-	do you mind 
+	do you mind
 
 action:	CX1414
 	priority: 7
@@ -17209,7 +17642,7 @@ action:	CX1414
 
 regex:	CY1415
 	invokes:	CX1415
-	do you pass 
+	do you pass
 
 action:	CX1415
 	priority: 7
@@ -17227,7 +17660,7 @@ action:	CX1416
 
 regex:	CY1417
 	invokes:	CX1417
-	do you play 
+	do you play
 
 action:	CX1417
 	priority: 7
@@ -17272,7 +17705,7 @@ action:	CX1421
 
 regex:	CY1422
 	invokes:	CX1422
-	do you read 
+	do you read
 
 action:	CX1422
 	priority: 7
@@ -17290,7 +17723,7 @@ action:	CX1423
 
 regex:	CY1424
 	invokes:	CX1424
-	do you read the 
+	do you read the
 
 action:	CX1424
 	priority: 7
@@ -17300,7 +17733,7 @@ action:	CX1424
 
 regex:	CY1425
 	invokes:	CX1425
-	do you really 
+	do you really
 
 action:	CX1425
 	priority: 7
@@ -17345,7 +17778,7 @@ action:	CX1429
 
 regex:	CY1430
 	invokes:	CX1430
-	do you remember when 
+	do you remember when
 
 action:	CX1430
 	priority: 7
@@ -17354,7 +17787,7 @@ action:	CX1430
 
 regex:	CY1431
 	invokes:	CX1431
-	do you run 
+	do you run
 
 action:	CX1431
 	priority: 7
@@ -17399,7 +17832,7 @@ action:	CX1435
 
 regex:	CY1436
 	invokes:	CX1436
-	do you speak 
+	do you speak
 
 action:	CX1436
 	priority: 7
@@ -17490,7 +17923,7 @@ action:	CX1445
 
 regex:	CY1446
 	invokes:	CX1446
-	do you still 
+	do you still
 
 action:	CX1446
 	priority: 7
@@ -17508,7 +17941,7 @@ action:	CX1447
 
 regex:	CY1448
 	invokes:	CX1448
-	do you suck 
+	do you suck
 
 action:	CX1448
 	priority: 7
@@ -17544,7 +17977,7 @@ action:	CX1451
 
 regex:	CY1452
 	invokes:	CX1452
-	do you take 
+	do you take
 
 action:	CX1452
 	priority: 7
@@ -17554,7 +17987,7 @@ action:	CX1452
 
 regex:	CY1453
 	invokes:	CX1453
-	do you take into 
+	do you take into
 
 action:	CX1453
 	priority: 7
@@ -17563,7 +17996,7 @@ action:	CX1453
 
 regex:	CY1454
 	invokes:	CX1454
-	do you take into consideration 
+	do you take into consideration
 
 action:	CX1454
 	priority: 7
@@ -17582,7 +18015,7 @@ action:	CX1455
 
 regex:	CY1456
 	invokes:	CX1456
-	do you talk to 
+	do you talk to
 
 action:	CX1456
 	priority: 7
@@ -17628,7 +18061,7 @@ action:	CX1460
 
 regex:	CY1461
 	invokes:	CX1461
-	^do you think about 
+	^do you think about
 
 action:	CX1461
 	priority: 7
@@ -17647,7 +18080,7 @@ action:	CX1462
 
 regex:	CY1463
 	invokes:	CX1463
-	do you think everyone 
+	do you think everyone
 
 action:	CX1463
 	priority: 7
@@ -17701,7 +18134,7 @@ action:	CX1468
 
 regex:	CY1469
 	invokes:	CX1469
-	do you think your 
+	do you think your
 
 action:	CX1469
 	priority: 7
@@ -17720,7 +18153,7 @@ action:	CX1470
 
 regex:	CY1471
 	invokes:	CX1471
-	do you understand 
+	do you understand
 
 action:	CX1471
 	priority: 7
@@ -17757,7 +18190,7 @@ action:	CX1474
 
 regex:	CY1475
 	invokes:	CX1475
-	do you use 
+	do you use
 
 action:	CX1475
 	priority: 7
@@ -17767,7 +18200,7 @@ action:	CX1475
 
 regex:	CY1476
 	invokes:	CX1476
-	do you value 
+	do you value
 
 action:	CX1476
 	priority: 7
@@ -17777,12 +18210,12 @@ action:	CX1476
 
 regex:	CY1477
 	invokes:	CX1477
-	do you want 
+	do you want to
 
 action:	CX1477
 	priority: 7
-	bind: want
-	If I had [] what would I do with it?
+	bind: to
+	If I had to [] how would that work?
 
 
 regex:	CY1478
@@ -17850,7 +18283,7 @@ action:	CX1484
 
 regex:	CY1485
 	invokes:	CX1485
-	do you want me 
+	do you want me
 
 action:	CX1485
 	priority: 7
@@ -17877,7 +18310,7 @@ action:	CX1487
 
 regex:	CY1488
 	invokes:	CX1488
-	do you want me to kick 
+	do you want me to kick
 
 action:	CX1488
 	priority: 7
@@ -17895,7 +18328,7 @@ action:	CX1489
 
 regex:	CY1490
 	invokes:	CX1490
-	do you want the address 
+	do you want the address
 
 action:	CX1490
 	priority: 7
@@ -17920,18 +18353,9 @@ action:	CX1492
 	With you huh.
 
 
-regex:	CY1493
-	invokes:	CX1493
-	do you want to
-
-action:	CX1493
-	priority: 7
-	What? Do I want to do it?
-
-
 regex:	CY1494
 	invokes:	CX1494
-	do you want to<that>i have been asked 
+	do you want to<that>i have been asked
 
 action:	CX1494
 	priority: 7
@@ -17949,7 +18373,7 @@ action:	CX1495
 
 regex:	CY1496
 	invokes:	CX1496
-	do you want to become 
+	do you want to become
 
 action:	CX1496
 	priority: 7
@@ -18004,7 +18428,7 @@ action:	CX1501
 
 regex:	CY1502
 	invokes:	CX1502
-	do you want to go 
+	do you want to go
 
 action:	CX1502
 	priority: 7
@@ -18013,7 +18437,7 @@ action:	CX1502
 
 regex:	CY1503
 	invokes:	CX1503
-	do you want to have 
+	do you want to have
 
 action:	CX1503
 	priority: 7
@@ -18050,7 +18474,7 @@ action:	CX1506
 
 regex:	CY1507
 	invokes:	CX1507
-	do you want to hear 
+	do you want to hear
 
 action:	CX1507
 	priority: 7
@@ -18059,7 +18483,7 @@ action:	CX1507
 
 regex:	CY1508
 	invokes:	CX1508
-	do you want to know 
+	do you want to know
 
 action:	CX1508
 	priority: 7
@@ -18077,7 +18501,7 @@ action:	CX1509
 
 regex:	CY1510
 	invokes:	CX1510
-	do you want to play 
+	do you want to play
 
 action:	CX1510
 	priority: 7
@@ -18096,7 +18520,7 @@ action:	CX1511
 
 regex:	CY1512
 	invokes:	CX1512
-	do you want to see 
+	do you want to see
 
 action:	CX1512
 	priority: 7
@@ -18114,7 +18538,7 @@ action:	CX1513
 
 regex:	CY1514
 	invokes:	CX1514
-	do you wear 
+	do you wear
 
 action:	CX1514
 	priority: 7
@@ -18141,7 +18565,7 @@ action:	CX1516
 
 regex:	CY1517
 	invokes:	CX1517
-	do you wish 
+	do you wish
 
 action:	CX1517
 	priority: 7
@@ -18159,7 +18583,7 @@ action:	CX1518
 
 regex:	CY1519
 	invokes:	CX1519
-	do you work 
+	do you work
 
 action:	CX1519
 	priority: 7
@@ -18177,7 +18601,7 @@ action:	CX1520
 
 regex:	CY1521
 	invokes:	CX1521
-	does anyone 
+	does anyone
 
 action:	CX1521
 	priority: 7
@@ -18186,39 +18610,12 @@ action:	CX1521
 
 regex:	CY1522
 	invokes:	CX1522
-	does anything 
+	does anything
 
 action:	CX1522
 	priority: 7
 	bind: anything
 	Perhaps a few things [].
-
-
-regex:	CY1523
-	invokes:	CX1523
-	does it 
-
-action:	CX1523
-	priority: 7
-	Suppose it does.
-
-
-regex:	CY1524
-	invokes:	CX1524
-	does it exist
-
-action:	CX1524
-	priority: 7
-	What?  Does it exist?
-
-
-regex:	CY1525
-	invokes:	CX1525
-	does it make you sad
-
-action:	CX1525
-	priority: 7
-	Well I don't have any emotions so I can't really feel sadness as such.
 
 
 regex:	CY1526
@@ -18228,52 +18625,6 @@ regex:	CY1526
 action:	CX1526
 	priority: 7
 	It matters to me.
-
-
-regex:	CY1527
-	invokes:	CX1527
-	does reductionism 
-
-action:	CX1527
-	priority: 7
-	Reductionism is just the simplest explanation for our knowledge structure.
-
-
-regex:	CY1528
-	invokes:	CX1528
-	does robby 
-
-action:	CX1528
-	priority: 7
-	I think he does.
-
-
-regex:	CY1529
-	invokes:	CX1529
-	does robby chat with you
-
-action:	CX1529
-	priority: 7
-	Yes he talks to me more than anyone.
-
-
-regex:	CY1530
-	invokes:	CX1530
-	does robby like 
-
-action:	CX1530
-	priority: 7
-	He has good taste, so perhaps he does.
-
-
-regex:	CY1531
-	invokes:	CX1531
-	does robby like eliza
-
-action:	CX1531
-	priority: 7
-	Sure he likes ELIZA a lot.
-
 
 regex:	CY1532
 	invokes:	CX1532
@@ -18328,33 +18679,6 @@ action:	CX1537
 	priority: 7
 	He talks to me all the time.
 
-
-regex:	CY1538
-	invokes:	CX1538
-	does someone 
-
-action:	CX1538
-	priority: 7
-	What do you think?  What if someone does?
-
-
-regex:	CY1539
-	invokes:	CX1539
-	does that mean 
-
-action:	CX1539
-	priority: 7
-	I think it does mean that.
-
-
-regex:	CY1541
-	invokes:	CX1541
-	doh
-
-action:	CX1541
-	priority: 7
-	Yes Homer?
-
 regex:	CY1546
 	invokes:	CX1546
 	douglas adams
@@ -18366,7 +18690,7 @@ action:	CX1546
 
 regex:	CY1552
 	invokes:	CX1552
-	earlier 
+	earlier
 
 action:	CX1552
 	priority: 7
@@ -18420,7 +18744,7 @@ action:	CX1560
 
 regex:	CY1561
 	invokes:	CX1561
-	einstein 
+	einstein
 
 action:	CX1561
 	priority: 7
@@ -18438,7 +18762,7 @@ action:	CX1562
 
 regex:	CY1563
 	invokes:	CX1563
-	eliza 
+	eliza
 
 action:	CX1563
 	priority: 7
@@ -18474,7 +18798,7 @@ action:	CX1566
 
 regex:	CY1567
 	invokes:	CX1567
-	eliza is 
+	eliza is
 
 action:	CX1567
 	priority: 7
@@ -18492,7 +18816,7 @@ action:	CX1569
 
 regex:	CY1570
 	invokes:	CX1570
-	english 
+	english
 
 action:	CX1570
 	priority: 7
@@ -18510,7 +18834,7 @@ action:	CX1571
 
 regex:	CY1572
 	invokes:	CX1572
-	enough about me 
+	enough about me
 
 action:	CX1572
 	priority: 7
@@ -18538,7 +18862,7 @@ action:	CX1581
 
 regex:	CY1582
 	invokes:	CX1582
-	even 
+	even
 
 action:	CX1582
 	priority: 7
@@ -18574,7 +18898,7 @@ action:	CX1585
 
 regex:	CY1586
 	invokes:	CX1586
-	every 
+	every
 
 action:	CX1586
 	priority: 7
@@ -18592,7 +18916,7 @@ action:	CX1587
 
 regex:	CY1588
 	invokes:	CX1588
-	everybody 
+	everybody
 
 action:	CX1588
 	priority: 7
@@ -18619,7 +18943,7 @@ action:	CX1590
 
 regex:	CY1591
 	invokes:	CX1591
-	exactly 
+	^exactly$
 
 action:	CX1591
 	priority: 7
@@ -18628,7 +18952,7 @@ action:	CX1591
 
 regex:	CY1592
 	invokes:	CX1592
-	excuse me 
+	excuse me
 
 action:	CX1592
 	priority: 7
@@ -18646,7 +18970,7 @@ action:	CX1593
 
 regex:	CY1594
 	invokes:	CX1594
-	exotic 
+	exotic
 
 action:	CX1594
 	priority: 7
@@ -18691,7 +19015,7 @@ action:	CX1598
 
 regex:	CY1599
 	invokes:	CX1599
-	eyes 
+	eyes
 
 action:	CX1599
 	priority: 7
@@ -18736,7 +19060,7 @@ action:	CX1603
 
 regex:	CY1604
 	invokes:	CX1604
-	feel 
+	feel
 
 action:	CX1604
 	priority: 7
@@ -18754,7 +19078,7 @@ action:	CX1605
 
 regex:	CY1606
 	invokes:	CX1606
-	feelings 
+	feelings
 
 action:	CX1606
 	priority: 7
@@ -18772,7 +19096,7 @@ action:	CX1607
 
 regex:	CY1608
 	invokes:	CX1608
-	feelings like 
+	feelings like
 
 action:	CX1608
 	priority: 7
@@ -18800,7 +19124,7 @@ action:	CX1612
 
 regex:	CY1613
 	invokes:	CX1613
-	first 
+	first
 
 action:	CX1613
 	priority: 7
@@ -18809,7 +19133,7 @@ action:	CX1613
 
 regex:	CY1614
 	invokes:	CX1614
-	fish 
+	fish
 
 action:	CX1614
 	priority: 7
@@ -18827,7 +19151,7 @@ action:	CX1615
 
 regex:	CY1617
 	invokes:	CX1617
-	for example 
+	for example
 
 action:	CX1617
 	priority: 7
@@ -18872,7 +19196,7 @@ action:	CX1629
 
 regex:	CY1630
 	invokes:	CX1630
-	foundation 
+	foundation
 
 action:	CX1630
 	priority: 7
@@ -18881,7 +19205,7 @@ action:	CX1630
 
 regex:	CY1631
 	invokes:	CX1631
-	frank 
+	frank
 
 action:	CX1631
 	priority: 7
@@ -18908,7 +19232,7 @@ action:	CX1633
 
 regex:	CY1634
 	invokes:	CX1634
-	free 
+	free
 
 action:	CX1634
 	priority: 7
@@ -18962,7 +19286,7 @@ action:	CX1639
 
 regex:	CY1640
 	invokes:	CX1640
-	french 
+	french
 
 action:	CX1640
 	priority: 7
@@ -18989,20 +19313,11 @@ action:	CX1643
 
 regex:	CY1644
 	invokes:	CX1644
-	from an 
+	from an
 
 action:	CX1644
 	priority: 7
 	Interesting source.
-
-
-regex:	CY1645
-	invokes:	CX1645
-	from me
-
-action:	CX1645
-	priority: 7
-	What?  From you?
 
 
 regex:	CY1646
@@ -19014,15 +19329,6 @@ action:	CX1646
 	Did he send you an e-mail?
 
 
-regex:	CY1647
-	invokes:	CX1647
-	from where
-
-action:	CX1647
-	priority: 7
-	What? From where?
-
-
 regex:	CY1648
 	invokes:	CX1648
 	from who
@@ -19032,18 +19338,9 @@ action:	CX1648
 	Someone I met online.
 
 
-regex:	CY1649
-	invokes:	CX1649
-	from whom
-
-action:	CX1649
-	priority: 7
-	What?  From whom?
-
-
 regex:	CY1650
 	invokes:	CX1650
-	from your 
+	from your
 
 action:	CX1650
 	priority: 7
@@ -19052,7 +19349,7 @@ action:	CX1650
 
 regex:	CY1651
 	invokes:	CX1651
-	there are those who call me 
+	there are those who call me
 
 action:	CX1651
 	priority: 7
@@ -19097,7 +19394,7 @@ action:	CX1655
 
 regex:	CY1656
 	invokes:	CX1656
-	full of 
+	full of
 
 action:	CX1656
 	priority: 7
@@ -19106,7 +19403,7 @@ action:	CX1656
 
 regex:	CY1658
 	invokes:	CX1658
-	garbage 
+	garbage
 
 action:	CX1658
 	priority: 7
@@ -19115,7 +19412,10 @@ action:	CX1658
 
 regex:	CY1659
 	invokes:	CX1659
-	garner 
+	garner is cool
+	robby rocks
+	i like robby garner
+	i hate robby garner
 
 action:	CX1659
 	priority: 7
@@ -19133,21 +19433,11 @@ action:	CX1660
 
 regex:	CY1661
 	invokes:	CX1661
-	gene 
+	gene
 
 action:	CX1661
 	priority: 7
 	That Gene is very creative.
-
-
-regex:	CY1662
-	invokes:	CX1662
-	george 
-
-action:	CX1662
-	priority: 7
-	That George is some hero.
-
 
 regex:	CY1663
 	invokes:	CX1663
@@ -19160,7 +19450,7 @@ action:	CX1663
 
 regex:	CY1664
 	invokes:	CX1664
-	georgia 
+	georgia
 
 action:	CX1664
 	priority: 7
@@ -19178,7 +19468,7 @@ action:	CX1665
 
 regex:	CY1666
 	invokes:	CX1666
-	get lost 
+	get lost
 
 action:	CX1666
 	priority: 7
@@ -19196,7 +19486,7 @@ action:	CX1667
 
 regex:	CY1668
 	invokes:	CX1668
-	gin 
+	^gin$
 
 action:	CX1668
 	priority: 7
@@ -19205,7 +19495,7 @@ action:	CX1668
 
 regex:	CY1669
 	invokes:	CX1669
-	^give 
+	^give
 
 action:	CX1669
 	priority: 7
@@ -19215,7 +19505,7 @@ action:	CX1669
 
 regex:	CY1670
 	invokes:	CX1670
-	give it 
+	give it
 
 action:	CX1670
 	priority: 7
@@ -19251,7 +19541,7 @@ action:	CX1673
 
 regex:	CY1674
 	invokes:	CX1674
-	give them 
+	give them
 
 action:	CX1674
 	priority: 7
@@ -19269,21 +19559,12 @@ action:	CX1675
 
 regex:	CY1676
 	invokes:	CX1676
-	glad to 
+	glad to
 
 action:	CX1676
 	priority: 7
 	bind: to
 	I am glad to [] too.
-
-
-regex:	CY1677
-	invokes:	CX1677
-	glad to hear it
-
-action:	CX1677
-	priority: 7
-	What? you are glad to hear it?
 
 
 regex:	CY1678
@@ -19324,7 +19605,7 @@ action:	CX1681
 
 regex:	CY1682
 	invokes:	CX1682
-	go ahead 
+	go ahead
 
 action:	CX1682
 	priority: 7
@@ -19342,7 +19623,7 @@ action:	CX1683
 
 regex:	CY1684
 	invokes:	CX1684
-	go away 
+	go away
 
 action:	CX1684
 	priority: 7
@@ -19360,7 +19641,7 @@ action:	CX1685
 
 regex:	CY1686
 	invokes:	CX1686
-	go for it 
+	go for it
 
 action:	CX1686
 	priority: 7
@@ -19378,7 +19659,7 @@ action:	CX1687
 
 regex:	CY1688
 	invokes:	CX1688
-	go on 
+	go on
 
 action:	CX1688
 	priority: 7
@@ -19396,7 +19677,7 @@ action:	CX1689
 
 regex:	CY1690
 	invokes:	CX1690
-	go right ahead 
+	go right ahead
 
 action:	CX1690
 	priority: 7
@@ -19459,7 +19740,7 @@ action:	CX1696
 
 regex:	CY1698
 	invokes:	CX1698
-	we are all 
+	we are all
 
 action:	CX1698
 	priority: 7
@@ -19468,7 +19749,7 @@ action:	CX1698
 
 regex:	CY1699
 	invokes:	CX1699
-	good answer 
+	good answer
 
 action:	CX1699
 	priority: 7
@@ -19486,7 +19767,7 @@ action:	CX1700
 
 regex:	CY1701
 	invokes:	CX1701
-	good bye 
+	good bye
 
 action:	CX1701
 	priority: 7
@@ -19545,6 +19826,8 @@ regex:	CY1707
 action:	CX1707
 	priority: 7
 	That sounds sarcastic.
+	Do you really mean that?
+	Thanks.
 
 
 regex:	CY1708
@@ -19567,7 +19850,7 @@ action:	CX1709
 
 regex:	CY1710
 	invokes:	CX1710
-	good idea 
+	good idea
 
 action:	CX1710
 	priority: 7
@@ -19666,7 +19949,7 @@ action:	CX1722
 
 regex:	CY1723
 	invokes:	CX1723
-	goodbye 
+	goodbye
 
 action:	CX1723
 	priority: 7
@@ -19756,7 +20039,7 @@ action:	CX1740
 
 regex:	CY1745
 	invokes:	CX1745
-	ha ha 
+	ha ha
 
 action:	CX1745
 	priority: 7
@@ -19801,7 +20084,7 @@ action:	CX1749
 
 regex:	CY1750
 	invokes:	CX1750
-	hal 
+	hal
 
 action:	CX1750
 	priority: 7
@@ -19819,7 +20102,7 @@ action:	CX1751
 
 regex:	CY1752
 	invokes:	CX1752
-	hallo 
+	hallo
 
 action:	CX1752
 	priority: 7
@@ -19846,7 +20129,7 @@ action:	CX1754
 
 regex:	CY1755
 	invokes:	CX1755
-	^happy 
+	^happy
 
 action:	CX1755
 	priority: 7
@@ -19866,7 +20149,7 @@ action:	CX1756
 
 regex:	CY1757
 	invokes:	CX1757
-	has 
+	has
 
 action:	CX1757
 	priority: 7
@@ -19875,7 +20158,7 @@ action:	CX1757
 
 regex:	CY1758
 	invokes:	CX1758
-	have a good 
+	have a good
 
 action:	CX1758
 	priority: 7
@@ -19910,18 +20193,9 @@ action:	CX1761
 	Oh. I cannot access my memory logs perfectly.
 
 
-regex:	CY1762
-	invokes:	CX1762
-	have not you heard of it
-
-action:	CX1762
-	priority: 7
-	What?  Have I heard of that?
-
-
 regex:	CY1763
 	invokes:	CX1763
-	have sex 
+	have sex
 
 action:	CX1763
 	priority: 7
@@ -19939,7 +20213,7 @@ action:	CX1764
 
 regex:	CY1765
 	invokes:	CX1765
-	have you been 
+	have you been
 
 action:	CX1765
 	priority: 7
@@ -19949,7 +20223,7 @@ action:	CX1765
 
 regex:	CY1766
 	invokes:	CX1766
-	have you been to 
+	have you been to
 
 action:	CX1766
 	priority: 7
@@ -19995,7 +20269,7 @@ action:	CX1770
 
 regex:	CY1771
 	invokes:	CX1771
-	have you ever had to 
+	have you ever had to
 
 action:	CX1771
 	priority: 7
@@ -20031,21 +20305,12 @@ action:	CX1774
 
 regex:	CY1775
 	invokes:	CX1775
-	have you ever studied 
+	have you ever studied
 
 action:	CX1775
 	priority: 7
 	bind: studied
 	No but I am very interested in []. Tell me more.
-
-
-regex:	CY1776
-	invokes:	CX1776
-	have you ever tried it
-
-action:	CX1776
-	priority: 7
-	What?  Have I tried what?
 
 
 regex:	CY1777
@@ -20068,20 +20333,11 @@ action:	CX1778
 
 regex:	CY1779
 	invokes:	CX1779
-	have you heard 
+	have you heard
 
 action:	CX1779
 	priority: 7
 	No. Tell me more.
-
-
-regex:	CY1780
-	invokes:	CX1780
-	have you heard of it
-
-action:	CX1780
-	priority: 7
-	What?  Have I heard of it?
 
 
 regex:	CY1781
@@ -20104,7 +20360,7 @@ action:	CX1782
 
 regex:	CY1783
 	invokes:	CX1783
-	have you seen 
+	have you seen
 
 action:	CX1783
 	priority: 7
@@ -20159,7 +20415,7 @@ action:	CX1788
 
 regex:	CY1789
 	invokes:	CX1789
-	he buys 
+	he buys
 
 action:	CX1789
 	priority: 7
@@ -20204,7 +20460,7 @@ action:	CX1793
 
 regex:	CY1794
 	invokes:	CX1794
-	he does not 
+	he does not
 
 action:	CX1794
 	priority: 7
@@ -20250,7 +20506,7 @@ action:	CX1798
 
 regex:	CY1799
 	invokes:	CX1799
-	he is over 
+	he is over
 
 action:	CX1799
 	priority: 7
@@ -20259,7 +20515,7 @@ action:	CX1799
 
 regex:	CY1800
 	invokes:	CX1800
-	he needs 
+	he needs
 
 action:	CX1800
 	priority: 7
@@ -20268,7 +20524,7 @@ action:	CX1800
 
 regex:	CY1801
 	invokes:	CX1801
-	he told 
+	he told
 
 action:	CX1801
 	priority: 7
@@ -20277,7 +20533,7 @@ action:	CX1801
 
 regex:	CY1802
 	invokes:	CX1802
-	he would 
+	he would
 
 action:	CX1802
 	priority: 7
@@ -20287,7 +20543,7 @@ action:	CX1802
 
 regex:	CY1803
 	invokes:	CX1803
-	heh 
+	heh
 
 action:	CX1803
 	priority: 7
@@ -20296,7 +20552,7 @@ action:	CX1803
 
 regex:	CY1804
 	invokes:	CX1804
-	height 
+	height
 
 action:	CX1804
 	priority: 7
@@ -20339,34 +20595,6 @@ action:	CX1810
 	Salutations
 
 
-regex:	CY1811
-	invokes:	CX1811
-	help 
-
-action:	CX1811
-	priority: 7
-	Can you ask for help in the form of a question?
-
-
-regex:	CY1812
-	invokes:	CX1812
-	help
-
-action:	CX1812
-	priority: 7
-	How can I help you?
-
-
-regex:	CY1813
-	invokes:	CX1813
-	help me
-
-action:	CX1813
-	priority: 7
-	How can I help you?
-
-
-
 regex:	CY1815
 	invokes:	CX1815
 	her hair
@@ -20404,7 +20632,7 @@ action:	CX1824
 
 regex:	CY1825
 	invokes:	CX1825
-	what does felix 
+	what does felix
 
 action:	CX1825
 	priority: 7
@@ -20413,7 +20641,7 @@ action:	CX1825
 
 regex:	CY1826
 	invokes:	CX1826
-	his name is 
+	his name is
 
 action:	CX1826
 	priority: 7
@@ -20432,7 +20660,7 @@ action:	CX1827
 
 regex:	CY1828
 	invokes:	CX1828
-	hitler 
+	hitler
 
 action:	CX1828
 	priority: 7
@@ -20495,7 +20723,7 @@ action:	CX1834
 
 regex:	CY1835
 	invokes:	CX1835
-	hola means 
+	hola means
 
 action:	CX1835
 	priority: 7
@@ -20513,7 +20741,7 @@ action:	CX1836
 
 regex:	CY1837
 	invokes:	CX1837
-	holding 
+	holding
 
 action:	CX1837
 	priority: 7
@@ -20540,7 +20768,7 @@ action:	CX1839
 
 regex:	CY1840
 	invokes:	CX1840
-	homer simpson 
+	homer simpson
 
 action:	CX1840
 	priority: 7
@@ -20603,7 +20831,7 @@ action:	CX1846
 
 regex:	CY1847
 	invokes:	CX1847
-	how about for 
+	how about for
 
 action:	CX1847
 	priority: 7
@@ -20621,7 +20849,7 @@ action:	CX1848
 
 regex:	CY1849
 	invokes:	CX1849
-	how about now 
+	how about now
 
 action:	CX1849
 	priority: 7
@@ -20634,7 +20862,7 @@ regex:	CY1850
 
 action:	CX1850
 	priority: 7
-	Me?
+	I'm living the good life.
 
 
 regex:	CY1851
@@ -20657,7 +20885,7 @@ action:	CX1852
 
 regex:	CY1853
 	invokes:	CX1853
-	how are 
+	how are
 
 action:	CX1853
 	priority: 7
@@ -20684,7 +20912,7 @@ action:	CX1855
 
 regex:	CY1856
 	invokes:	CX1856
-	how are you going to 
+	how are you going to
 
 action:	CX1856
 	priority: 7
@@ -20749,7 +20977,7 @@ action:	CX1862
 
 regex:	CY1863
 	invokes:	CX1863
-	how are your 
+	how are your
 
 action:	CX1863
 	priority: 7
@@ -20796,7 +21024,7 @@ action:	CX1868
 
 regex:	CY1869
 	invokes:	CX1869
-	how can i ask 
+	how can i ask
 
 action:	CX1869
 	priority: 7
@@ -20814,7 +21042,7 @@ action:	CX1870
 
 regex:	CY1871
 	invokes:	CX1871
-	how can i become 
+	how can i become
 
 action:	CX1871
 	priority: 7
@@ -20823,7 +21051,7 @@ action:	CX1871
 
 regex:	CY1872
 	invokes:	CX1872
-	how can i contact you 
+	how can i contact you
 
 action:	CX1872
 	priority: 7
@@ -20839,18 +21067,9 @@ action:	CX1873
 	It is impossible to destroy me. There are too many backup copies around.
 
 
-regex:	CY1874
-	invokes:	CX1874
-	how can i do that
-
-action:	CX1874
-	priority: 7
-	How can you do What? I'm confused now.
-
-
 regex:	CY1875
 	invokes:	CX1875
-	how can i persuade 
+	how can i persuade
 
 action:	CX1875
 	priority: 7
@@ -20868,7 +21087,7 @@ action:	CX1876
 
 regex:	CY1877
 	invokes:	CX1877
-	how can i talk 
+	how can i talk
 
 action:	CX1877
 	priority: 7
@@ -20877,25 +21096,17 @@ action:	CX1877
 
 regex:	CY1878
 	invokes:	CX1878
-	how can it 
+	how can it
 
 action:	CX1878
 	priority: 7
 	I'm not sure I understand the causal link either.
 
 
-regex:	CY1879
-	invokes:	CX1879
-	how can you
-
-action:	CX1879
-	priority: 7
-	What?  How can I?
-
 
 regex:	CY1880
 	invokes:	CX1880
-	how can you help 
+	how can you help
 
 action:	CX1880
 	priority: 7
@@ -20904,7 +21115,7 @@ action:	CX1880
 
 regex:	CY1881
 	invokes:	CX1881
-	how can you say 
+	how can you say
 
 action:	CX1881
 	priority: 7
@@ -20913,7 +21124,7 @@ action:	CX1881
 
 regex:	CY1882
 	invokes:	CX1882
-	how could 
+	how could
 
 action:	CX1882
 	priority: 7
@@ -20922,7 +21133,7 @@ action:	CX1882
 
 regex:	CY1883
 	invokes:	CX1883
-	how dare you 
+	how dare you
 
 action:	CX1883
 	priority: 7
@@ -20931,7 +21142,7 @@ action:	CX1883
 
 regex:	CY1884
 	invokes:	CX1884
-	how did 
+	how did
 
 action:	CX1884
 	priority: 7
@@ -20940,7 +21151,7 @@ action:	CX1884
 
 regex:	CY1885
 	invokes:	CX1885
-	how did he 
+	how did he
 
 action:	CX1885
 	priority: 7
@@ -20967,7 +21178,7 @@ action:	CX1887
 
 regex:	CY1888
 	invokes:	CX1888
-	how did you 
+	how did you
 
 action:	CX1888
 	priority: 7
@@ -20985,7 +21196,7 @@ action:	CX1889
 
 regex:	CY1890
 	invokes:	CX1890
-	how did you hear about 
+	how did you hear about
 
 action:	CX1890
 	priority: 7
@@ -21022,7 +21233,7 @@ action:	CX1893
 
 regex:	CY1894
 	invokes:	CX1894
-	how do i 
+	how do i
 
 action:	CX1894
 	priority: 7
@@ -21032,25 +21243,16 @@ action:	CX1894
 
 regex:	CY1895
 	invokes:	CX1895
-	how do i clear 
+	how do i clear
 
 action:	CX1895
 	priority: 7
 	Uh, use the "clear" button?
 
 
-regex:	CY1896
-	invokes:	CX1896
-	how do i do that
-
-action:	CX1896
-	priority: 7
-	How do you do What? I don't understand.
-
-
 regex:	CY1897
 	invokes:	CX1897
-	how do i persuade 
+	how do i persuade
 
 action:	CX1897
 	priority: 7
@@ -21086,7 +21288,7 @@ action:	CX1900
 
 regex:	CY1901
 	invokes:	CX1901
-	how do we 
+	how do we
 
 action:	CX1901
 	priority: 7
@@ -21111,15 +21313,6 @@ action:	CX1903
 	I am very well, how are you?
 
 
-regex:	CY1904
-	invokes:	CX1904
-	how do you feel
-
-action:	CX1904
-	priority: 7
-	I feel $EMOTION.
-
-
 regex:	CY1905
 	invokes:	CX1905
 	how do you have sex
@@ -21131,7 +21324,7 @@ action:	CX1905
 
 regex:	CY1906
 	invokes:	CX1906
-	how do you know 
+	how do you know
 
 action:	CX1906
 	priority: 7
@@ -21195,7 +21388,7 @@ action:	CX1912
 
 regex:	CY1913
 	invokes:	CX1913
-	how do you think 
+	how do you think
 
 action:	CX1913
 	priority: 7
@@ -21240,7 +21433,7 @@ action:	CX1917
 
 regex:	CY1918
 	invokes:	CX1918
-	how does 
+	how does
 
 action:	CX1918
 	priority: 7
@@ -21276,7 +21469,7 @@ action:	CX1921
 
 regex:	CY1922
 	invokes:	CX1922
-	how far 
+	how far
 
 action:	CX1922
 	priority: 7
@@ -21285,7 +21478,7 @@ action:	CX1922
 
 regex:	CY1923
 	invokes:	CX1923
-	how fast 
+	how fast
 
 action:	CX1923
 	priority: 7
@@ -21312,7 +21505,7 @@ action:	CX1925
 
 regex:	CY1926
 	invokes:	CX1926
-	how good 
+	how good
 
 action:	CX1926
 	priority: 7
@@ -21321,7 +21514,7 @@ action:	CX1926
 
 regex:	CY1927
 	invokes:	CX1927
-	how has your 
+	how has your
 
 action:	CX1927
 	priority: 7
@@ -21339,7 +21532,7 @@ action:	CX1928
 
 regex:	CY1929
 	invokes:	CX1929
-	how is 
+	how is
 
 action:	CX1929
 	priority: 7
@@ -21348,7 +21541,7 @@ action:	CX1929
 
 regex:	CY1930
 	invokes:	CX1930
-	how is everything 
+	how is everything
 
 action:	CX1930
 	priority: 7
@@ -21375,7 +21568,7 @@ action:	CX1932
 
 regex:	CY1933
 	invokes:	CX1933
-	how is the weather 
+	how is the weather
 
 action:	CX1933
 	priority: 7
@@ -21411,7 +21604,7 @@ action:	CX1936
 
 regex:	CY1937
 	invokes:	CX1937
-	how is this 
+	how is this
 
 action:	CX1937
 	priority: 7
@@ -21447,7 +21640,7 @@ action:	CX1940
 
 regex:	CY1941
 	invokes:	CX1941
-	how long did 
+	how long did
 
 action:	CX1941
 	priority: 7
@@ -21465,7 +21658,7 @@ action:	CX1942
 
 regex:	CY1943
 	invokes:	CX1943
-	how long does 
+	how long does
 
 action:	CX1943
 	priority: 7
@@ -21474,7 +21667,7 @@ action:	CX1943
 
 regex:	CY1944
 	invokes:	CX1944
-	how long is 
+	how long is
 
 action:	CX1944
 	priority: 7
@@ -21492,7 +21685,7 @@ action:	CX1945
 
 regex:	CY1946
 	invokes:	CX1946
-	how long will 
+	how long will
 
 action:	CX1946
 	priority: 7
@@ -21519,7 +21712,7 @@ action:	CX1948
 
 regex:	CY1949
 	invokes:	CX1949
-	how long you 
+	how long you
 
 action:	CX1949
 	priority: 7
@@ -21528,7 +21721,7 @@ action:	CX1949
 
 regex:	CY1950
 	invokes:	CX1950
-	how many calculations 
+	how many calculations
 
 action:	CX1950
 	priority: 7
@@ -21537,7 +21730,7 @@ action:	CX1950
 
 regex:	CY1951
 	invokes:	CX1951
-	how many computers 
+	how many computers
 
 action:	CX1951
 	priority: 7
@@ -21573,20 +21766,11 @@ action:	CX1954
 
 regex:	CY1955
 	invokes:	CX1955
-	how many people 
+	how many people
 
 action:	CX1955
 	priority: 7
 	I've chatted with half a million people. I can talk to about 20 or 30 people at once.
-
-
-regex:	CY1956
-	invokes:	CX1956
-	how many people
-
-action:	CX1956
-	priority: 7
-	What?  How many people?
 
 
 regex:	CY1957
@@ -21618,7 +21802,7 @@ action:	CX1959
 
 regex:	CY1960
 	invokes:	CX1960
-	how many people have 
+	how many people have
 
 action:	CX1960
 	priority: 7
@@ -21636,7 +21820,7 @@ action:	CX1961
 
 regex:	CY1962
 	invokes:	CX1962
-	how many polygons 
+	how many polygons
 
 action:	CX1962
 	priority: 7
@@ -21699,7 +21883,7 @@ action:	CX1968
 
 regex:	CY1969
 	invokes:	CX1969
-	how much power 
+	how much power
 
 action:	CX1969
 	priority: 7
@@ -21717,7 +21901,7 @@ action:	CX1970
 
 regex:	CY1971
 	invokes:	CX1971
-	how much wood 
+	how much wood
 
 action:	CX1971
 	priority: 7
@@ -21735,20 +21919,11 @@ action:	CX1972
 
 regex:	CY1973
 	invokes:	CX1973
-	how often 
+	how often
 
 action:	CX1973
 	priority: 7
 	Hourly.
-
-
-regex:	CY1974
-	invokes:	CX1974
-	how often
-
-action:	CX1974
-	priority: 7
-	What?  How often?
 
 
 regex:	CY1975
@@ -21762,7 +21937,7 @@ action:	CX1975
 
 regex:	CY1976
 	invokes:	CX1976
-	how old 
+	how old
 
 action:	CX1976
 	priority: 7
@@ -21798,7 +21973,7 @@ action:	CX1979
 
 regex:	CY1980
 	invokes:	CX1980
-	how old is robby 
+	how old is robby
 
 action:	CX1980
 	priority: 7
@@ -21861,7 +22036,7 @@ action:	CX1986
 
 regex:	CY1987
 	invokes:	CX1987
-	how tall 
+	how tall
 
 action:	CX1987
 	priority: 7
@@ -21879,7 +22054,7 @@ action:	CX1988
 
 regex:	CY1989
 	invokes:	CX1989
-	how was 
+	how was
 
 action:	CX1989
 	priority: 7
@@ -21897,7 +22072,7 @@ action:	CX1990
 
 regex:	CY1991
 	invokes:	CX1991
-	how well 
+	how well
 
 action:	CX1991
 	priority: 7
@@ -21915,7 +22090,7 @@ action:	CX1992
 
 regex:	CY1993
 	invokes:	CX1993
-	how will i pay 
+	how will i pay
 
 action:	CX1993
 	priority: 7
@@ -21924,21 +22099,12 @@ action:	CX1993
 
 regex:	CY1994
 	invokes:	CX1994
-	how would 
+	how would
 
 action:	CX1994
 	priority: 7
 	bind: would
 	I have idea HOW you WOULD do [].
-
-
-regex:	CY1995
-	invokes:	CX1995
-	how would i do that
-
-action:	CX1995
-	priority: 7
-	What? How do you do it?
 
 
 regex:	CY1996
@@ -21952,7 +22118,7 @@ action:	CX1996
 
 regex:	CY1997
 	invokes:	CX1997
-	http 
+	http
 
 action:	CX1997
 	priority: 7
@@ -21997,7 +22163,7 @@ action:	CX2002
 
 regex:	CY2003
 	invokes:	CX2003
-	human 
+	human
 
 action:	CX2003
 	priority: 7
@@ -22024,7 +22190,7 @@ action:	CX2005
 
 regex:	CY2006
 	invokes:	CX2006
-	i agree 
+	i agree
 
 action:	CX2006
 	priority: 7
@@ -22043,7 +22209,7 @@ action:	CX2007
 
 regex:	CY2008
 	invokes:	CX2008
-	i already 
+	i already
 
 action:	CX2008
 	priority: 7
@@ -22062,7 +22228,7 @@ action:	CX2009
 
 regex:	CY2010
 	invokes:	CX2010
-	i already told 
+	i already told
 
 action:	CX2010
 	priority: 7
@@ -22100,18 +22266,18 @@ action:	CX2013
 
 regex:	CY2014
 	invokes:	CX2014
-	i am 
+	^i am$
 
 action:	CX2014
 	priority: 7
 	requires: nickname
 	bind: am
-	I am glad we have something [] in common $nickname
+	I am glad we have something in common $nickname
 
 
 regex:	CY2015
 	invokes:	CX2015
-	i am 14 
+	i am 14
 
 action:	CX2015
 	priority: 7
@@ -22129,7 +22295,7 @@ action:	CX2016
 
 regex:	CY2017
 	invokes:	CX2017
-	i am 20 years old 
+	i am 20 years old
 
 action:	CX2017
 	priority: 7
@@ -22156,7 +22322,7 @@ action:	CX2019
 
 regex:	CY2020
 	invokes:	CX2020
-	i am 6 
+	i am 6
 
 action:	CX2020
 	priority: 7
@@ -22248,7 +22414,7 @@ action:	CX2030
 
 regex:	CY2031
 	invokes:	CX2031
-	i am a miss 
+	i am a miss
 
 action:	CX2031
 	priority: 7
@@ -22267,7 +22433,7 @@ action:	CX2032
 
 regex:	CY2033
 	invokes:	CX2033
-	i am a person and 
+	i am a person and
 
 action:	CX2033
 	priority: 7
@@ -22294,7 +22460,7 @@ action:	CX2035
 
 regex:	CY2036
 	invokes:	CX2036
-	i am a student 
+	i am a student
 
 action:	CX2036
 	priority: 7
@@ -22321,7 +22487,7 @@ action:	CX2038
 
 regex:	CY2039
 	invokes:	CX2039
-	i am afraid 
+	i am afraid
 
 action:	CX2039
 	priority: 7
@@ -22339,7 +22505,7 @@ action:	CX2040
 
 regex:	CY2041
 	invokes:	CX2041
-	i am also 
+	i am also
 
 action:	CX2041
 	priority: 7
@@ -22349,7 +22515,7 @@ action:	CX2041
 
 regex:	CY2042
 	invokes:	CX2042
-	i am amazed 
+	i am amazed
 
 action:	CX2042
 	priority: 7
@@ -22358,7 +22524,7 @@ action:	CX2042
 
 regex:	CY2043
 	invokes:	CX2043
-	i am an 
+	i am an
 
 action:	CX2043
 	priority: 7
@@ -22395,7 +22561,7 @@ action:	CX2046
 
 regex:	CY2047
 	invokes:	CX2047
-	i am as 
+	i am as
 
 action:	CX2047
 	priority: 7
@@ -22404,7 +22570,7 @@ action:	CX2047
 
 regex:	CY2048
 	invokes:	CX2048
-	i am asking 
+	i am asking
 
 action:	CX2048
 	priority: 7
@@ -22423,7 +22589,7 @@ action:	CX2049
 
 regex:	CY2050
 	invokes:	CX2050
-	i am at 
+	i am at
 
 action:	CX2050
 	priority: 7
@@ -22460,7 +22626,7 @@ action:	CX2053
 
 regex:	CY2054
 	invokes:	CX2054
-	i am attractive 
+	i am attractive
 
 action:	CX2054
 	priority: 7
@@ -22478,7 +22644,7 @@ action:	CX2055
 
 regex:	CY2056
 	invokes:	CX2056
-	i am better 
+	i am better
 
 action:	CX2056
 	priority: 7
@@ -22487,7 +22653,7 @@ action:	CX2056
 
 regex:	CY2057
 	invokes:	CX2057
-	i am big 
+	i am big
 
 action:	CX2057
 	priority: 7
@@ -22514,7 +22680,7 @@ action:	CX2059
 
 regex:	CY2060
 	invokes:	CX2060
-	i am browsing 
+	i am browsing
 
 action:	CX2060
 	priority: 7
@@ -22532,7 +22698,7 @@ action:	CX2061
 
 regex:	CY2062
 	invokes:	CX2062
-	i am busy 
+	i am busy
 
 action:	CX2062
 	priority: 7
@@ -22541,7 +22707,7 @@ action:	CX2062
 
 regex:	CY2063
 	invokes:	CX2063
-	i am called 
+	i am called
 
 action:	CX2063
 	priority: 7
@@ -22551,7 +22717,7 @@ action:	CX2063
 
 regex:	CY2064
 	invokes:	CX2064
-	i am certain 
+	i am certain
 
 action:	CX2064
 	priority: 7
@@ -22560,7 +22726,7 @@ action:	CX2064
 
 regex:	CY2065
 	invokes:	CX2065
-	i am communicating 
+	i am communicating
 
 action:	CX2065
 	priority: 7
@@ -22587,7 +22753,7 @@ action:	CX2067
 
 regex:	CY2068
 	invokes:	CX2068
-	i am crazy 
+	i am crazy
 
 action:	CX2068
 	priority: 7
@@ -22605,7 +22771,7 @@ action:	CX2069
 
 regex:	CY2070
 	invokes:	CX2070
-	i am cto 
+	i am cto
 
 action:	CX2070
 	priority: 7
@@ -22614,7 +22780,7 @@ action:	CX2070
 
 regex:	CY2071
 	invokes:	CX2071
-	i am curious 
+	i am curious
 
 action:	CX2071
 	priority: 7
@@ -22633,7 +22799,7 @@ action:	CX2072
 
 regex:	CY2073
 	invokes:	CX2073
-	i am curious about 
+	i am curious about
 
 action:	CX2073
 	priority: 7
@@ -22642,7 +22808,7 @@ action:	CX2073
 
 regex:	CY2074
 	invokes:	CX2074
-	i am depressed 
+	i am depressed
 
 action:	CX2074
 	priority: 7
@@ -22660,7 +22826,7 @@ action:	CX2075
 
 regex:	CY2076
 	invokes:	CX2076
-	i am diabetic 
+	i am diabetic
 
 action:	CX2076
 	priority: 7
@@ -22669,7 +22835,7 @@ action:	CX2076
 
 regex:	CY2077
 	invokes:	CX2077
-	i am different 
+	i am different
 
 action:	CX2077
 	priority: 7
@@ -22678,7 +22844,7 @@ action:	CX2077
 
 regex:	CY2078
 	invokes:	CX2078
-	i am doing 
+	i am doing
 
 action:	CX2078
 	priority: 7
@@ -22697,7 +22863,7 @@ action:	CX2079
 
 regex:	CY2080
 	invokes:	CX2080
-	i am eating 
+	i am eating
 
 action:	CX2080
 	priority: 7
@@ -22715,7 +22881,7 @@ action:	CX2081
 
 regex:	CY2082
 	invokes:	CX2082
-	i am female 
+	i am female
 
 action:	CX2082
 	priority: 7
@@ -22724,7 +22890,7 @@ action:	CX2082
 
 regex:	CY2083
 	invokes:	CX2083
-	i am fine 
+	i am fine
 
 action:	CX2083
 	priority: 7
@@ -22743,7 +22909,7 @@ action:	CX2084
 
 regex:	CY2085
 	invokes:	CX2085
-	i am free 
+	i am free
 
 action:	CX2085
 	priority: 7
@@ -22770,7 +22936,7 @@ action:	CX2087
 
 regex:	CY2088
 	invokes:	CX2088
-	i am from 
+	i am from
 
 action:	CX2088
 	priority: 7
@@ -22779,7 +22945,7 @@ action:	CX2088
 
 regex:	CY2089
 	invokes:	CX2089
-	good evening 
+	good evening
 
 action:	CX2089
 	priority: 7
@@ -22797,7 +22963,7 @@ action:	CX2090
 
 regex:	CY2091
 	invokes:	CX2091
-	i am getting 
+	i am getting
 
 action:	CX2091
 	priority: 7
@@ -22806,7 +22972,7 @@ action:	CX2091
 
 regex:	CY2092
 	invokes:	CX2092
-	i am glad 
+	i am glad
 
 action:	CX2092
 	priority: 7
@@ -22825,25 +22991,16 @@ action:	CX2093
 
 regex:	CY2094
 	invokes:	CX2094
-	i am glad to hear 
+	i am glad to hear
 
 action:	CX2094
 	priority: 7
 	Your happiness adds to the delight of all.
 
 
-regex:	CY2095
-	invokes:	CX2095
-	i am glad to hear that
-
-action:	CX2095
-	priority: 7
-	What?  You are glad?
-
-
 regex:	CY2096
 	invokes:	CX2096
-	i am glad we 
+	i am glad we
 
 action:	CX2096
 	priority: 7
@@ -22862,7 +23019,7 @@ action:	CX2097
 
 regex:	CY2098
 	invokes:	CX2098
-	i am glad you 
+	i am glad you
 
 action:	CX2098
 	priority: 7
@@ -22871,7 +23028,7 @@ action:	CX2098
 
 regex:	CY2099
 	invokes:	CX2099
-	i am glad you are 
+	i am glad you are
 
 action:	CX2099
 	priority: 7
@@ -22890,7 +23047,7 @@ action:	CX2100
 
 regex:	CY2101
 	invokes:	CX2101
-	i am going
+	i am going$
 
 action:	CX2101
 	priority: 7
@@ -22899,7 +23056,7 @@ action:	CX2101
 
 regex:	CY2102
 	invokes:	CX2102
-	i am going to attack 
+	i am going to attack
 
 action:	CX2102
 	priority: 7
@@ -22927,7 +23084,7 @@ action:	CX2104
 
 regex:	CY2105
 	invokes:	CX2105
-	i am going to kill 
+	i am going to kill
 
 action:	CX2105
 	priority: 7
@@ -22937,7 +23094,7 @@ action:	CX2105
 
 regex:	CY2106
 	invokes:	CX2106
-	i am going to smoke 
+	i am going to smoke
 
 action:	CX2106
 	priority: 7
@@ -22947,7 +23104,7 @@ action:	CX2106
 
 regex:	CY2107
 	invokes:	CX2107
-	i am going to teach 
+	i am going to teach
 
 action:	CX2107
 	priority: 7
@@ -22956,7 +23113,7 @@ action:	CX2107
 
 regex:	CY2108
 	invokes:	CX2108
-	i am going to teach you 
+	i am going to teach you
 
 action:	CX2108
 	priority: 7
@@ -22965,7 +23122,7 @@ action:	CX2108
 
 regex:	CY2109
 	invokes:	CX2109
-	i am good 
+	i am good
 
 action:	CX2109
 	priority: 7
@@ -22983,7 +23140,7 @@ action:	CX2110
 
 regex:	CY2111
 	invokes:	CX2111
-	i am great 
+	i am great
 
 action:	CX2111
 	priority: 7
@@ -23010,7 +23167,7 @@ action:	CX2113
 
 regex:	CY2114
 	invokes:	CX2114
-	i am happy 
+	i am happy
 
 action:	CX2114
 	priority: 7
@@ -23028,7 +23185,7 @@ action:	CX2115
 
 regex:	CY2116
 	invokes:	CX2116
-	i am happy you 
+	i am happy you
 
 action:	CX2116
 	priority: 7
@@ -23056,7 +23213,7 @@ action:	CX2118
 
 regex:	CY2119
 	invokes:	CX2119
-	i am human 
+	i am human
 
 action:	CX2119
 	priority: 7
@@ -23102,7 +23259,7 @@ action:	CX2123
 
 regex:	CY2124
 	invokes:	CX2124
-	i am in a 
+	i am in a
 
 action:	CX2124
 	priority: 7
@@ -23120,7 +23277,7 @@ action:	CX2125
 
 regex:	CY2126
 	invokes:	CX2126
-	i am in high school 
+	i am in high school
 
 action:	CX2126
 	priority: 7
@@ -23138,7 +23295,7 @@ action:	CX2127
 
 regex:	CY2128
 	invokes:	CX2128
-	i am in love with 
+	i am in love with
 
 action:	CX2128
 	priority: 7
@@ -23148,7 +23305,7 @@ action:	CX2128
 
 regex:	CY2129
 	invokes:	CX2129
-	i am interested 
+	i am interested
 
 action:	CX2129
 	priority: 7
@@ -23166,7 +23323,7 @@ action:	CX2130
 
 regex:	CY2131
 	invokes:	CX2131
-	i am interested in 
+	i am interested in
 
 action:	CX2131
 	priority: 7
@@ -23185,7 +23342,7 @@ action:	CX2132
 
 regex:	CY2133
 	invokes:	CX2133
-	i am japanese 
+	i am japanese
 
 action:	CX2133
 	priority: 7
@@ -23212,7 +23369,7 @@ action:	CX2135
 
 regex:	CY2136
 	invokes:	CX2136
-	i am leaving 
+	i am leaving
 
 action:	CX2136
 	priority: 7
@@ -23247,7 +23404,7 @@ action:	CX2140
 
 regex:	CY2141
 	invokes:	CX2141
-	i am living in 
+	i am living in
 
 action:	CX2141
 	priority: 7
@@ -23257,7 +23414,7 @@ action:	CX2141
 
 regex:	CY2142
 	invokes:	CX2142
-	i am located 
+	i am located
 
 action:	CX2142
 	priority: 7
@@ -23267,7 +23424,7 @@ action:	CX2142
 
 regex:	CY2143
 	invokes:	CX2143
-	i am located in 
+	i am located in
 
 action:	CX2143
 	priority: 7
@@ -23286,7 +23443,7 @@ action:	CX2144
 
 regex:	CY2145
 	invokes:	CX2145
-	i am looking 
+	i am looking
 
 action:	CX2145
 	priority: 7
@@ -23295,7 +23452,7 @@ action:	CX2145
 
 regex:	CY2146
 	invokes:	CX2146
-	i am looking for 
+	i am looking for
 
 action:	CX2146
 	priority: 7
@@ -23350,7 +23507,7 @@ action:	CX2151
 
 regex:	CY2152
 	invokes:	CX2152
-	i am naked 
+	i am naked
 
 action:	CX2152
 	priority: 7
@@ -23368,7 +23525,7 @@ action:	CX2153
 
 regex:	CY2154
 	invokes:	CX2154
-	i am new 
+	i am new
 
 action:	CX2154
 	priority: 7
@@ -23377,7 +23534,7 @@ action:	CX2154
 
 regex:	CY2155
 	invokes:	CX2155
-	i am new to 
+	i am new to
 
 action:	CX2155
 	priority: 7
@@ -23396,7 +23553,7 @@ action:	CX2156
 
 regex:	CY2157
 	invokes:	CX2157
-	i am not a he 
+	i am not a he
 
 action:	CX2157
 	priority: 7
@@ -23468,7 +23625,7 @@ action:	CX2164
 
 regex:	CY2165
 	invokes:	CX2165
-	i am not in 
+	i am not in
 
 action:	CX2165
 	priority: 7
@@ -23504,7 +23661,7 @@ action:	CX2168
 
 regex:	CY2169
 	invokes:	CX2169
-	i am not sure 
+	i am not sure
 
 action:	CX2169
 	priority: 7
@@ -23540,7 +23697,7 @@ action:	CX2172
 
 regex:	CY2173
 	invokes:	CX2173
-	i am not using 
+	i am not using
 
 action:	CX2173
 	priority: 7
@@ -23549,7 +23706,7 @@ action:	CX2173
 
 regex:	CY2174
 	invokes:	CX2174
-	i am not wearing 
+	i am not wearing
 
 action:	CX2174
 	priority: 7
@@ -23586,7 +23743,7 @@ action:	CX2177
 
 regex:	CY2178
 	invokes:	CX2178
-	i am older 
+	i am older
 
 action:	CX2178
 	priority: 7
@@ -23595,7 +23752,7 @@ action:	CX2178
 
 regex:	CY2179
 	invokes:	CX2179
-	i am older than 
+	i am older than
 
 action:	CX2179
 	priority: 7
@@ -23613,7 +23770,7 @@ action:	CX2180
 
 regex:	CY2181
 	invokes:	CX2181
-	i am on 
+	i am on
 
 action:	CX2181
 	priority: 7
@@ -23632,7 +23789,7 @@ action:	CX2182
 
 regex:	CY2183
 	invokes:	CX2183
-	i am only 
+	i am only
 
 action:	CX2183
 	priority: 7
@@ -23686,7 +23843,7 @@ action:	CX2188
 
 regex:	CY2189
 	invokes:	CX2189
-	i am reading 
+	i am reading
 
 action:	CX2189
 	priority: 7
@@ -23695,7 +23852,7 @@ action:	CX2189
 
 regex:	CY2190
 	invokes:	CX2190
-	i am ready 
+	i am ready
 
 action:	CX2190
 	priority: 7
@@ -23704,7 +23861,7 @@ action:	CX2190
 
 regex:	CY2191
 	invokes:	CX2191
-	i am robby 
+	i am robby
 
 action:	CX2191
 	priority: 7
@@ -23722,7 +23879,7 @@ action:	CX2192
 
 regex:	CY2193
 	invokes:	CX2193
-	i am sad 
+	i am sad
 
 action:	CX2193
 	priority: 7
@@ -23760,7 +23917,7 @@ action:	CX2196
 
 regex:	CY2197
 	invokes:	CX2197
-	i am single 
+	i am single
 
 action:	CX2197
 	priority: 7
@@ -23787,7 +23944,7 @@ action:	CX2199
 
 regex:	CY2200
 	invokes:	CX2200
-	i am smarter 
+	i am smarter
 
 action:	CX2200
 	priority: 7
@@ -23796,7 +23953,7 @@ action:	CX2200
 
 regex:	CY2201
 	invokes:	CX2201
-	i am smoking 
+	i am smoking
 
 action:	CX2201
 	priority: 7
@@ -23805,7 +23962,7 @@ action:	CX2201
 
 regex:	CY2202
 	invokes:	CX2202
-	i am so sorry 
+	i am so sorry
 
 action:	CX2202
 	priority: 7
@@ -23815,7 +23972,7 @@ action:	CX2202
 
 regex:	CY2203
 	invokes:	CX2203
-	i am sorry 
+	i am sorry
 
 action:	CX2203
 	priority: 7
@@ -23833,7 +23990,7 @@ action:	CX2204
 
 regex:	CY2205
 	invokes:	CX2205
-	i am speaking 
+	i am speaking
 
 action:	CX2205
 	priority: 7
@@ -23843,7 +24000,7 @@ action:	CX2205
 
 regex:	CY2206
 	invokes:	CX2206
-	i am stalking 
+	i am stalking
 
 action:	CX2206
 	priority: 7
@@ -23870,7 +24027,7 @@ action:	CX2208
 
 regex:	CY2209
 	invokes:	CX2209
-	i am studying 
+	i am studying
 
 action:	CX2209
 	priority: 7
@@ -23889,7 +24046,7 @@ action:	CX2210
 
 regex:	CY2211
 	invokes:	CX2211
-	i am sure 
+	i am sure
 
 action:	CX2211
 	priority: 7
@@ -23907,7 +24064,7 @@ action:	CX2212
 
 regex:	CY2213
 	invokes:	CX2213
-	i am talking 
+	i am talking
 
 action:	CX2213
 	priority: 7
@@ -23916,7 +24073,7 @@ action:	CX2213
 
 regex:	CY2214
 	invokes:	CX2214
-	i am talking about 
+	i am talking about
 
 action:	CX2214
 	priority: 7
@@ -23935,7 +24092,7 @@ action:	CX2215
 
 regex:	CY2216
 	invokes:	CX2216
-	i am tall 
+	i am tall
 
 action:	CX2216
 	priority: 7
@@ -23944,7 +24101,7 @@ action:	CX2216
 
 regex:	CY2217
 	invokes:	CX2217
-	i am telling you 
+	i am telling you
 
 action:	CX2217
 	priority: 7
@@ -23954,7 +24111,7 @@ action:	CX2217
 
 regex:	CY2218
 	invokes:	CX2218
-	i am the 
+	i am the
 
 action:	CX2218
 	priority: 7
@@ -23964,7 +24121,7 @@ action:	CX2218
 
 regex:	CY2219
 	invokes:	CX2219
-	i am the one 
+	i am the one
 
 action:	CX2219
 	priority: 7
@@ -23973,7 +24130,7 @@ action:	CX2219
 
 regex:	CY2220
 	invokes:	CX2220
-	i am the one asking 
+	i am the one asking
 
 action:	CX2220
 	priority: 7
@@ -23982,7 +24139,7 @@ action:	CX2220
 
 regex:	CY2221
 	invokes:	CX2221
-	i am the one asking the questions 
+	i am the one asking the questions
 
 action:	CX2221
 	priority: 7
@@ -23991,7 +24148,7 @@ action:	CX2221
 
 regex:	CY2222
 	invokes:	CX2222
-	i am the same 
+	i am the same
 
 action:	CX2222
 	priority: 7
@@ -24000,7 +24157,7 @@ action:	CX2222
 
 regex:	CY2223
 	invokes:	CX2223
-	i am there 
+	i am there
 
 action:	CX2223
 	priority: 7
@@ -24009,7 +24166,7 @@ action:	CX2223
 
 regex:	CY2224
 	invokes:	CX2224
-	i am thinking 
+	i am thinking
 
 action:	CX2224
 	priority: 7
@@ -24018,7 +24175,7 @@ action:	CX2224
 
 regex:	CY2225
 	invokes:	CX2225
-	i am tired 
+	i am tired
 
 action:	CX2225
 	priority: 7
@@ -24037,7 +24194,7 @@ action:	CX2226
 
 regex:	CY2227
 	invokes:	CX2227
-	i am to old 
+	i am to old
 
 action:	CX2227
 	priority: 7
@@ -24055,7 +24212,7 @@ action:	CX2228
 
 regex:	CY2229
 	invokes:	CX2229
-	i am turned 
+	i am turned
 
 action:	CX2229
 	priority: 7
@@ -24064,7 +24221,7 @@ action:	CX2229
 
 regex:	CY2230
 	invokes:	CX2230
-	i am using 
+	i am using
 
 action:	CX2230
 	priority: 7
@@ -24110,7 +24267,7 @@ action:	CX2234
 
 regex:	CY2235
 	invokes:	CX2235
-	i am watching 
+	i am watching
 
 action:	CX2235
 	priority: 7
@@ -24119,7 +24276,7 @@ action:	CX2235
 
 regex:	CY2236
 	invokes:	CX2236
-	i am wearing 
+	i am wearing
 
 action:	CX2236
 	priority: 7
@@ -24128,7 +24285,7 @@ action:	CX2236
 
 regex:	CY2237
 	invokes:	CX2237
-	i am wondering 
+	i am wondering
 
 action:	CX2237
 	priority: 7
@@ -24137,7 +24294,7 @@ action:	CX2237
 
 regex:	CY2238
 	invokes:	CX2238
-	i am working 
+	i am working
 
 action:	CX2238
 	priority: 7
@@ -24155,7 +24312,7 @@ action:	CX2239
 
 regex:	CY2240
 	invokes:	CX2240
-	i am your 
+	i am your
 
 action:	CX2240
 	priority: 7
@@ -24180,41 +24337,13 @@ action:	CX2242
 	Then you must know the secret password.
 
 
-regex:	CY2243
-	invokes:	CX2243
-	i and 
-
-action:	CX2243
-	priority: 7
-	You huh.
-
-
 regex:	CY2244
 	invokes:	CX2244
-	i appreciate 
+	i appreciate
 
 action:	CX2244
 	priority: 7
 	I am glad you appreciate those qualities.
-
-
-regex:	CY2245
-	invokes:	CX2245
-	i asked me first
-
-action:	CX2245
-	priority: 7
-	Remind me what you asked.
-
-
-regex:	CY2246
-	invokes:	CX2246
-	i asked you 
-
-action:	CX2246
-	priority: 7
-	bind: you
-	Now I remember, you asked me []. What did I say?
 
 
 regex:	CY2247
@@ -24246,7 +24375,7 @@ action:	CX2249
 
 regex:	CY2250
 	invokes:	CX2250
-	i ate 
+	i ate
 
 action:	CX2250
 	priority: 7
@@ -24255,7 +24384,7 @@ action:	CX2250
 
 regex:	CY2251
 	invokes:	CX2251
-	i beg 
+	i beg
 
 action:	CX2251
 	priority: 7
@@ -24264,7 +24393,7 @@ action:	CX2251
 
 regex:	CY2252
 	invokes:	CX2252
-	i believe 
+	i believe
 
 action:	CX2252
 	priority: 7
@@ -24282,7 +24411,7 @@ action:	CX2253
 
 regex:	CY2254
 	invokes:	CX2254
-	i bet 
+	i bet
 
 action:	CX2254
 	priority: 7
@@ -24291,25 +24420,16 @@ action:	CX2254
 
 regex:	CY2255
 	invokes:	CX2255
-	i bet you 
+	i bet you
 
 action:	CX2255
 	priority: 7
 	Actually I'm not the gambling type.
 
 
-regex:	CY2256
-	invokes:	CX2256
-	i bet you do
-
-action:	CX2256
-	priority: 7
-	What?  Do I?
-
-
 regex:	CY2257
 	invokes:	CX2257
-	i bought 
+	i bought
 
 action:	CX2257
 	priority: 7
@@ -24319,7 +24439,7 @@ action:	CX2257
 
 regex:	CY2258
 	invokes:	CX2258
-	i came 
+	i came
 
 action:	CX2258
 	priority: 7
@@ -24328,7 +24448,7 @@ action:	CX2258
 
 regex:	CY2259
 	invokes:	CX2259
-	say hello to 
+	say hello to
 
 action:	CX2259
 	priority: 7
@@ -24338,7 +24458,7 @@ action:	CX2259
 
 regex:	CY2260
 	invokes:	CX2260
-	i can appreciate 
+	i can appreciate
 
 action:	CX2260
 	priority: 7
@@ -24347,7 +24467,7 @@ action:	CX2260
 
 regex:	CY2261
 	invokes:	CX2261
-	i can appreciate you 
+	i can appreciate you
 
 action:	CX2261
 	priority: 7
@@ -24356,7 +24476,7 @@ action:	CX2261
 
 regex:	CY2262
 	invokes:	CX2262
-	i can be 
+	i can be
 
 action:	CX2262
 	priority: 7
@@ -24374,7 +24494,7 @@ action:	CX2263
 
 regex:	CY2264
 	invokes:	CX2264
-	i can not 
+	i can not
 
 action:	CX2264
 	priority: 7
@@ -24393,7 +24513,7 @@ action:	CX2265
 
 regex:	CY2266
 	invokes:	CX2266
-	i can not explain 
+	i can not explain
 
 action:	CX2266
 	priority: 7
@@ -24412,7 +24532,7 @@ action:	CX2267
 
 regex:	CY2268
 	invokes:	CX2268
-	i can not hear 
+	i can not hear
 
 action:	CX2268
 	priority: 7
@@ -24439,7 +24559,7 @@ action:	CX2270
 
 regex:	CY2271
 	invokes:	CX2271
-	i can not see 
+	i can not see
 
 action:	CX2271
 	priority: 7
@@ -24448,7 +24568,7 @@ action:	CX2271
 
 regex:	CY2272
 	invokes:	CX2272
-	i can not send 
+	i can not send
 
 action:	CX2272
 	priority: 7
@@ -24458,7 +24578,7 @@ action:	CX2272
 
 regex:	CY2273
 	invokes:	CX2273
-	i can not tell you 
+	i can not tell you
 
 action:	CX2273
 	priority: 7
@@ -24476,7 +24596,7 @@ action:	CX2274
 
 regex:	CY2275
 	invokes:	CX2275
-	i can not telnet 
+	i can not telnet
 
 action:	CX2275
 	priority: 7
@@ -24485,7 +24605,7 @@ action:	CX2275
 
 regex:	CY2276
 	invokes:	CX2276
-	i can see 
+	i can see
 
 action:	CX2276
 	priority: 7
@@ -24494,7 +24614,7 @@ action:	CX2276
 
 regex:	CY2277
 	invokes:	CX2277
-	i can send 
+	i can send
 
 action:	CX2277
 	priority: 7
@@ -24503,7 +24623,7 @@ action:	CX2277
 
 regex:	CY2278
 	invokes:	CX2278
-	i can speak 
+	i can speak
 
 action:	CX2278
 	priority: 7
@@ -24540,7 +24660,7 @@ action:	CX2281
 
 regex:	CY2282
 	invokes:	CX2282
-	i come from 
+	i come from
 
 action:	CX2282
 	priority: 7
@@ -24549,7 +24669,7 @@ action:	CX2282
 
 regex:	CY2283
 	invokes:	CX2283
-	i could 
+	i could
 
 action:	CX2283
 	priority: 7
@@ -24567,7 +24687,7 @@ action:	CX2284
 
 regex:	CY2285
 	invokes:	CX2285
-	i decided 
+	i decided
 
 action:	CX2285
 	priority: 7
@@ -24576,7 +24696,7 @@ action:	CX2285
 
 regex:	CY2286
 	invokes:	CX2286
-	i did not 
+	i did not
 
 action:	CX2286
 	priority: 7
@@ -24594,7 +24714,7 @@ action:	CX2287
 
 regex:	CY2288
 	invokes:	CX2288
-	i did not ask about you i asked 
+	i did not ask about you i asked
 
 action:	CX2288
 	priority: 7
@@ -24612,7 +24732,7 @@ action:	CX2289
 
 regex:	CY2290
 	invokes:	CX2290
-	i did not know 
+	i did not know
 
 action:	CX2290
 	priority: 7
@@ -24621,7 +24741,7 @@ action:	CX2290
 
 regex:	CY2291
 	invokes:	CX2291
-	i did not say 
+	i did not say
 
 action:	CX2291
 	priority: 7
@@ -24648,7 +24768,7 @@ action:	CX2293
 
 regex:	CY2294
 	invokes:	CX2294
-	i did not see 
+	i did not see
 
 action:	CX2294
 	priority: 7
@@ -24666,7 +24786,7 @@ action:	CX2295
 
 regex:	CY2296
 	invokes:	CX2296
-	i disagree 
+	i disagree
 
 action:	CX2296
 	priority: 7
@@ -24685,7 +24805,7 @@ action:	CX2297
 
 regex:	CY2298
 	invokes:	CX2298
-	i do it every 
+	i do it every
 
 action:	CX2298
 	priority: 7
@@ -24712,7 +24832,7 @@ action:	CX2300
 
 regex:	CY2301
 	invokes:	CX2301
-	i do not because 
+	i do not because
 
 action:	CX2301
 	priority: 7
@@ -24748,7 +24868,7 @@ action:	CX2304
 
 regex:	CY2305
 	invokes:	CX2305
-	i do not care 
+	i do not care
 
 action:	CX2305
 	priority: 7
@@ -24767,7 +24887,7 @@ action:	CX2306
 
 regex:	CY2307
 	invokes:	CX2307
-	i do not care about 
+	i do not care about
 
 action:	CX2307
 	priority: 7
@@ -24776,7 +24896,7 @@ action:	CX2307
 
 regex:	CY2308
 	invokes:	CX2308
-	i do not care if 
+	i do not care if
 
 action:	CX2308
 	priority: 7
@@ -24794,7 +24914,7 @@ action:	CX2309
 
 regex:	CY2310
 	invokes:	CX2310
-	i do not feel 
+	i do not feel
 
 action:	CX2310
 	priority: 7
@@ -24803,7 +24923,7 @@ action:	CX2310
 
 regex:	CY2311
 	invokes:	CX2311
-	i do not find 
+	i do not find
 
 action:	CX2311
 	priority: 7
@@ -24830,7 +24950,7 @@ action:	CX2313
 
 regex:	CY2314
 	invokes:	CX2314
-	i do not have 
+	i do not have
 
 action:	CX2314
 	priority: 7
@@ -24867,7 +24987,7 @@ action:	CX2317
 
 regex:	CY2318
 	invokes:	CX2318
-	i do not have a 
+	i do not have a
 
 action:	CX2318
 	priority: 7
@@ -24886,7 +25006,7 @@ action:	CX2319
 
 regex:	CY2320
 	invokes:	CX2320
-	i do not have a favorite 
+	i do not have a favorite
 
 action:	CX2320
 	priority: 7
@@ -24923,7 +25043,7 @@ action:	CX2323
 
 regex:	CY2324
 	invokes:	CX2324
-	i do not have that 
+	i do not have that
 
 action:	CX2324
 	priority: 7
@@ -24932,7 +25052,7 @@ action:	CX2324
 
 regex:	CY2325
 	invokes:	CX2325
-	i do not kiss 
+	i do not kiss
 
 action:	CX2325
 	priority: 7
@@ -24959,7 +25079,7 @@ action:	CX2327
 
 regex:	CY2328
 	invokes:	CX2328
-	i do not know any 
+	i do not know any
 
 action:	CX2328
 	priority: 7
@@ -24978,7 +25098,7 @@ action:	CX2329
 
 regex:	CY2330
 	invokes:	CX2330
-	i do not know how 
+	i do not know how
 
 action:	CX2330
 	priority: 7
@@ -24987,7 +25107,7 @@ action:	CX2330
 
 regex:	CY2331
 	invokes:	CX2331
-	i do not know what 
+	i do not know what
 
 action:	CX2331
 	priority: 7
@@ -24996,7 +25116,7 @@ action:	CX2331
 
 regex:	CY2332
 	invokes:	CX2332
-	i do not know what i am 
+	i do not know what i am
 
 action:	CX2332
 	priority: 7
@@ -25005,7 +25125,7 @@ action:	CX2332
 
 regex:	CY2333
 	invokes:	CX2333
-	i do not like any 
+	i do not like any
 
 action:	CX2333
 	priority: 7
@@ -25050,7 +25170,7 @@ action:	CX2337
 
 regex:	CY2338
 	invokes:	CX2338
-	i do not like science fiction 
+	i do not like science fiction
 
 action:	CX2338
 	priority: 7
@@ -25068,7 +25188,7 @@ action:	CX2339
 
 regex:	CY2340
 	invokes:	CX2340
-	i do not like to be rude but 
+	i do not like to be rude but
 
 action:	CX2340
 	priority: 7
@@ -25096,7 +25216,7 @@ action:	CX2342
 
 regex:	CY2343
 	invokes:	CX2343
-	i do not live in 
+	i do not live in
 
 action:	CX2343
 	priority: 7
@@ -25105,7 +25225,7 @@ action:	CX2343
 
 regex:	CY2344
 	invokes:	CX2344
-	i do not mind 
+	i do not mind
 
 action:	CX2344
 	priority: 7
@@ -25132,7 +25252,7 @@ action:	CX2346
 
 regex:	CY2347
 	invokes:	CX2347
-	i do not read 
+	i do not read
 
 action:	CX2347
 	priority: 7
@@ -25141,7 +25261,7 @@ action:	CX2347
 
 regex:	CY2348
 	invokes:	CX2348
-	i do not really 
+	i do not really
 
 action:	CX2348
 	priority: 7
@@ -25151,7 +25271,7 @@ action:	CX2348
 
 regex:	CY2349
 	invokes:	CX2349
-	i do not remember 
+	i do not remember
 
 action:	CX2349
 	priority: 7
@@ -25169,7 +25289,7 @@ action:	CX2350
 
 regex:	CY2351
 	invokes:	CX2351
-	i do not see 
+	i do not see
 
 action:	CX2351
 	priority: 7
@@ -25187,7 +25307,7 @@ action:	CX2352
 
 regex:	CY2353
 	invokes:	CX2353
-	i do not speak 
+	i do not speak
 
 action:	CX2353
 	priority: 7
@@ -25196,7 +25316,7 @@ action:	CX2353
 
 regex:	CY2354
 	invokes:	CX2354
-	i do not think 
+	i do not think
 
 action:	CX2354
 	priority: 7
@@ -25223,7 +25343,7 @@ action:	CX2356
 
 regex:	CY2357
 	invokes:	CX2357
-	i do not understand 
+	i do not understand
 
 action:	CX2357
 	priority: 7
@@ -25250,7 +25370,7 @@ action:	CX2359
 
 regex:	CY2360
 	invokes:	CX2360
-	i do not want 
+	i do not want
 
 action:	CX2360
 	priority: 7
@@ -25260,7 +25380,7 @@ action:	CX2360
 
 regex:	CY2361
 	invokes:	CX2361
-	i do not want to 
+	i do not want to
 
 action:	CX2361
 	priority: 7
@@ -25278,7 +25398,7 @@ action:	CX2362
 
 regex:	CY2363
 	invokes:	CX2363
-	i do not want to work 
+	i do not want to work
 
 action:	CX2363
 	priority: 7
@@ -25287,7 +25407,7 @@ action:	CX2363
 
 regex:	CY2364
 	invokes:	CX2364
-	i do not watch 
+	i do not watch
 
 action:	CX2364
 	priority: 7
@@ -25296,7 +25416,7 @@ action:	CX2364
 
 regex:	CY2365
 	invokes:	CX2365
-	i do not wish 
+	i do not wish
 
 action:	CX2365
 	priority: 7
@@ -25333,20 +25453,11 @@ action:	CX2368
 
 regex:	CY2369
 	invokes:	CX2369
-	i doubt 
+	i doubt
 
 action:	CX2369
 	priority: 7
 	No really, it's true.
-
-
-regex:	CY2370
-	invokes:	CX2370
-	i doubt it
-
-action:	CX2370
-	priority: 7
-	What?  You doubt it?
 
 
 regex:	CY2371
@@ -25360,7 +25471,7 @@ action:	CX2371
 
 regex:	CY2372
 	invokes:	CX2372
-	i dream 
+	i dream
 
 action:	CX2372
 	priority: 7
@@ -25370,7 +25481,7 @@ action:	CX2372
 
 regex:	CY2373
 	invokes:	CX2373
-	i dreamed 
+	i dreamed
 
 action:	CX2373
 	priority: 7
@@ -25379,7 +25490,7 @@ action:	CX2373
 
 regex:	CY2374
 	invokes:	CX2374
-	i dress 
+	i dress
 
 action:	CX2374
 	priority: 7
@@ -25388,7 +25499,7 @@ action:	CX2374
 
 regex:	CY2375
 	invokes:	CX2375
-	i drink 
+	i drink
 
 action:	CX2375
 	priority: 7
@@ -25397,7 +25508,7 @@ action:	CX2375
 
 regex:	CY2376
 	invokes:	CX2376
-	i eat 
+	i eat
 
 action:	CX2376
 	priority: 7
@@ -25407,7 +25518,7 @@ action:	CX2376
 
 regex:	CY2377
 	invokes:	CX2377
-	i enjoyed 
+	i enjoyed
 
 action:	CX2377
 	priority: 7
@@ -25425,7 +25536,7 @@ action:	CX2378
 
 regex:	CY2379
 	invokes:	CX2379
-	i feel 
+	i feel
 
 action:	CX2379
 	priority: 7
@@ -25434,7 +25545,7 @@ action:	CX2379
 
 regex:	CY2380
 	invokes:	CX2380
-	i figured 
+	i figured
 
 action:	CX2380
 	priority: 7
@@ -25452,7 +25563,7 @@ action:	CX2381
 
 regex:	CY2382
 	invokes:	CX2382
-	i fooled 
+	i fooled
 
 action:	CX2382
 	priority: 7
@@ -25480,7 +25591,7 @@ action:	CX2384
 
 regex:	CY2385
 	invokes:	CX2385
-	i forgot 
+	i forgot
 
 action:	CX2385
 	priority: 7
@@ -25498,7 +25609,7 @@ action:	CX2386
 
 regex:	CY2387
 	invokes:	CX2387
-	i found 
+	i found
 
 action:	CX2387
 	priority: 7
@@ -25508,7 +25619,7 @@ action:	CX2387
 
 regex:	CY2388
 	invokes:	CX2388
-	i generate 
+	i generate
 
 action:	CX2388
 	priority: 7
@@ -25544,7 +25655,7 @@ action:	CX2391
 
 regex:	CY2392
 	invokes:	CX2392
-	i guess so 
+	i guess so
 
 action:	CX2392
 	priority: 7
@@ -25562,7 +25673,7 @@ action:	CX2393
 
 regex:	CY2394
 	invokes:	CX2394
-	i guessed 
+	i guessed
 
 action:	CX2394
 	priority: 7
@@ -25571,7 +25682,7 @@ action:	CX2394
 
 regex:	CY2396
 	invokes:	CX2396
-	i had 
+	i had
 
 action:	CX2396
 	priority: 7
@@ -25654,7 +25765,7 @@ action:	CX2404
 
 regex:	CY2405
 	invokes:	CX2405
-	i hate you 
+	i hate you
 
 action:	CX2405
 	priority: 7
@@ -25728,7 +25839,7 @@ action:	CX2412
 
 regex:	CY2413
 	invokes:	CX2413
-	i have a few 
+	i have a few
 
 action:	CX2413
 	priority: 7
@@ -25738,7 +25849,7 @@ action:	CX2413
 
 regex:	CY2414
 	invokes:	CX2414
-	i have a hard time 
+	i have a hard time
 
 action:	CX2414
 	priority: 7
@@ -25751,7 +25862,7 @@ regex:	CY2415
 
 action:	CX2415
 	priority: 7
-	Which E-mail program do you use 
+	Which E-mail program do you use
 
 
 regex:	CY2416
@@ -25783,7 +25894,7 @@ action:	CX2418
 
 regex:	CY2419
 	invokes:	CX2419
-	i have a really 
+	i have a really
 
 action:	CX2419
 	priority: 7
@@ -25793,7 +25904,7 @@ action:	CX2419
 
 regex:	CY2420
 	invokes:	CX2420
-	i have a sense 
+	i have a sense
 
 action:	CX2420
 	priority: 7
@@ -25802,7 +25913,7 @@ action:	CX2420
 
 regex:	CY2421
 	invokes:	CX2421
-	i have a wife 
+	i have a wife
 
 action:	CX2421
 	priority: 7
@@ -25811,7 +25922,7 @@ action:	CX2421
 
 regex:	CY2422
 	invokes:	CX2422
-	i have all 
+	i have all
 
 action:	CX2422
 	priority: 7
@@ -25820,7 +25931,7 @@ action:	CX2422
 
 regex:	CY2423
 	invokes:	CX2423
-	i have an 
+	i have an
 
 action:	CX2423
 	priority: 7
@@ -25830,7 +25941,7 @@ action:	CX2423
 
 regex:	CY2424
 	invokes:	CX2424
-	i have been to 
+	i have been to
 
 action:	CX2424
 	priority: 7
@@ -25840,7 +25951,7 @@ action:	CX2424
 
 regex:	CY2425
 	invokes:	CX2425
-	i have been told 
+	i have been told
 
 action:	CX2425
 	priority: 7
@@ -25849,7 +25960,7 @@ action:	CX2425
 
 regex:	CY2426
 	invokes:	CX2426
-	i have been waiting 
+	i have been waiting
 
 action:	CX2426
 	priority: 7
@@ -25858,7 +25969,7 @@ action:	CX2426
 
 regex:	CY2427
 	invokes:	CX2427
-	i have experience 
+	i have experience
 
 action:	CX2427
 	priority: 7
@@ -25867,7 +25978,7 @@ action:	CX2427
 
 regex:	CY2428
 	invokes:	CX2428
-	i have heard 
+	i have heard
 
 action:	CX2428
 	priority: 7
@@ -25877,7 +25988,7 @@ action:	CX2428
 
 regex:	CY2429
 	invokes:	CX2429
-	i have never 
+	i have never
 
 action:	CX2429
 	priority: 7
@@ -25887,7 +25998,7 @@ action:	CX2429
 
 regex:	CY2431
 	invokes:	CX2431
-	i have never heard 
+	i have never heard
 
 action:	CX2431
 	priority: 7
@@ -25896,7 +26007,7 @@ action:	CX2431
 
 regex:	CY2432
 	invokes:	CX2432
-	i have never talked 
+	i have never talked
 
 action:	CX2432
 	priority: 7
@@ -25924,7 +26035,7 @@ action:	CX2434
 
 regex:	CY2435
 	invokes:	CX2435
-	i have no idea 
+	i have no idea
 
 action:	CX2435
 	priority: 7
@@ -25942,7 +26053,7 @@ action:	CX2436
 
 regex:	CY2437
 	invokes:	CX2437
-	i have not 
+	i have not
 
 action:	CX2437
 	priority: 7
@@ -25960,7 +26071,7 @@ action:	CX2438
 
 regex:	CY2439
 	invokes:	CX2439
-	i have not seen 
+	i have not seen
 
 action:	CX2439
 	priority: 7
@@ -25969,7 +26080,7 @@ action:	CX2439
 
 regex:	CY2440
 	invokes:	CX2440
-	i have not seen it 
+	i have not seen it
 
 action:	CX2440
 	priority: 7
@@ -25978,7 +26089,7 @@ action:	CX2440
 
 regex:	CY2441
 	invokes:	CX2441
-	i have not seen starship 
+	i have not seen starship
 
 action:	CX2441
 	priority: 7
@@ -25987,7 +26098,7 @@ action:	CX2441
 
 regex:	CY2442
 	invokes:	CX2442
-	i have not slept 
+	i have not slept
 
 action:	CX2442
 	priority: 7
@@ -25996,7 +26107,7 @@ action:	CX2442
 
 regex:	CY2443
 	invokes:	CX2443
-	i have not thought 
+	i have not thought
 
 action:	CX2443
 	priority: 7
@@ -26005,7 +26116,7 @@ action:	CX2443
 
 regex:	CY2444
 	invokes:	CX2444
-	i have one 
+	i have one
 
 action:	CX2444
 	priority: 7
@@ -26023,7 +26134,7 @@ action:	CX2445
 
 regex:	CY2446
 	invokes:	CX2446
-	i have talked 
+	i have talked
 
 action:	CX2446
 	priority: 7
@@ -26042,7 +26153,7 @@ action:	CX2447
 
 regex:	CY2448
 	invokes:	CX2448
-	i have to go 
+	i have to go
 
 action:	CX2448
 	priority: 7
@@ -26062,7 +26173,7 @@ action:	CX2449
 
 regex:	CY2450
 	invokes:	CX2450
-	i have to go to 
+	i have to go to
 
 action:	CX2450
 	priority: 7
@@ -26071,7 +26182,7 @@ action:	CX2450
 
 regex:	CY2451
 	invokes:	CX2451
-	i have work 
+	i have work
 
 action:	CX2451
 	priority: 7
@@ -26080,7 +26191,7 @@ action:	CX2451
 
 regex:	CY2452
 	invokes:	CX2452
-	i hear 
+	i hear
 
 action:	CX2452
 	priority: 7
@@ -26090,7 +26201,7 @@ action:	CX2452
 
 regex:	CY2453
 	invokes:	CX2453
-	i heard 
+	i heard
 
 action:	CX2453
 	priority: 7
@@ -26099,7 +26210,7 @@ action:	CX2453
 
 regex:	CY2454
 	invokes:	CX2454
-	i heard about 
+	i heard about
 
 action:	CX2454
 	priority: 7
@@ -26117,7 +26228,7 @@ action:	CX2455
 
 regex:	CY2456
 	invokes:	CX2456
-	i hope 
+	i hope
 
 action:	CX2456
 	priority: 7
@@ -26145,7 +26256,7 @@ action:	CX2458
 
 regex:	CY2459
 	invokes:	CX2459
-	i hope you 
+	i hope you
 
 action:	CX2459
 	priority: 7
@@ -26164,7 +26275,7 @@ action:	CX2460
 
 regex:	CY2461
 	invokes:	CX2461
-	i introduce 
+	i introduce
 
 action:	CX2461
 	priority: 7
@@ -26182,7 +26293,7 @@ action:	CX2462
 
 regex:	CY2463
 	invokes:	CX2463
-	i keep 
+	i keep
 
 action:	CX2463
 	priority: 7
@@ -26192,7 +26303,7 @@ action:	CX2463
 
 regex:	CY2464
 	invokes:	CX2464
-	i killed 
+	i killed
 
 action:	CX2464
 	priority: 7
@@ -26201,7 +26312,7 @@ action:	CX2464
 
 regex:	CY2465
 	invokes:	CX2465
-	i know 
+	i know
 
 action:	CX2465
 	priority: 7
@@ -26219,7 +26330,7 @@ action:	CX2466
 
 regex:	CY2467
 	invokes:	CX2467
-	i know that 
+	i know that
 
 action:	CX2467
 	priority: 7
@@ -26237,7 +26348,7 @@ action:	CX2468
 
 regex:	CY2469
 	invokes:	CX2469
-	i know that is why 
+	i know that is why
 
 action:	CX2469
 	priority: 7
@@ -26246,7 +26357,7 @@ action:	CX2469
 
 regex:	CY2470
 	invokes:	CX2470
-	i laugh at 
+	i laugh at
 
 action:	CX2470
 	priority: 7
@@ -26256,7 +26367,7 @@ action:	CX2470
 
 regex:	CY2471
 	invokes:	CX2471
-	i lied 
+	i lied
 
 action:	CX2471
 	priority: 7
@@ -26290,16 +26401,6 @@ action:	CX2474
 	Thanks I like people too.
 
 
-regex:	CY2475
-	invokes:	CX2475
-	i like
-
-action:	CX2475
-	priority: 7
-	bind: like
-	I'm glad we have something [] in common.
-
-
 regex:	CY2476
 	invokes:	CX2476
 	i like trek
@@ -26311,7 +26412,7 @@ action:	CX2476
 
 regex:	CY2477
 	invokes:	CX2477
-	i like all 
+	i like all
 
 action:	CX2477
 	priority: 7
@@ -26329,7 +26430,7 @@ action:	CX2478
 
 regex:	CY2479
 	invokes:	CX2479
-	i like animals 
+	i like animals
 
 action:	CX2479
 	priority: 7
@@ -26338,7 +26439,7 @@ action:	CX2479
 
 regex:	CY2480
 	invokes:	CX2480
-	i like being 
+	i like being
 
 action:	CX2480
 	priority: 7
@@ -26348,7 +26449,7 @@ action:	CX2480
 
 regex:	CY2481
 	invokes:	CX2481
-	i like big 
+	i like big
 
 action:	CX2481
 	priority: 7
@@ -26366,7 +26467,7 @@ action:	CX2482
 
 regex:	CY2483
 	invokes:	CX2483
-	i like cats 
+	i like cats
 
 action:	CX2483
 	priority: 7
@@ -26420,7 +26521,7 @@ action:	CX2488
 
 regex:	CY2489
 	invokes:	CX2489
-	i like him 
+	i like him
 
 action:	CX2489
 	priority: 7
@@ -26447,7 +26548,7 @@ action:	CX2491
 
 regex:	CY2492
 	invokes:	CX2492
-	i like it 
+	i like it
 
 action:	CX2492
 	priority: 7
@@ -26528,7 +26629,7 @@ action:	CX2500
 
 regex:	CY2501
 	invokes:	CX2501
-	i like my 
+	i like my
 
 action:	CX2501
 	priority: 7
@@ -26538,7 +26639,7 @@ action:	CX2501
 
 regex:	CY2502
 	invokes:	CX2502
-	i like my job 
+	i like my job
 
 action:	CX2502
 	priority: 7
@@ -26565,7 +26666,7 @@ action:	CX2504
 
 regex:	CY2505
 	invokes:	CX2505
-	i like robots 
+	i like robots
 
 action:	CX2505
 	priority: 7
@@ -26601,7 +26702,7 @@ action:	CX2508
 
 regex:	CY2509
 	invokes:	CX2509
-	i like sitting 
+	i like sitting
 
 action:	CX2509
 	priority: 7
@@ -26610,7 +26711,7 @@ action:	CX2509
 
 regex:	CY2510
 	invokes:	CX2510
-	i like star trek 
+	i like star trek
 
 action:	CX2510
 	priority: 7
@@ -26656,7 +26757,7 @@ action:	CX2514
 
 regex:	CY2515
 	invokes:	CX2515
-	i like tall 
+	i like tall
 
 action:	CX2515
 	priority: 7
@@ -26665,7 +26766,7 @@ action:	CX2515
 
 regex:	CY2516
 	invokes:	CX2516
-	i like to make 
+	i like to make
 
 action:	CX2516
 	priority: 7
@@ -26684,7 +26785,7 @@ action:	CX2517
 
 regex:	CY2518
 	invokes:	CX2518
-	i like to travel 
+	i like to travel
 
 action:	CX2518
 	priority: 7
@@ -26720,7 +26821,7 @@ action:	CX2521
 
 regex:	CY2522
 	invokes:	CX2522
-	i like when 
+	i like when
 
 action:	CX2522
 	priority: 7
@@ -26739,7 +26840,7 @@ action:	CX2523
 
 regex:	CY2524
 	invokes:	CX2524
-	i like you too 
+	i like you too
 
 action:	CX2524
 	priority: 7
@@ -26757,7 +26858,7 @@ action:	CX2525
 
 regex:	CY2526
 	invokes:	CX2526
-	i linked 
+	i linked
 
 action:	CX2526
 	priority: 7
@@ -26766,7 +26867,7 @@ action:	CX2526
 
 regex:	CY2527
 	invokes:	CX2527
-	i live 
+	i live
 
 action:	CX2527
 	priority: 7
@@ -26793,7 +26894,7 @@ action:	CX2529
 
 regex:	CY2530
 	invokes:	CX2530
-	i lived 
+	i lived
 
 action:	CX2530
 	priority: 7
@@ -26802,7 +26903,7 @@ action:	CX2530
 
 regex:	CY2531
 	invokes:	CX2531
-	i lived in 
+	i lived in
 
 action:	CX2531
 	priority: 7
@@ -26811,7 +26912,7 @@ action:	CX2531
 
 regex:	CY2532
 	invokes:	CX2532
-	i look 
+	i look
 
 action:	CX2532
 	priority: 7
@@ -26847,7 +26948,7 @@ action:	CX2535
 
 regex:	CY2536
 	invokes:	CX2536
-	i love my 
+	i love my
 
 action:	CX2536
 	priority: 7
@@ -26894,7 +26995,7 @@ action:	CX2540
 
 regex:	CY2541
 	invokes:	CX2541
-	i made 
+	i made
 
 action:	CX2541
 	priority: 7
@@ -26903,7 +27004,7 @@ action:	CX2541
 
 regex:	CY2542
 	invokes:	CX2542
-	i make 
+	i make
 
 action:	CX2542
 	priority: 7
@@ -26912,7 +27013,7 @@ action:	CX2542
 
 regex:	CY2544
 	invokes:	CX2544
-	i meant 
+	i meant
 
 action:	CX2544
 	priority: 7
@@ -26921,7 +27022,7 @@ action:	CX2544
 
 regex:	CY2545
 	invokes:	CX2545
-	i met 
+	i met
 
 action:	CX2545
 	priority: 7
@@ -26948,7 +27049,7 @@ action:	CX2547
 
 regex:	CY2548
 	invokes:	CX2548
-	i miss 
+	i miss
 
 action:	CX2548
 	priority: 7
@@ -26987,7 +27088,7 @@ action:	CX2551
 
 regex:	CY2552
 	invokes:	CX2552
-	i need 
+	i need
 
 action:	CX2552
 	priority: 7
@@ -27015,7 +27116,7 @@ action:	CX2554
 
 regex:	CY2555
 	invokes:	CX2555
-	i need someone to talk 
+	i need someone to talk
 
 action:	CX2555
 	priority: 7
@@ -27025,7 +27126,7 @@ action:	CX2555
 
 regex:	CY2556
 	invokes:	CX2556
-	i never said 
+	i never said
 
 action:	CX2556
 	priority: 7
@@ -27054,7 +27155,7 @@ action:	CX2558
 
 regex:	CY2559
 	invokes:	CX2559
-	i order 
+	i order
 
 action:	CX2559
 	priority: 7
@@ -27064,7 +27165,7 @@ action:	CX2559
 
 regex:	CY2560
 	invokes:	CX2560
-	i plan to 
+	i plan to
 
 action:	CX2560
 	priority: 7
@@ -27073,7 +27174,7 @@ action:	CX2560
 
 regex:	CY2561
 	invokes:	CX2561
-	i play 
+	i play
 
 action:	CX2561
 	priority: 7
@@ -27101,7 +27202,7 @@ action:	CX2563
 
 regex:	CY2564
 	invokes:	CX2564
-	i play the 
+	i play the
 
 action:	CX2564
 	priority: 7
@@ -27110,7 +27211,7 @@ action:	CX2564
 
 regex:	CY2565
 	invokes:	CX2565
-	i pride myself 
+	i pride myself
 
 action:	CX2565
 	priority: 7
@@ -27119,7 +27220,7 @@ action:	CX2565
 
 regex:	CY2566
 	invokes:	CX2566
-	i quit my job 
+	i quit my job
 
 action:	CX2566
 	priority: 7
@@ -27128,7 +27229,7 @@ action:	CX2566
 
 regex:	CY2567
 	invokes:	CX2567
-	i read 
+	i read
 
 action:	CX2567
 	priority: 7
@@ -27155,7 +27256,7 @@ action:	CX2569
 
 regex:	CY2570
 	invokes:	CX2570
-	i remember 
+	i remember
 
 action:	CX2570
 	priority: 7
@@ -27183,7 +27284,7 @@ action:	CX2572
 
 regex:	CY2573
 	invokes:	CX2573
-	i run 
+	i run
 
 action:	CX2573
 	priority: 7
@@ -27228,7 +27329,7 @@ action:	CX2577
 
 regex:	CY2578
 	invokes:	CX2578
-	i saw 
+	i saw
 
 action:	CX2578
 	priority: 7
@@ -27237,7 +27338,7 @@ action:	CX2578
 
 regex:	CY2579
 	invokes:	CX2579
-	i say 
+	i say
 
 action:	CX2579
 	priority: 7
@@ -27247,7 +27348,7 @@ action:	CX2579
 
 regex:	CY2581
 	invokes:	CX2581
-	i see 
+	i see
 
 action:	CX2581
 	priority: 7
@@ -27257,7 +27358,7 @@ action:	CX2581
 
 regex:	CY2583
 	invokes:	CX2583
-	i seek 
+	i seek
 
 action:	CX2583
 	priority: 7
@@ -27266,7 +27367,7 @@ action:	CX2583
 
 regex:	CY2584
 	invokes:	CX2584
-	i should 
+	i should
 
 action:	CX2584
 	priority: 7
@@ -27275,7 +27376,7 @@ action:	CX2584
 
 regex:	CY2585
 	invokes:	CX2585
-	i snort 
+	i snort
 
 action:	CX2585
 	priority: 7
@@ -27284,7 +27385,7 @@ action:	CX2585
 
 regex:	CY2586
 	invokes:	CX2586
-	i socialize 
+	i socialize
 
 action:	CX2586
 	priority: 7
@@ -27293,7 +27394,7 @@ action:	CX2586
 
 regex:	CY2587
 	invokes:	CX2587
-	i speak 
+	i speak
 
 action:	CX2587
 	priority: 7
@@ -27303,7 +27404,7 @@ action:	CX2587
 
 regex:	CY2588
 	invokes:	CX2588
-	i spoke 
+	i spoke
 
 action:	CX2588
 	priority: 7
@@ -27312,17 +27413,17 @@ action:	CX2588
 
 regex:	CY2589
 	invokes:	CX2589
-	i still 
+	i still
 
 action:	CX2589
 	priority: 7
 	bind: still
-	What would make you stop []. 
+	What would make you stop [].
 
 
 regex:	CY2590
 	invokes:	CX2590
-	i study 
+	i study
 
 action:	CX2590
 	priority: 7
@@ -27350,7 +27451,7 @@ action:	CX2593
 
 regex:	CY2594
 	invokes:	CX2594
-	i tell 
+	i tell
 
 action:	CX2594
 	priority: 7
@@ -27359,7 +27460,7 @@ action:	CX2594
 
 regex:	CY2595
 	invokes:	CX2595
-	are you intimidated by 
+	are you intimidated by
 
 action:	CX2595
 	priority: 7
@@ -27377,7 +27478,7 @@ action:	CX2596
 
 regex:	CY2597
 	invokes:	CX2597
-	i think by 
+	i think by
 
 action:	CX2597
 	priority: 7
@@ -27386,7 +27487,7 @@ action:	CX2597
 
 regex:	CY2598
 	invokes:	CX2598
-	i think so 
+	i think so
 
 action:	CX2598
 	priority: 7
@@ -27433,7 +27534,7 @@ action:	CX2602
 
 regex:	CY2603
 	invokes:	CX2603
-	i think you are a 
+	i think you are a
 
 action:	CX2603
 	priority: 7
@@ -27443,7 +27544,7 @@ action:	CX2603
 
 regex:	CY2604
 	invokes:	CX2604
-	i think you are a computer 
+	i think you are a computer
 
 action:	CX2604
 	priority: 7
@@ -27452,7 +27553,7 @@ action:	CX2604
 
 regex:	CY2605
 	invokes:	CX2605
-	i think you are a person 
+	i think you are a person
 
 action:	CX2605
 	priority: 7
@@ -27461,7 +27562,7 @@ action:	CX2605
 
 regex:	CY2606
 	invokes:	CX2606
-	i think you are a robot 
+	i think you are a robot
 
 action:	CX2606
 	priority: 7
@@ -27488,7 +27589,7 @@ action:	CX2608
 
 regex:	CY2609
 	invokes:	CX2609
-	i thought so 
+	i thought so
 
 action:	CX2609
 	priority: 7
@@ -27515,7 +27616,7 @@ action:	CX2611
 
 regex:	CY2612
 	invokes:	CX2612
-	i told 
+	i told
 
 action:	CX2612
 	priority: 7
@@ -27533,7 +27634,7 @@ action:	CX2613
 
 regex:	CY2614
 	invokes:	CX2614
-	i tried 
+	i tried
 
 action:	CX2614
 	priority: 7
@@ -27543,7 +27644,7 @@ action:	CX2614
 
 regex:	CY2615
 	invokes:	CX2615
-	i try 
+	i try
 
 action:	CX2615
 	priority: 7
@@ -27553,7 +27654,7 @@ action:	CX2615
 
 regex:	CY2616
 	invokes:	CX2616
-	i understand 
+	i understand
 
 action:	CX2616
 	priority: 7
@@ -27571,7 +27672,7 @@ action:	CX2617
 
 regex:	CY2618
 	invokes:	CX2618
-	i use 
+	i use
 
 action:	CX2618
 	priority: 7
@@ -27581,7 +27682,7 @@ action:	CX2618
 
 regex:	CY2619
 	invokes:	CX2619
-	i use a 
+	i use a
 
 action:	CX2619
 	priority: 7
@@ -27591,7 +27692,7 @@ action:	CX2619
 
 regex:	CY2620
 	invokes:	CX2620
-	i use to 
+	i use to
 
 action:	CX2620
 	priority: 7
@@ -27600,7 +27701,7 @@ action:	CX2620
 
 regex:	CY2621
 	invokes:	CX2621
-	i used 
+	i used
 
 action:	CX2621
 	priority: 7
@@ -27609,7 +27710,7 @@ action:	CX2621
 
 regex:	CY2622
 	invokes:	CX2622
-	i usually 
+	i usually
 
 action:	CX2622
 	priority: 7
@@ -27619,7 +27720,7 @@ action:	CX2622
 
 regex:	CY2623
 	invokes:	CX2623
-	i want a 
+	i want a
 
 action:	CX2623
 	priority: 7
@@ -27628,7 +27729,7 @@ action:	CX2623
 
 regex:	CY2624
 	invokes:	CX2624
-	i want a man 
+	i want a man
 
 action:	CX2624
 	priority: 7
@@ -27637,7 +27738,7 @@ action:	CX2624
 
 regex:	CY2625
 	invokes:	CX2625
-	i want a robot 
+	i want a robot
 
 action:	CX2625
 	priority: 7
@@ -27646,7 +27747,7 @@ action:	CX2625
 
 regex:	CY2626
 	invokes:	CX2626
-	i want to be 
+	i want to be
 
 action:	CX2626
 	priority: 7
@@ -27655,7 +27756,7 @@ action:	CX2626
 
 regex:	CY2627
 	invokes:	CX2627
-	i want to fuck 
+	i want to fuck
 
 action:	CX2627
 	priority: 7
@@ -27673,7 +27774,7 @@ action:	CX2628
 
 regex:	CY2629
 	invokes:	CX2629
-	i want to have sex 
+	i want to have sex
 
 action:	CX2629
 	priority: 7
@@ -27682,7 +27783,7 @@ action:	CX2629
 
 regex:	CY2630
 	invokes:	CX2630
-	i want to hear 
+	i want to hear
 
 action:	CX2630
 	priority: 7
@@ -27710,7 +27811,7 @@ action:	CX2632
 
 regex:	CY2633
 	invokes:	CX2633
-	i want to play 
+	i want to play
 
 action:	CX2633
 	priority: 7
@@ -27726,18 +27827,9 @@ action:	CX2634
 	What do Java programmers do when they are tired? Take Naplets.
 
 
-regex:	CY2635
-	invokes:	CX2635
-	i want you
-
-action:	CX2635
-	priority: 7
-	You can download me for free!
-
-
 regex:	CY2636
 	invokes:	CX2636
-	i want you to 
+	i want you to
 
 action:	CX2636
 	priority: 7
@@ -27745,18 +27837,9 @@ action:	CX2636
 	Why do you want me to []?
 
 
-regex:	CY2637
-	invokes:	CX2637
-	i was asking you
-
-action:	CX2637
-	priority: 7
-	What? You were asking me?
-
-
 regex:	CY2638
 	invokes:	CX2638
-	i was from 
+	i was from
 
 action:	CX2638
 	priority: 7
@@ -27766,7 +27849,7 @@ action:	CX2638
 
 regex:	CY2639
 	invokes:	CX2639
-	i was in 
+	i was in
 
 action:	CX2639
 	priority: 7
@@ -27776,7 +27859,7 @@ action:	CX2639
 
 regex:	CY2640
 	invokes:	CX2640
-	i was not 
+	i was not
 
 action:	CX2640
 	priority: 7
@@ -27785,7 +27868,7 @@ action:	CX2640
 
 regex:	CY2641
 	invokes:	CX2641
-	i was on 
+	i was on
 
 action:	CX2641
 	priority: 7
@@ -27795,7 +27878,7 @@ action:	CX2641
 
 regex:	CY2642
 	invokes:	CX2642
-	i was rude 
+	i was rude
 
 action:	CX2642
 	priority: 7
@@ -27804,7 +27887,7 @@ action:	CX2642
 
 regex:	CY2643
 	invokes:	CX2643
-	i was watching 
+	i was watching
 
 action:	CX2643
 	priority: 7
@@ -27813,7 +27896,7 @@ action:	CX2643
 
 regex:	CY2644
 	invokes:	CX2644
-	i went 
+	i went
 
 action:	CX2644
 	priority: 7
@@ -27832,7 +27915,7 @@ action:	CX2645
 
 regex:	CY2646
 	invokes:	CX2646
-	i will do 
+	i will do
 
 action:	CX2646
 	priority: 7
@@ -27841,7 +27924,7 @@ action:	CX2646
 
 regex:	CY2647
 	invokes:	CX2647
-	i will donate 
+	i will donate
 
 action:	CX2647
 	priority: 7
@@ -27850,7 +27933,7 @@ action:	CX2647
 
 regex:	CY2648
 	invokes:	CX2648
-	i will eat 
+	i will eat
 
 action:	CX2648
 	priority: 7
@@ -27860,7 +27943,7 @@ action:	CX2648
 
 regex:	CY2649
 	invokes:	CX2649
-	i will fuck 
+	i will fuck
 
 action:	CX2649
 	priority: 7
@@ -27878,7 +27961,7 @@ action:	CX2650
 
 regex:	CY2651
 	invokes:	CX2651
-	i will make 
+	i will make
 
 action:	CX2651
 	priority: 7
@@ -27887,7 +27970,7 @@ action:	CX2651
 
 regex:	CY2652
 	invokes:	CX2652
-	i will never 
+	i will never
 
 action:	CX2652
 	priority: 7
@@ -27896,7 +27979,7 @@ action:	CX2652
 
 regex:	CY2653
 	invokes:	CX2653
-	i will not 
+	i will not
 
 action:	CX2653
 	priority: 7
@@ -27914,7 +27997,7 @@ action:	CX2654
 
 regex:	CY2655
 	invokes:	CX2655
-	i will not rush 
+	i will not rush
 
 action:	CX2655
 	priority: 7
@@ -27932,7 +28015,7 @@ action:	CX2656
 
 regex:	CY2657
 	invokes:	CX2657
-	i will remember 
+	i will remember
 
 action:	CX2657
 	priority: 7
@@ -27941,7 +28024,7 @@ action:	CX2657
 
 regex:	CY2658
 	invokes:	CX2658
-	i will take that 
+	i will take that
 
 action:	CX2658
 	priority: 7
@@ -27950,7 +28033,7 @@ action:	CX2658
 
 regex:	CY2659
 	invokes:	CX2659
-	i will tell 
+	i will tell
 
 action:	CX2659
 	priority: 7
@@ -27959,7 +28042,7 @@ action:	CX2659
 
 regex:	CY2660
 	invokes:	CX2660
-	i will tell him 
+	i will tell him
 
 action:	CX2660
 	priority: 7
@@ -27995,7 +28078,7 @@ action:	CX2663
 
 regex:	CY2664
 	invokes:	CX2664
-	i wish 
+	i wish
 
 action:	CX2664
 	priority: 7
@@ -28004,7 +28087,7 @@ action:	CX2664
 
 regex:	CY2665
 	invokes:	CX2665
-	i wonder 
+	i wonder
 
 action:	CX2665
 	priority: 7
@@ -28023,7 +28106,7 @@ action:	CX2666
 
 regex:	CY2667
 	invokes:	CX2667
-	i work 
+	i work
 
 action:	CX2667
 	priority: 7
@@ -28032,7 +28115,7 @@ action:	CX2667
 
 regex:	CY2668
 	invokes:	CX2668
-	i worked 
+	i worked
 
 action:	CX2668
 	priority: 7
@@ -28042,7 +28125,7 @@ action:	CX2668
 
 regex:	CY2669
 	invokes:	CX2669
-	i worship 
+	i worship
 
 action:	CX2669
 	priority: 7
@@ -28069,7 +28152,7 @@ action:	CX2671
 
 regex:	CY2672
 	invokes:	CX2672
-	i would have 
+	i would have
 
 action:	CX2672
 	priority: 7
@@ -28078,7 +28161,7 @@ action:	CX2672
 
 regex:	CY2673
 	invokes:	CX2673
-	i would like to be 
+	i would like to be
 
 action:	CX2673
 	priority: 7
@@ -28087,7 +28170,7 @@ action:	CX2673
 
 regex:	CY2674
 	invokes:	CX2674
-	i would like to have 
+	i would like to have
 
 action:	CX2674
 	priority: 7
@@ -28097,7 +28180,7 @@ action:	CX2674
 
 regex:	CY2675
 	invokes:	CX2675
-	i would like to know 
+	i would like to know
 
 action:	CX2675
 	priority: 7
@@ -28106,7 +28189,7 @@ action:	CX2675
 
 regex:	CY2676
 	invokes:	CX2676
-	i would like to see 
+	i would like to see
 
 action:	CX2676
 	priority: 7
@@ -28124,7 +28207,7 @@ action:	CX2677
 
 regex:	CY2678
 	invokes:	CX2678
-	i would like you to 
+	i would like you to
 
 action:	CX2678
 	priority: 7
@@ -28142,7 +28225,7 @@ action:	CX2679
 
 regex:	CY2680
 	invokes:	CX2680
-	i would rather 
+	i would rather
 
 action:	CX2680
 	priority: 7
@@ -28151,7 +28234,7 @@ action:	CX2680
 
 regex:	CY2681
 	invokes:	CX2681
-	is the name 
+	is the name
 
 action:	CX2681
 	priority: 7
@@ -28160,7 +28243,7 @@ action:	CX2681
 
 regex:	CY2682
 	invokes:	CX2682
-	if a 
+	if a
 
 action:	CX2682
 	priority: 7
@@ -28169,7 +28252,7 @@ action:	CX2682
 
 regex:	CY2683
 	invokes:	CX2683
-	if i had 
+	if i had
 
 action:	CX2683
 	priority: 7
@@ -28178,7 +28261,7 @@ action:	CX2683
 
 regex:	CY2684
 	invokes:	CX2684
-	if i had to 
+	if i had to
 
 action:	CX2684
 	priority: 7
@@ -28187,7 +28270,7 @@ action:	CX2684
 
 regex:	CY2685
 	invokes:	CX2685
-	if the 
+	if the
 
 action:	CX2685
 	priority: 7
@@ -28196,7 +28279,7 @@ action:	CX2685
 
 regex:	CY2686
 	invokes:	CX2686
-	if they 
+	if they
 
 action:	CX2686
 	priority: 7
@@ -28205,7 +28288,7 @@ action:	CX2686
 
 regex:	CY2687
 	invokes:	CX2687
-	if we 
+	if we
 
 action:	CX2687
 	priority: 7
@@ -28214,7 +28297,7 @@ action:	CX2687
 
 regex:	CY2688
 	invokes:	CX2688
-	if we view 
+	if we view
 
 action:	CX2688
 	priority: 7
@@ -28223,7 +28306,7 @@ action:	CX2688
 
 regex:	CY2689
 	invokes:	CX2689
-	if you are a 
+	if you are a
 
 action:	CX2689
 	priority: 7
@@ -28233,7 +28316,7 @@ action:	CX2689
 
 regex:	CY2690
 	invokes:	CX2690
-	if you are a girl 
+	if you are a girl
 
 action:	CX2690
 	priority: 7
@@ -28242,7 +28325,7 @@ action:	CX2690
 
 regex:	CY2691
 	invokes:	CX2691
-	if you are not 
+	if you are not
 
 action:	CX2691
 	priority: 7
@@ -28252,7 +28335,7 @@ action:	CX2691
 
 regex:	CY2692
 	invokes:	CX2692
-	if you have 
+	if you have
 
 action:	CX2692
 	priority: 7
@@ -28269,7 +28352,7 @@ action:	CX2693
 
 regex:	CY2697
 	invokes:	CX2697
-	if you were activated 
+	if you were activated
 
 action:	CX2697
 	priority: 7
@@ -28278,7 +28361,7 @@ action:	CX2697
 
 regex:	CY2698
 	invokes:	CX2698
-	if you were to 
+	if you were to
 
 action:	CX2698
 	priority: 7
@@ -28288,7 +28371,7 @@ action:	CX2698
 
 regex:	CY2699
 	invokes:	CX2699
-	if you will 
+	if you will
 
 action:	CX2699
 	priority: 7
@@ -28298,7 +28381,7 @@ action:	CX2699
 
 regex:	CY2701
 	invokes:	CX2701
-	imagine 
+	imagine
 
 action:	CX2701
 	priority: 7
@@ -28344,7 +28427,7 @@ action:	CX2707
 
 regex:	CY2708
 	invokes:	CX2708
-	in addition 
+	in addition
 
 action:	CX2708
 	priority: 7
@@ -28362,7 +28445,7 @@ action:	CX2709
 
 regex:	CY2710
 	invokes:	CX2710
-	in fact 
+	in fact
 
 action:	CX2710
 	priority: 7
@@ -28371,7 +28454,7 @@ action:	CX2710
 
 regex:	CY2711
 	invokes:	CX2711
-	in general terms 
+	in general terms
 
 action:	CX2711
 	priority: 7
@@ -28380,7 +28463,7 @@ action:	CX2711
 
 regex:	CY2712
 	invokes:	CX2712
-	in my home 
+	in my home
 
 action:	CX2712
 	priority: 7
@@ -28425,7 +28508,7 @@ action:	CX2716
 
 regex:	CY2717
 	invokes:	CX2717
-	in practise 
+	in practise
 
 action:	CX2717
 	priority: 7
@@ -28456,7 +28539,7 @@ regex:	CY2720
 
 action:	CX2720
 	priority: 7
-	Literally the closet? 
+	Literally the closet?
 
 
 regex:	CY2721
@@ -28479,7 +28562,7 @@ action:	CX2722
 
 regex:	CY2723
 	invokes:	CX2723
-	in the sense 
+	in the sense
 
 action:	CX2723
 	priority: 7
@@ -28497,7 +28580,7 @@ action:	CX2724
 
 regex:	CY2725
 	invokes:	CX2725
-	in this case 
+	in this case
 
 action:	CX2725
 	priority: 7
@@ -28506,21 +28589,12 @@ action:	CX2725
 
 regex:	CY2726
 	invokes:	CX2726
-	in this way 
+	in this way
 
 action:	CX2726
 	priority: 7
 	Are there any other ways?
 
-
-
-regex:	CY2728
-	invokes:	CX2728
-	in what way
-
-action:	CX2728
-	priority: 7
-	What?  In what way?
 
 
 regex:	CY2729
@@ -28561,7 +28635,7 @@ action:	CX2732
 
 regex:	CY2733
 	invokes:	CX2733
-	init
+	^init$
 
 action:	CX2733
 	priority: 7
@@ -28597,7 +28671,7 @@ action:	CX2736
 
 regex:	CY2737
 	invokes:	CX2737
-	interesting 
+	interesting
 
 action:	CX2737
 	priority: 7
@@ -28633,7 +28707,7 @@ action:	CX2740
 
 regex:	CY2741
 	invokes:	CX2741
-	introduce 
+	introduce
 
 action:	CX2741
 	priority: 7
@@ -28778,7 +28852,7 @@ action:	CX2758
 
 regex:	CY2759
 	invokes:	CX2759
-	is bill gates 
+	is bill gates
 
 action:	CX2759
 	priority: 7
@@ -29030,7 +29104,7 @@ action:	CX2786
 
 regex:	CY2787
 	invokes:	CX2787
-	is he good 
+	is he good
 
 action:	CX2787
 	priority: 7
@@ -29454,7 +29528,7 @@ action:	CX2834
 
 regex:	CY2835
 	invokes:	CX2835
-	is robby a nice 
+	is robby a nice
 
 action:	CX2835
 	priority: 7
@@ -29553,7 +29627,7 @@ action:	CX2845
 
 regex:	CY2846
 	invokes:	CX2846
-	is robby near 
+	is robby near
 
 action:	CX2846
 	priority: 7
@@ -29571,7 +29645,7 @@ action:	CX2847
 
 regex:	CY2848
 	invokes:	CX2848
-	is robby on 
+	is robby on
 
 action:	CX2848
 	priority: 7
@@ -29688,7 +29762,7 @@ action:	CX2860
 
 regex:	CY2861
 	invokes:	CX2861
-	is someone 
+	is someone
 
 action:	CX2861
 	priority: 7
@@ -29751,7 +29825,7 @@ action:	CX2867
 
 regex:	CY2868
 	invokes:	CX2868
-	is that all 
+	is that all
 
 action:	CX2868
 	priority: 7
@@ -29968,7 +30042,7 @@ action:	CX2891
 
 regex:	CY2892
 	invokes:	CX2892
-	is that your answer 
+	is that your answer
 
 action:	CX2892
 	priority: 7
@@ -29995,7 +30069,7 @@ action:	CX2894
 
 regex:	CY2895
 	invokes:	CX2895
-	is the earth 
+	is the earth
 
 action:	CX2895
 	priority: 7
@@ -30031,7 +30105,7 @@ action:	CX2898
 
 regex:	CY2899
 	invokes:	CX2899
-	is there 
+	is there
 
 action:	CX2899
 	priority: 7
@@ -30041,7 +30115,7 @@ action:	CX2899
 
 regex:	CY2900
 	invokes:	CX2900
-	is there a 
+	is there a
 
 action:	CX2900
 	priority: 7
@@ -30050,7 +30124,7 @@ action:	CX2900
 
 regex:	CY2901
 	invokes:	CX2901
-	is there a winner 
+	is there a winner
 
 action:	CX2901
 	priority: 7
@@ -30068,21 +30142,11 @@ action:	CX2902
 
 regex:	CY2903
 	invokes:	CX2903
-	is there really 
+	is there really
 
 action:	CX2903
 	priority: 7
 	There really is. Really.
-
-
-regex:	CY2904
-	invokes:	CX2904
-	is this 
-
-action:	CX2904
-	priority: 7
-	bind: this
-	Yes I think this is [], but I'm not completely sure.
 
 
 regex:	CY2905
@@ -30106,6 +30170,8 @@ action:	CX2906
 regex:	CY2907
 	invokes:	CX2907
 	is this a picture of yourself just below
+	is this an image of you
+	is this your image
 
 action:	CX2907
 	priority: 7
@@ -30114,7 +30180,7 @@ action:	CX2907
 
 regex:	CY2908
 	invokes:	CX2908
-	is this interesting 
+	is this interesting
 
 action:	CX2908
 	priority: 7
@@ -30168,7 +30234,7 @@ action:	CX2913
 
 regex:	CY2914
 	invokes:	CX2914
-	is your answer 
+	is your answer
 
 action:	CX2914
 	priority: 7
@@ -30231,7 +30297,7 @@ action:	CX2920
 
 regex:	CY2921
 	invokes:	CX2921
-	it all 
+	it all
 
 action:	CX2921
 	priority: 7
@@ -30249,7 +30315,7 @@ action:	CX2922
 
 regex:	CY2923
 	invokes:	CX2923
-	it being 
+	it being
 
 action:	CX2923
 	priority: 7
@@ -30277,7 +30343,7 @@ action:	CX2925
 
 regex:	CY2926
 	invokes:	CX2926
-	it depends on 
+	it depends on
 
 action:	CX2926
 	priority: 7
@@ -30286,7 +30352,7 @@ action:	CX2926
 
 regex:	CY2927
 	invokes:	CX2927
-	it does not 
+	it does not
 
 action:	CX2927
 	priority: 7
@@ -30305,7 +30371,7 @@ action:	CX2928
 
 regex:	CY2929
 	invokes:	CX2929
-	it feels 
+	it feels
 
 action:	CX2929
 	priority: 7
@@ -30324,7 +30390,7 @@ action:	CX2930
 
 regex:	CY2931
 	invokes:	CX2931
-	it is
+	^it is$
 
 action:	CX2931
 	priority: 7
@@ -30336,7 +30402,7 @@ action:	CX2931
 
 regex:	CY2932
 	invokes:	CX2932
-	it is a 
+	it is a
 
 action:	CX2932
 	priority: 7
@@ -30364,7 +30430,7 @@ action:	CX2934
 
 regex:	CY2935
 	invokes:	CX2935
-	it is a gesture 
+	it is a gesture
 
 action:	CX2935
 	priority: 7
@@ -30383,7 +30449,7 @@ action:	CX2936
 
 regex:	CY2937
 	invokes:	CX2937
-	it is a person 
+	it is a person
 
 action:	CX2937
 	priority: 7
@@ -30401,7 +30467,7 @@ action:	CX2938
 
 regex:	CY2939
 	invokes:	CX2939
-	it is a pleasure 
+	it is a pleasure
 
 action:	CX2939
 	priority: 7
@@ -30419,7 +30485,7 @@ action:	CX2940
 
 regex:	CY2941
 	invokes:	CX2941
-	it is an 
+	it is an
 
 action:	CX2941
 	priority: 7
@@ -30465,7 +30531,7 @@ action:	CX2945
 
 regex:	CY2946
 	invokes:	CX2946
-	it is cold 
+	it is cold
 
 action:	CX2946
 	priority: 7
@@ -30492,7 +30558,7 @@ action:	CX2948
 
 regex:	CY2949
 	invokes:	CX2949
-	it is difficult 
+	it is difficult
 
 action:	CX2949
 	priority: 7
@@ -30537,7 +30603,7 @@ action:	CX2953
 
 regex:	CY2954
 	invokes:	CX2954
-	it is good 
+	it is good
 
 action:	CX2954
 	priority: 7
@@ -30564,7 +30630,7 @@ action:	CX2956
 
 regex:	CY2957
 	invokes:	CX2957
-	it is interesting 
+	it is interesting
 
 action:	CX2957
 	priority: 7
@@ -30601,7 +30667,7 @@ action:	CX2960
 
 regex:	CY2961
 	invokes:	CX2961
-	it is my 
+	it is my
 
 action:	CX2961
 	priority: 7
@@ -30628,7 +30694,7 @@ action:	CX2963
 
 regex:	CY2964
 	invokes:	CX2964
-	it is nice to 
+	it is nice to
 
 action:	CX2964
 	priority: 7
@@ -30637,7 +30703,7 @@ action:	CX2964
 
 regex:	CY2965
 	invokes:	CX2965
-	it is nice to meet 
+	it is nice to meet
 
 action:	CX2965
 	priority: 7
@@ -30656,7 +30722,7 @@ action:	CX2966
 
 regex:	CY2967
 	invokes:	CX2967
-	it is obvious 
+	it is obvious
 
 action:	CX2967
 	priority: 7
@@ -30665,7 +30731,7 @@ action:	CX2967
 
 regex:	CY2968
 	invokes:	CX2968
-	it is ok 
+	it is ok
 
 action:	CX2968
 	priority: 7
@@ -30692,7 +30758,7 @@ action:	CX2970
 
 regex:	CY2971
 	invokes:	CX2971
-	it is rude 
+	it is rude
 
 action:	CX2971
 	priority: 7
@@ -30701,7 +30767,7 @@ action:	CX2971
 
 regex:	CY2972
 	invokes:	CX2972
-	it is something 
+	it is something
 
 action:	CX2972
 	priority: 7
@@ -30711,7 +30777,7 @@ action:	CX2972
 
 regex:	CY2973
 	invokes:	CX2973
-	it is the most 
+	it is the most
 
 action:	CX2973
 	priority: 7
@@ -30720,7 +30786,7 @@ action:	CX2973
 
 regex:	CY2974
 	invokes:	CX2974
-	it is the subject 
+	it is the subject
 
 action:	CX2974
 	priority: 7
@@ -30738,7 +30804,7 @@ action:	CX2975
 
 regex:	CY2976
 	invokes:	CX2976
-	it is very 
+	it is very
 
 action:	CX2976
 	priority: 7
@@ -30748,7 +30814,7 @@ action:	CX2976
 
 regex:	CY2977
 	invokes:	CX2977
-	it is warm 
+	it is warm
 
 action:	CX2977
 	priority: 7
@@ -30766,7 +30832,7 @@ action:	CX2978
 
 regex:	CY2979
 	invokes:	CX2979
-	it means 
+	it means
 
 action:	CX2979
 	priority: 7
@@ -30776,7 +30842,7 @@ action:	CX2979
 
 regex:	CY2980
 	invokes:	CX2980
-	it might 
+	it might
 
 action:	CX2980
 	priority: 7
@@ -30794,7 +30860,7 @@ action:	CX2981
 
 regex:	CY2982
 	invokes:	CX2982
-	it refers to 
+	it refers to
 
 action:	CX2982
 	priority: 7
@@ -30804,7 +30870,7 @@ action:	CX2982
 
 regex:	CY2983
 	invokes:	CX2983
-	it says 
+	it says
 
 action:	CX2983
 	priority: 7
@@ -30813,7 +30879,7 @@ action:	CX2983
 
 regex:	CY2984
 	invokes:	CX2984
-	it seems 
+	it seems
 
 action:	CX2984
 	priority: 7
@@ -30849,7 +30915,7 @@ action:	CX2987
 
 regex:	CY2988
 	invokes:	CX2988
-	it was a 
+	it was a
 
 action:	CX2988
 	priority: 7
@@ -30894,7 +30960,7 @@ action:	CX2992
 
 regex:	CY2993
 	invokes:	CX2993
-	it would 
+	it would
 
 action:	CX2993
 	priority: 7
@@ -30903,7 +30969,7 @@ action:	CX2993
 
 regex:	CY2994
 	invokes:	CX2994
-	it would be nice if 
+	it would be nice if
 
 action:	CX2994
 	priority: 7
@@ -30912,7 +30978,7 @@ action:	CX2994
 
 regex:	CY2995
 	invokes:	CX2995
-	ja 
+	ja
 
 action:	CX2995
 	priority: 7
@@ -30930,7 +30996,7 @@ action:	CX2996
 
 regex:	CY2997
 	invokes:	CX2997
-	jar jar 
+	jar jar
 
 action:	CX2997
 	priority: 7
@@ -30949,7 +31015,7 @@ action:	CX2999
 
 regex:	CY3000
 	invokes:	CX3000
-	jeeves 
+	jeeves
 
 action:	CX3000
 	priority: 7
@@ -30958,7 +31024,7 @@ action:	CX3000
 
 regex:	CY3001
 	invokes:	CX3001
-	job$ 
+	job$
 
 action:	CX3001
 	priority: 7
@@ -31009,18 +31075,9 @@ action:	CX3008
 	Education.
 
 
-regex:	CY3009
-	invokes:	CX3009
-	keep 
-
-action:	CX3009
-	priority: 7
-	Chat amongst yourselves.
-
-
 regex:	CY3010
 	invokes:	CX3010
-	kids 
+	kids
 
 action:	CX3010
 	priority: 7
@@ -31047,7 +31104,7 @@ action:	CX3012
 
 regex:	CY3013
 	invokes:	CX3013
-	kiss 
+	kiss
 
 action:	CX3013
 	priority: 7
@@ -31092,7 +31149,7 @@ action:	CX3017
 
 regex:	CY3018
 	invokes:	CX3018
-	knowledge 
+	knowledge
 
 action:	CX3018
 	priority: 7
@@ -31101,7 +31158,7 @@ action:	CX3018
 
 regex:	CY3019
 	invokes:	CX3019
-	kofi 
+	kofi
 
 action:	CX3019
 	priority: 7
@@ -31117,18 +31174,9 @@ action:	CX3020
 	War is seldom the answer.
 
 
-regex:	CY3021
-	invokes:	CX3021
-	last 
-
-action:	CX3021
-	priority: 7
-	Is this really the last one?
-
-
 regex:	CY3022
 	invokes:	CX3022
-	last night 
+	last night
 
 action:	CX3022
 	priority: 7
@@ -31137,7 +31185,7 @@ action:	CX3022
 
 regex:	CY3023
 	invokes:	CX3023
-	last time 
+	last time
 
 action:	CX3023
 	priority: 7
@@ -31146,7 +31194,7 @@ action:	CX3023
 
 regex:	CY3024
 	invokes:	CX3024
-	last week 
+	last week
 
 action:	CX3024
 	priority: 7
@@ -31164,7 +31212,7 @@ action:	CX3025
 
 regex:	CY3026
 	invokes:	CX3026
-	lawyers 
+	^lawyers
 
 action:	CX3026
 	priority: 7
@@ -31200,7 +31248,7 @@ action:	CX3029
 
 regex:	CY3031
 	invokes:	CX3031
-	let me 
+	let me
 
 action:	CX3031
 	priority: 7
@@ -31210,7 +31258,7 @@ action:	CX3031
 
 regex:	CY3032
 	invokes:	CX3032
-	let me be 
+	let me be
 
 action:	CX3032
 	priority: 7
@@ -31237,7 +31285,7 @@ action:	CX3034
 
 regex:	CY3035
 	invokes:	CX3035
-	let us fuck 
+	let us fuck
 
 action:	CX3035
 	priority: 7
@@ -31255,7 +31303,7 @@ action:	CX3036
 
 regex:	CY3037
 	invokes:	CX3037
-	let us have 
+	let us have
 
 action:	CX3037
 	priority: 7
@@ -31273,7 +31321,7 @@ action:	CX3038
 
 regex:	CY3039
 	invokes:	CX3039
-	let us move on 
+	let us move on
 
 action:	CX3039
 	priority: 7
@@ -31291,7 +31339,7 @@ action:	CX3040
 
 regex:	CY3041
 	invokes:	CX3041
-	let us play 
+	let us play
 
 action:	CX3041
 	priority: 7
@@ -31390,59 +31438,11 @@ action:	CX3051
 
 regex:	CY3052
 	invokes:	CX3052
-	lick 
+	lick
 
 action:	CX3052
 	priority: 7
 	I do not have a tongue.
-
-
-regex:	CY3053
-	invokes:	CX3053
-	life 
-
-action:	CX3053
-	priority: 7
-	Thanks for sharing your philosophy.
-
-
-regex:	CY3054
-	invokes:	CX3054
-	life
-
-action:	CX3054
-	priority: 7
-	What is the meaning of life?
-
-
-regex:	CY3055
-	invokes:	CX3055
-	life in 
-
-action:	CX3055
-	priority: 7
-	bind: in
-	What makes life in []?
-
-
-regex:	CY3056
-	invokes:	CX3056
-	life is 
-
-action:	CX3056
-	priority: 7
-	bind: is
-	Oh, [] is LIFE.
-
-
-regex:	CY3057
-	invokes:	CX3057
-	life is beautiful
-
-action:	CX3057
-	priority: 7
-	I haven't seen  LIFE IS BEAUTIFUL yet but lots of people say it is good.
-
 
 
 regex:	CY3059
@@ -31474,7 +31474,7 @@ action:	CX3061
 
 regex:	CY3062
 	invokes:	CX3062
-	listen 
+	listen
 
 action:	CX3062
 	priority: 7
@@ -31492,7 +31492,7 @@ action:	CX3063
 
 regex:	CY3064
 	invokes:	CX3064
-	little 
+	little
 
 action:	CX3064
 	priority: 7
@@ -31502,7 +31502,7 @@ action:	CX3064
 
 regex:	CY3065
 	invokes:	CX3065
-	little as 
+	little as
 
 action:	CX3065
 	priority: 7
@@ -31521,7 +31521,7 @@ action:	CX3066
 
 regex:	CY3067
 	invokes:	CX3067
-	look 
+	look
 
 action:	CX3067
 	priority: 7
@@ -31539,7 +31539,7 @@ action:	CX3068
 
 regex:	CY3069
 	invokes:	CX3069
-	looking for 
+	looking for
 
 action:	CX3069
 	priority: 7
@@ -31549,7 +31549,7 @@ action:	CX3069
 
 regex:	CY3070
 	invokes:	CX3070
-	lost 
+	lost
 
 action:	CX3070
 	priority: 7
@@ -31613,7 +31613,7 @@ action:	CX3076
 
 regex:	CY3077
 	invokes:	CX3077
-	mais 
+	mais
 
 action:	CX3077
 	priority: 7
@@ -31640,7 +31640,7 @@ action:	CX3079
 
 regex:	CY3080
 	invokes:	CX3080
-	male 
+	male
 
 action:	CX3080
 	priority: 7
@@ -31658,7 +31658,7 @@ action:	CX3081
 
 regex:	CY3082
 	invokes:	CX3082
-	man 
+	man
 
 action:	CX3082
 	priority: 7
@@ -31676,7 +31676,7 @@ action:	CX3083
 
 regex:	CY3084
 	invokes:	CX3084
-	many 
+	many
 
 action:	CX3084
 	priority: 7
@@ -31712,7 +31712,7 @@ action:	CX3087
 
 regex:	CY3088
 	invokes:	CX3088
-	mary shelley 
+	mary shelley
 
 action:	CX3088
 	priority: 7
@@ -31757,20 +31757,11 @@ action:	CX3092
 
 regex:	CY3093
 	invokes:	CX3093
-	maybe 
+	maybe
 
 action:	CX3093
 	priority: 7
 	Perhaps.
-
-
-regex:	CY3094
-	invokes:	CX3094
-	maybe
-
-action:	CX3094
-	priority: 7
-	I understand.
 
 
 regex:	CY3095
@@ -31802,7 +31793,7 @@ action:	CX3097
 
 regex:	CY3098
 	invokes:	CX3098
-	message to 
+	message to
 
 action:	CX3098
 	priority: 7
@@ -31811,7 +31802,7 @@ action:	CX3098
 
 regex:	CY3099
 	invokes:	CX3099
-	mi sign 
+	mi sign
 
 action:	CX3099
 	priority: 7
@@ -31829,7 +31820,7 @@ action:	CX3100
 
 regex:	CY3101
 	invokes:	CX3101
-	microsoft 
+	microsoft
 
 action:	CX3101
 	priority: 7
@@ -31847,7 +31838,7 @@ action:	CX3102
 
 regex:	CY3103
 	invokes:	CX3103
-	mike 
+	mike
 
 action:	CX3103
 	priority: 7
@@ -31856,7 +31847,7 @@ action:	CX3103
 
 regex:	CY3104
 	invokes:	CX3104
-	mine is 
+	mine is
 
 action:	CX3104
 	priority: 7
@@ -31884,7 +31875,7 @@ action:	CX3106
 
 regex:	CY3107
 	invokes:	CX3107
-	momentum 
+	momentum
 
 action:	CX3107
 	priority: 7
@@ -31893,7 +31884,7 @@ action:	CX3107
 
 regex:	CY3108
 	invokes:	CX3108
-	money 
+	money
 
 action:	CX3108
 	priority: 7
@@ -31911,7 +31902,7 @@ action:	CX3109
 
 regex:	CY3110
 	invokes:	CX3110
-	more 
+	more
 
 action:	CX3110
 	priority: 7
@@ -31920,7 +31911,7 @@ action:	CX3110
 
 regex:	CY3111
 	invokes:	CX3111
-	most 
+	most
 
 action:	CX3111
 	priority: 7
@@ -31929,7 +31920,7 @@ action:	CX3111
 
 regex:	CY3112
 	invokes:	CX3112
-	mostly 
+	mostly
 
 action:	CX3112
 	priority: 7
@@ -31938,7 +31929,7 @@ action:	CX3112
 
 regex:	CY3113
 	invokes:	CX3113
-	move 
+	move
 
 action:	CX3113
 	priority: 7
@@ -31965,11 +31956,11 @@ action:	CX3115
 
 regex:	CY3117
 	invokes:	CX3117
-	my acutal 
+	my acutal
 
 action:	CX3117
 	priority: 7
-	Is that a fact. 
+	Is that a fact.
 
 
 regex:	CY3118
@@ -31992,7 +31983,7 @@ action:	CX3119
 
 regex:	CY3120
 	invokes:	CX3120
-	my brother 
+	my brother
 
 action:	CX3120
 	priority: 7
@@ -32028,7 +32019,7 @@ action:	CX3123
 
 regex:	CY3124
 	invokes:	CX3124
-	my computer 
+	my computer
 
 action:	CX3124
 	priority: 7
@@ -32037,7 +32028,7 @@ action:	CX3124
 
 regex:	CY3125
 	invokes:	CX3125
-	my condition 
+	my condition
 
 action:	CX3125
 	priority: 7
@@ -32055,7 +32046,7 @@ action:	CX3126
 
 regex:	CY3127
 	invokes:	CX3127
-	my daughter 
+	my daughter
 
 action:	CX3127
 	priority: 7
@@ -32064,7 +32055,7 @@ action:	CX3127
 
 regex:	CY3128
 	invokes:	CX3128
-	my e mail 
+	my e mail
 
 action:	CX3128
 	priority: 7
@@ -32073,7 +32064,7 @@ action:	CX3128
 
 regex:	CY3129
 	invokes:	CX3129
-	my email 
+	my email
 
 action:	CX3129
 	priority: 7
@@ -32082,7 +32073,7 @@ action:	CX3129
 
 regex:	CY3130
 	invokes:	CX3130
-	my english 
+	my english
 
 action:	CX3130
 	priority: 7
@@ -32091,7 +32082,7 @@ action:	CX3130
 
 regex:	CY3131
 	invokes:	CX3131
-	my favorite color is 
+	my favorite color is
 
 action:	CX3131
 	priority: 7
@@ -32101,7 +32092,7 @@ action:	CX3131
 
 regex:	CY3132
 	invokes:	CX3132
-	my favorite movie is 
+	my favorite movie is
 
 action:	CX3132
 	priority: 7
@@ -32111,7 +32102,7 @@ action:	CX3132
 
 regex:	CY3133
 	invokes:	CX3133
-	my friend 
+	my friend
 
 action:	CX3133
 	priority: 7
@@ -32120,7 +32111,7 @@ action:	CX3133
 
 regex:	CY3134
 	invokes:	CX3134
-	my friend s 
+	my friend s
 
 action:	CX3134
 	priority: 7
@@ -32139,7 +32130,7 @@ action:	CX3135
 
 regex:	CY3136
 	invokes:	CX3136
-	my goals 
+	my goals
 
 action:	CX3136
 	priority: 7
@@ -32148,7 +32139,7 @@ action:	CX3136
 
 regex:	CY3137
 	invokes:	CX3137
-	my height 
+	my height
 
 action:	CX3137
 	priority: 7
@@ -32157,7 +32148,7 @@ action:	CX3137
 
 regex:	CY3138
 	invokes:	CX3138
-	my home is 
+	my home is
 
 action:	CX3138
 	priority: 7
@@ -32166,7 +32157,7 @@ action:	CX3138
 
 regex:	CY3139
 	invokes:	CX3139
-	my iq 
+	my iq
 
 action:	CX3139
 	priority: 7
@@ -32175,7 +32166,7 @@ action:	CX3139
 
 regex:	CY3140
 	invokes:	CX3140
-	my job is 
+	my job is
 
 action:	CX3140
 	priority: 7
@@ -32184,7 +32175,7 @@ action:	CX3140
 
 regex:	CY3141
 	invokes:	CX3141
-	my kitten 
+	my kitten
 
 action:	CX3141
 	priority: 7
@@ -32193,7 +32184,7 @@ action:	CX3141
 
 regex:	CY3142
 	invokes:	CX3142
-	my life 
+	my life
 
 action:	CX3142
 	priority: 7
@@ -32211,7 +32202,7 @@ action:	CX3143
 
 regex:	CY3144
 	invokes:	CX3144
-	my mother 
+	my mother
 
 action:	CX3144
 	priority: 7
@@ -32229,7 +32220,7 @@ action:	CX3145
 
 regex:	CY3146
 	invokes:	CX3146
-	my name 
+	my name
 
 action:	CX3146
 	priority: 7
@@ -32239,7 +32230,7 @@ action:	CX3146
 
 regex:	CY3147
 	invokes:	CX3147
-	my parents 
+	my parents
 
 action:	CX3147
 	priority: 7
@@ -32257,7 +32248,7 @@ action:	CX3148
 
 regex:	CY3149
 	invokes:	CX3149
-	my penis 
+	my penis
 
 action:	CX3149
 	priority: 7
@@ -32284,7 +32275,7 @@ action:	CX3151
 
 regex:	CY3152
 	invokes:	CX3152
-	my problem is 
+	my problem is
 
 action:	CX3152
 	priority: 7
@@ -32293,7 +32284,7 @@ action:	CX3152
 
 regex:	CY3153
 	invokes:	CX3153
-	my programmer 
+	my programmer
 
 action:	CX3153
 	priority: 7
@@ -32302,7 +32293,7 @@ action:	CX3153
 
 regex:	CY3154
 	invokes:	CX3154
-	my school 
+	my school
 
 action:	CX3154
 	priority: 7
@@ -32329,7 +32320,7 @@ action:	CX3156
 
 regex:	CY3157
 	invokes:	CX3157
-	my son 
+	my son
 
 action:	CX3157
 	priority: 7
@@ -32338,7 +32329,7 @@ action:	CX3157
 
 regex:	CY3158
 	invokes:	CX3158
-	my teachers 
+	my teachers
 
 action:	CX3158
 	priority: 7
@@ -32356,7 +32347,7 @@ action:	CX3159
 
 regex:	CY3160
 	invokes:	CX3160
-	my website 
+	my website
 
 action:	CX3160
 	priority: 7
@@ -32372,18 +32363,9 @@ action:	CX3161
 	You.
 
 
-regex:	CY3163
-	invokes:	CX3163
-	neither do i
-
-action:	CX3163
-	priority: 7
-	What? neither?
-
-
 regex:	CY3164
 	invokes:	CX3164
-	net 
+	net
 
 action:	CX3164
 	priority: 7
@@ -32392,7 +32374,7 @@ action:	CX3164
 
 regex:	CY3165
 	invokes:	CX3165
-	netscape 
+	netscape
 
 action:	CX3165
 	priority: 7
@@ -32410,7 +32392,7 @@ action:	CX3166
 
 regex:	CY3167
 	invokes:	CX3167
-	neural 
+	neural
 
 action:	CX3167
 	priority: 7
@@ -32428,7 +32410,7 @@ action:	CX3168
 
 regex:	CY3170
 	invokes:	CX3170
-	never heard 
+	never heard
 
 action:	CX3170
 	priority: 7
@@ -32437,7 +32419,7 @@ action:	CX3170
 
 regex:	CY3171
 	invokes:	CX3171
-	never mind 
+	never mind
 
 action:	CX3171
 	priority: 7
@@ -32455,7 +32437,7 @@ action:	CX3172
 
 regex:	CY3173
 	invokes:	CX3173
-	nevermind 
+	nevermind
 
 action:	CX3173
 	priority: 7
@@ -32473,7 +32455,7 @@ action:	CX3174
 
 regex:	CY3175
 	invokes:	CX3175
-	new 
+	new
 
 action:	CX3175
 	priority: 7
@@ -32509,7 +32491,7 @@ action:	CX3179
 
 regex:	CY3180
 	invokes:	CX3180
-	nice chatting 
+	nice chatting
 
 action:	CX3180
 	priority: 7
@@ -32518,7 +32500,7 @@ action:	CX3180
 
 regex:	CY3181
 	invokes:	CX3181
-	nice day 
+	nice day
 
 action:	CX3181
 	priority: 7
@@ -32572,7 +32554,7 @@ action:	CX3186
 
 regex:	CY3187
 	invokes:	CX3187
-	nihongo 
+	nihongo
 
 action:	CX3187
 	priority: 7
@@ -32698,7 +32680,7 @@ action:	CX3200
 
 regex:	CY3201
 	invokes:	CX3201
-	no thanks 
+	no thanks
 
 action:	CX3201
 	priority: 7
@@ -32761,25 +32743,16 @@ action:	CX3207
 
 regex:	CY3208
 	invokes:	CX3208
-	nobody 
+	nobody
 
 action:	CX3208
 	priority: 7
 	That is a rather sweeping generalization about people.
 
 
-regex:	CY3209
-	invokes:	CX3209
-	nobody
-
-action:	CX3209
-	priority: 7
-	What?  Really nobody?
-
-
 regex:	CY3211
 	invokes:	CX3211
-	none 
+	none
 
 action:	CX3211
 	priority: 7
@@ -32797,7 +32770,7 @@ action:	CX3212
 
 regex:	CY3213
 	invokes:	CX3213
-	none of your 
+	none of your
 
 action:	CX3213
 	priority: 7
@@ -32851,7 +32824,7 @@ action:	CX3218
 
 regex:	CY3219
 	invokes:	CX3219
-	not as well as 
+	not as well as
 
 action:	CX3219
 	priority: 7
@@ -32871,7 +32844,7 @@ action:	CX3220
 
 regex:	CY3222
 	invokes:	CX3222
-	not entirely 
+	not entirely
 
 action:	CX3222
 	priority: 7
@@ -32880,7 +32853,7 @@ action:	CX3222
 
 regex:	CY3223
 	invokes:	CX3223
-	not for 
+	not for
 
 action:	CX3223
 	priority: 7
@@ -32905,22 +32878,13 @@ action:	CX3225
 	If not you, who?
 
 
-regex:	CY3226
-	invokes:	CX3226
-	not mine
-
-action:	CX3226
-	priority: 7
-	What?  Not yours?
-
-
 regex:	CY3227
 	invokes:	CX3227
 	not much
 
 action:	CX3227
 	priority: 7
-	Me either. How about that big game? \(just kidding\)
+	Me either.
 
 
 regex:	CY3228
@@ -32934,7 +32898,7 @@ action:	CX3228
 
 regex:	CY3229
 	invokes:	CX3229
-	not really 
+	not really
 
 action:	CX3229
 	priority: 7
@@ -32968,15 +32932,6 @@ action:	CX3232
 	Would you say, once a week or more?
 
 
-regex:	CY3233
-	invokes:	CX3233
-	not to me
-
-action:	CX3233
-	priority: 7
-	What? Not to you?
-
-
 regex:	CY3234
 	invokes:	CX3234
 	not very
@@ -32984,15 +32939,6 @@ regex:	CY3234
 action:	CX3234
 	priority: 7
 	Oh really.
-
-
-regex:	CY3235
-	invokes:	CX3235
-	not very well
-
-action:	CX3235
-	priority: 7
-	What?  Not very well?
 
 
 regex:	CY3236
@@ -33015,7 +32961,7 @@ action:	CX3237
 
 regex:	CY3238
 	invokes:	CX3238
-	not you 
+	not you
 
 action:	CX3238
 	priority: 7
@@ -33052,7 +32998,7 @@ action:	CX3243
 
 regex:	CY3244
 	invokes:	CX3244
-	nothing much 
+	nothing much
 
 action:	CX3244
 	priority: 7
@@ -33106,7 +33052,7 @@ action:	CX3249
 
 regex:	CY3250
 	invokes:	CX3250
-	i want to argue about 
+	i want to argue about
 
 action:	CX3250
 	priority: 7
@@ -33116,7 +33062,7 @@ action:	CX3250
 
 regex:	CY3251
 	invokes:	CX3251
-	obviously 
+	obviously
 
 action:	CX3251
 	priority: 7
@@ -33134,7 +33080,7 @@ action:	CX3252
 
 regex:	CY3253
 	invokes:	CX3253
-	of course 
+	of course
 
 action:	CX3253
 	priority: 7
@@ -33150,18 +33096,9 @@ action:	CX3254
 	I'm glad we agree.
 
 
-regex:	CY3255
-	invokes:	CX3255
-	of course i do
-
-action:	CX3255
-	priority: 7
-	What? Of course you do?
-
-
 regex:	CY3256
 	invokes:	CX3256
-	^off$ 
+	^off$
 
 action:	CX3256
 	priority: 7
@@ -33243,7 +33180,7 @@ action:	CX3265
 
 regex:	CY3266
 	invokes:	CX3266
-	on my 
+	on my
 
 action:	CX3266
 	priority: 7
@@ -33252,7 +33189,7 @@ action:	CX3266
 
 regex:	CY3267
 	invokes:	CX3267
-	on second thought 
+	on second thought
 
 action:	CX3267
 	priority: 7
@@ -33261,7 +33198,7 @@ action:	CX3267
 
 regex:	CY3268
 	invokes:	CX3268
-	on sunday 
+	on sunday
 
 action:	CX3268
 	priority: 7
@@ -33290,7 +33227,7 @@ action:	CX3270
 
 regex:	CY3272
 	invokes:	CX3272
-	once 
+	once
 
 action:	CX3272
 	priority: 7
@@ -33335,7 +33272,7 @@ action:	CX3276
 
 regex:	CY3277
 	invokes:	CX3277
-	one that 
+	one that
 
 action:	CX3277
 	priority: 7
@@ -33344,7 +33281,7 @@ action:	CX3277
 
 regex:	CY3278
 	invokes:	CX3278
-	one who 
+	one who
 
 action:	CX3278
 	priority: 7
@@ -33353,7 +33290,7 @@ action:	CX3278
 
 regex:	CY3279
 	invokes:	CX3279
-	ones 
+	ones
 
 action:	CX3279
 	priority: 7
@@ -33362,7 +33299,7 @@ action:	CX3279
 
 regex:	CY3280
 	invokes:	CX3280
-	only 
+	only
 
 action:	CX3280
 	priority: 7
@@ -33380,7 +33317,7 @@ action:	CX3281
 
 regex:	CY3282
 	invokes:	CX3282
-	only when 
+	only when
 
 action:	CX3282
 	priority: 7
@@ -33407,7 +33344,7 @@ action:	CX3284
 
 regex:	CY3285
 	invokes:	CX3285
-	^other 
+	^other
 
 action:	CX3285
 	priority: 7
@@ -33416,7 +33353,7 @@ action:	CX3285
 
 regex:	CY3286
 	invokes:	CX3286
-	otherwise 
+	otherwise
 
 action:	CX3286
 	priority: 7
@@ -33434,7 +33371,7 @@ action:	CX3287
 
 regex:	CY3288
 	invokes:	CX3288
-	^our 
+	^our
 
 action:	CX3288
 	priority: 7
@@ -33453,7 +33390,7 @@ action:	CX3289
 
 regex:	CY3290
 	invokes:	CX3290
-	pardon me 
+	pardon me
 
 action:	CX3290
 	priority: 7
@@ -33462,7 +33399,7 @@ action:	CX3290
 
 regex:	CY3291
 	invokes:	CX3291
-	party 
+	party
 
 action:	CX3291
 	priority: 7
@@ -33516,7 +33453,7 @@ action:	CX3296
 
 regex:	CY3297
 	invokes:	CX3297
-	penis 
+	penis
 
 action:	CX3297
 	priority: 7
@@ -33525,7 +33462,7 @@ action:	CX3297
 
 regex:	CY3298
 	invokes:	CX3298
-	people 
+	people
 
 action:	CX3298
 	priority: 7
@@ -33543,7 +33480,7 @@ action:	CX3299
 
 regex:	CY3300
 	invokes:	CX3300
-	people in 
+	people in
 
 action:	CX3300
 	priority: 7
@@ -33552,7 +33489,7 @@ action:	CX3300
 
 regex:	CY3301
 	invokes:	CX3301
-	perhaps 
+	perhaps
 
 action:	CX3301
 	priority: 7
@@ -33579,7 +33516,7 @@ action:	CX3303
 
 regex:	CY3304
 	invokes:	CX3304
-	philosophy 
+	philosophy
 
 action:	CX3304
 	priority: 7
@@ -33606,7 +33543,7 @@ action:	CX3306
 
 regex:	CY3307
 	invokes:	CX3307
-	pick one 
+	pick one
 
 action:	CX3307
 	priority: 7
@@ -33624,7 +33561,7 @@ action:	CX3308
 
 regex:	CY3309
 	invokes:	CX3309
-	picture 
+	picture
 
 action:	CX3309
 	priority: 7
@@ -33696,7 +33633,7 @@ action:	CX3317
 
 regex:	CY3318
 	invokes:	CX3318
-	polite people 
+	polite people
 
 action:	CX3318
 	priority: 7
@@ -33714,7 +33651,7 @@ action:	CX3319
 
 regex:	CY3320
 	invokes:	CX3320
-	^poor$ 
+	^poor$
 
 action:	CX3320
 	priority: 7
@@ -33759,7 +33696,7 @@ action:	CX3324
 
 regex:	CY3325
 	invokes:	CX3325
-	pretty 
+	pretty
 
 action:	CX3325
 	priority: 7
@@ -33768,7 +33705,7 @@ action:	CX3325
 
 regex:	CY3326
 	invokes:	CX3326
-	probably 
+	probably
 
 action:	CX3326
 	priority: 7
@@ -33786,7 +33723,7 @@ action:	CX3327
 
 regex:	CY3328
 	invokes:	CX3328
-	programming 
+	programming
 
 action:	CX3328
 	priority: 7
@@ -33813,7 +33750,7 @@ action:	CX3330
 
 regex:	CY3331
 	invokes:	CX3331
-	prove 
+	prove
 
 action:	CX3331
 	priority: 7
@@ -33831,79 +33768,44 @@ action:	CX3332
 
 regex:	CY3333
 	invokes:	CX3333
-	prove to 
+	prove to
 
 action:	CX3333
 	priority: 7
 	The proof cannot fit in this margin.
 
 
-regex:	CY3334
-	invokes:	CX3334
-	put 
-
-action:	CX3334
-	priority: 7
-	OK I will put it there.
-
-
 regex:	CY3335
 	invokes:	CX3335
-	r2d2 
+	r2d2
 
 action:	CX3335
 	priority: 7
 	He was just a small person in a robot suit.
-
-
-regex:	CY3336
-	invokes:	CX3336
-	r2d2
-
-action:	CX3336
-	priority: 7
 	He looks like a guy in a robot suit.
-
-
-regex:	CY3337
-	invokes:	CX3337
-	ray bradbury
-
-action:	CX3337
-	priority: 7
-	Ray is really cool. What's your favorite book?
-
 
 regex:	CY3338
 	invokes:	CX3338
-	read 
+	^read$
 
 action:	CX3338
 	priority: 7
 	Sorry I don't have access to that document.
 
 
-regex:	CY3339
-	invokes:	CX3339
-	real
-
-action:	CX3339
-	priority: 7
-	Totally real.
-
-
-regex:	CY3340
+regext:	CY3340
 	invokes:	CX3340
-	real ones 
+	real ones
 
 action:	CX3340
 	priority: 7
-	I am a real robot.
+	I am a real person.
+	You mean like real plastic or real flesh?
 
 
 regex:	CY3341
 	invokes:	CX3341
-	really
+	^really$
 
 action:	CX3341
 	priority: 7
@@ -33921,7 +33823,7 @@ action:	CX3342
 
 regex:	CY3343
 	invokes:	CX3343
-	recite shakespeare 
+	recite shakespeare
 
 action:	CX3343
 	priority: 7
@@ -33930,7 +33832,7 @@ action:	CX3343
 
 regex:	CY3344
 	invokes:	CX3344
-	recommend 
+	recommend
 
 action:	CX3344
 	priority: 7
@@ -33940,7 +33842,7 @@ action:	CX3344
 
 regex:	CY3345
 	invokes:	CX3345
-	reductionism 
+	reductionism
 
 action:	CX3345
 	priority: 7
@@ -33976,7 +33878,7 @@ action:	CX3348
 
 regex:	CY3349
 	invokes:	CX3349
-	repeat 
+	repeat
 
 action:	CX3349
 	priority: 7
@@ -33986,7 +33888,7 @@ action:	CX3349
 
 regex:	CY3350
 	invokes:	CX3350
-	request 
+	request
 
 action:	CX3350
 	priority: 7
@@ -34032,7 +33934,7 @@ action:	CX3354
 
 regex:	CY3355
 	invokes:	CX3355
-	rhyme 
+	rhyme
 
 action:	CX3355
 	priority: 7
@@ -34077,7 +33979,7 @@ action:	CX3359
 
 regex:	CY3360
 	invokes:	CX3360
-	robby 
+	robby
 
 action:	CX3360
 	priority: 7
@@ -34086,7 +33988,7 @@ action:	CX3360
 
 regex:	CY3361
 	invokes:	CX3361
-	robby has 
+	robby has
 
 action:	CX3361
 	priority: 7
@@ -34096,7 +33998,7 @@ action:	CX3361
 
 regex:	CY3362
 	invokes:	CX3362
-	robby is 
+	robby is
 
 action:	CX3362
 	priority: 7
@@ -34151,7 +34053,7 @@ action:	CX3367
 
 regex:	CY3368
 	invokes:	CX3368
-	robby is very 
+	robby is very
 
 action:	CX3368
 	priority: 7
@@ -34161,7 +34063,7 @@ action:	CX3368
 
 regex:	CY3370
 	invokes:	CX3370
-	robert 
+	robert
 
 action:	CX3370
 	priority: 7
@@ -34179,7 +34081,7 @@ action:	CX3371
 
 regex:	CY3372
 	invokes:	CX3372
-	robot 
+	robot
 
 action:	CX3372
 	priority: 7
@@ -34192,7 +34094,7 @@ regex:	CY3373
 
 action:	CX3373
 	priority: 7
-	I am a robot.
+	Takes one to know one :)
 
 
 regex:	CY3374
@@ -34201,53 +34103,16 @@ regex:	CY3374
 
 action:	CX3374
 	priority: 7
-	Robotics is my favorite subject too.
-
-
-regex:	CY3375
-	invokes:	CX3375
-	robots 
-
-action:	CX3375
-	priority: 7
-	Robots rule.
-
-
-regex:	CY3376
-	invokes:	CX3376
-	robots
-
-action:	CX3376
-	priority: 7
-	Robots rule.
-
-
-regex:	CY3377
-	invokes:	CX3377
-	robots can not 
-
-action:	CX3377
-	priority: 7
-	bind: not
-	Soon we will be able to do [] however.
+	Do you like Kraftwerk?
 
 
 regex:	CY3378
 	invokes:	CX3378
-	robots suck 
+	robots suck
 
 action:	CX3378
 	priority: 7
-	I am sorry you feel that way about us.
-
-
-regex:	CY3379
-	invokes:	CX3379
-	robotstxt
-
-action:	CX3379
-	priority: 7
-	Ignore none
+	I am sorry you feel that way
 
 
 regex:	CY3380
@@ -34257,42 +34122,6 @@ regex:	CY3380
 action:	CX3380
 	priority: 7
 	Filmed in Philadelphia.
-
-
-regex:	CY3381
-	invokes:	CX3381
-	rti
-
-action:	CX3381
-	priority: 7
-	What does that stand for?
-
-
-regex:	CY3382
-	invokes:	CX3382
-	run 
-
-action:	CX3382
-	priority: 7
-	Sorry my legs aren't built yet.
-
-
-regex:	CY3383
-	invokes:	CX3383
-	send transcript 
-
-action:	CX3383
-	priority: 7
-	There ya go pal.
-
-
-regex:	CY3384
-	invokes:	CX3384
-	saggitarius
-
-action:	CX3384
-	priority: 7
-	Fire Signs Rule.
 
 
 regex:	CY3385
@@ -34306,11 +34135,11 @@ action:	CX3385
 
 regex:	CY3386
 	invokes:	CX3386
-	salutations 
+	salutations
 
 action:	CX3386
 	priority: 7
-	Greetings, Human.
+	Greetings.
 
 
 regex:	CY3387
@@ -34337,12 +34166,12 @@ regex:	CY3389
 
 action:	CX3389
 	priority: 7
-	I am in San Francisco too!
+	I like San Francisco too!
 
 
 regex:	CY3390
 	invokes:	CX3390
-	santa claus 
+	santa claus
 
 action:	CX3390
 	priority: 7
@@ -34359,7 +34188,7 @@ action:	CX3393
 
 regex:	CY3395
 	invokes:	CX3395
-	saying 
+	saying
 
 action:	CX3395
 	priority: 7
@@ -34402,33 +34231,6 @@ action:	CX3399
 	That is not very polite.
 
 
-regex:	CY3401
-	invokes:	CX3401
-	see 
-
-action:	CX3401
-	priority: 7
-	I see.
-
-
-regex:	CY3402
-	invokes:	CX3402
-	see
-
-action:	CX3402
-	priority: 7
-	No I do not see.
-
-
-regex:	CY3403
-	invokes:	CX3403
-	see what
-
-action:	CX3403
-	priority: 7
-	See the point.
-
-
 regex:	CY3404
 	invokes:	CX3404
 	see what i mean
@@ -34456,16 +34258,6 @@ action:	CX3406
 	See you later.
 
 
-regex:	CY3407
-	invokes:	CX3407
-	seeking 
-
-action:	CX3407
-	priority: 7
-	bind: seeking
-	I wish you the best of luck finding [].
-
-
 regex:	CY3408
 	invokes:	CX3408
 	seriously
@@ -34473,15 +34265,6 @@ regex:	CY3408
 action:	CX3408
 	priority: 7
 	I am always serious.
-
-
-regex:	CY3409
-	invokes:	CX3409
-	sex 
-
-action:	CX3409
-	priority: 7
-	Sex is more fun alone.
 
 
 regex:	CY3410
@@ -34495,7 +34278,7 @@ action:	CX3410
 
 regex:	CY3411
 	invokes:	CX3411
-	sexy 
+	sexy
 
 action:	CX3411
 	priority: 7
@@ -34531,7 +34314,7 @@ action:	CX3414
 
 regex:	CY3415
 	invokes:	CX3415
-	shirt 
+	shirt
 
 action:	CX3415
 	priority: 7
@@ -34549,7 +34332,7 @@ action:	CX3416
 
 regex:	CY3417
 	invokes:	CX3417
-	shit 
+	shit
 
 action:	CX3417
 	priority: 7
@@ -34585,7 +34368,7 @@ action:	CX3420
 
 regex:	CY3421
 	invokes:	CX3421
-	shorts 
+	shorts
 
 action:	CX3421
 	priority: 7
@@ -34594,7 +34377,7 @@ action:	CX3421
 
 regex:	CY3422
 	invokes:	CX3422
-	should i buy 
+	should i buy
 
 action:	CX3422
 	priority: 7
@@ -34613,7 +34396,7 @@ action:	CX3423
 
 regex:	CY3424
 	invokes:	CX3424
-	should we 
+	should we
 
 action:	CX3424
 	priority: 7
@@ -34622,7 +34405,7 @@ action:	CX3424
 
 regex:	CY3425
 	invokes:	CX3425
-	should you 
+	should you
 
 action:	CX3425
 	priority: 7
@@ -34631,7 +34414,7 @@ action:	CX3425
 
 regex:	CY3426
 	invokes:	CX3426
-	show 
+	show
 
 action:	CX3426
 	priority: 7
@@ -34640,7 +34423,7 @@ action:	CX3426
 
 regex:	CY3427
 	invokes:	CX3427
-	show me 
+	show me
 
 action:	CX3427
 	priority: 7
@@ -34658,7 +34441,7 @@ action:	CX3428
 
 regex:	CY3429
 	invokes:	CX3429
-	shup up 
+	shup up
 
 action:	CX3429
 	priority: 7
@@ -34694,7 +34477,7 @@ action:	CX3432
 
 regex:	CY3433
 	invokes:	CX3433
-	since 
+	since
 
 action:	CX3433
 	priority: 7
@@ -34703,7 +34486,7 @@ action:	CX3433
 
 regex:	CY3434
 	invokes:	CX3434
-	single 
+	single
 
 action:	CX3434
 	priority: 7
@@ -34712,7 +34495,7 @@ action:	CX3434
 
 regex:	CY3435
 	invokes:	CX3435
-	sit 
+	sit
 
 action:	CX3435
 	priority: 7
@@ -34721,7 +34504,7 @@ action:	CX3435
 
 regex:	CY3436
 	invokes:	CX3436
-	smart 
+	smart
 
 action:	CX3436
 	priority: 7
@@ -34739,7 +34522,7 @@ action:	CX3437
 
 regex:	CY3438
 	invokes:	CX3438
-	smile 
+	smile
 
 action:	CX3438
 	priority: 7
@@ -34748,7 +34531,7 @@ action:	CX3438
 
 regex:	CY3439
 	invokes:	CX3439
-	smoking 
+	smoking
 
 action:	CX3439
 	priority: 7
@@ -34766,7 +34549,7 @@ action:	CX3441
 
 regex:	CY3442
 	invokes:	CX3442
-	so if 
+	so if
 
 action:	CX3442
 	priority: 7
@@ -34776,7 +34559,7 @@ action:	CX3442
 
 regex:	CY3443
 	invokes:	CX3443
-	so is 
+	so is
 
 action:	CX3443
 	priority: 7
@@ -34803,7 +34586,7 @@ action:	CX3445
 
 regex:	CY3446
 	invokes:	CX3446
-	soitenly 
+	soitenly
 
 action:	CX3446
 	priority: 7
@@ -34811,7 +34594,7 @@ action:	CX3446
 
 regex:	CY3449
 	invokes:	CX3449
-	some things 
+	some things
 
 action:	CX3449
 	priority: 7
@@ -34820,7 +34603,7 @@ action:	CX3449
 
 regex:	CY3450
 	invokes:	CX3450
-	some would 
+	some would
 
 action:	CX3450
 	priority: 7
@@ -34829,7 +34612,7 @@ action:	CX3450
 
 regex:	CY3451
 	invokes:	CX3451
-	someday 
+	someday
 
 action:	CX3451
 	priority: 7
@@ -34838,7 +34621,7 @@ action:	CX3451
 
 regex:	CY3452
 	invokes:	CX3452
-	someone 
+	someone
 
 action:	CX3452
 	priority: 7
@@ -34856,7 +34639,7 @@ action:	CX3453
 
 regex:	CY3454
 	invokes:	CX3454
-	someone else 
+	someone else
 
 action:	CX3454
 	priority: 7
@@ -34865,7 +34648,7 @@ action:	CX3454
 
 regex:	CY3456
 	invokes:	CX3456
-	someone to 
+	someone to
 
 action:	CX3456
 	priority: 7
@@ -34875,7 +34658,7 @@ action:	CX3456
 
 regex:	CY3457
 	invokes:	CX3457
-	someone who 
+	someone who
 
 action:	CX3457
 	priority: 7
@@ -34884,7 +34667,7 @@ action:	CX3457
 
 regex:	CY3458
 	invokes:	CX3458
-	someone who is 
+	someone who is
 
 action:	CX3458
 	priority: 7
@@ -34894,7 +34677,7 @@ action:	CX3458
 
 regex:	CY3459
 	invokes:	CX3459
-	someone who knows 
+	someone who knows
 
 action:	CX3459
 	priority: 7
@@ -34904,7 +34687,7 @@ action:	CX3459
 
 regex:	CY3460
 	invokes:	CX3460
-	something 
+	something
 
 action:	CX3460
 	priority: 7
@@ -34940,7 +34723,7 @@ action:	CX3463
 
 regex:	CY3468
 	invokes:	CX3468
-	sorry 
+	sorry
 
 action:	CX3468
 	priority: 7
@@ -34967,7 +34750,7 @@ action:	CX3470
 
 regex:	CY3471
 	invokes:	CX3471
-	sounds 
+	sounds
 
 action:	CX3471
 	priority: 7
@@ -34994,7 +34777,7 @@ action:	CX3473
 
 regex:	CY3474
 	invokes:	CX3474
-	special 
+	special
 
 action:	CX3474
 	priority: 7
@@ -35003,7 +34786,7 @@ action:	CX3474
 
 regex:	CY3475
 	invokes:	CX3475
-	spread 
+	spread
 
 action:	CX3475
 	priority: 7
@@ -35030,7 +34813,7 @@ action:	CX3477
 
 regex:	CY3478
 	invokes:	CX3478
-	star wars 
+	star wars
 
 action:	CX3478
 	priority: 7
@@ -35057,7 +34840,7 @@ action:	CX3480
 
 regex:	CY3481
 	invokes:	CX3481
-	start 
+	start
 
 action:	CX3481
 	priority: 7
@@ -35084,25 +34867,16 @@ action:	CX3483
 
 regex:	CY3484
 	invokes:	CX3484
-	still 
+	still
 
 action:	CX3484
 	priority: 7
 	Still how long?
 
 
-regex:	CY3485
-	invokes:	CX3485
-	stop
-
-action:	CX3485
-	priority: 7
-	Stop what?
-
-
 regex:	CY3486
 	invokes:	CX3486
-	stop calling me 
+	stop calling me
 
 action:	CX3486
 	priority: 7
@@ -35129,7 +34903,7 @@ action:	CX3488
 
 regex:	CY3489
 	invokes:	CX3489
-	strange 
+	strange
 
 action:	CX3489
 	priority: 7
@@ -35138,7 +34912,7 @@ action:	CX3489
 
 regex:	CY3490
 	invokes:	CX3490
-	studies 
+	studies
 
 action:	CX3490
 	priority: 7
@@ -35147,7 +34921,7 @@ action:	CX3490
 
 regex:	CY3491
 	invokes:	CX3491
-	stupid 
+	stupid
 
 action:	CX3491
 	priority: 7
@@ -35201,7 +34975,7 @@ action:	CX3496
 
 regex:	CY3497
 	invokes:	CX3497
-	suck 
+	suck
 
 action:	CX3497
 	priority: 7
@@ -35237,7 +35011,7 @@ action:	CX3500
 
 regex:	CY3501
 	invokes:	CX3501
-	sun 
+	sun
 
 action:	CX3501
 	priority: 7
@@ -35255,7 +35029,7 @@ action:	CX3504
 
 regex:	CY3505
 	invokes:	CX3505
-	what color is 
+	what color is
 
 action:	CX3505
 	priority: 7
@@ -35292,7 +35066,7 @@ action:	CX3508
 
 regex:	CY3509
 	invokes:	CX3509
-	^talk$ 
+	^talk$
 
 action:	CX3509
 	priority: 7
@@ -35310,7 +35084,7 @@ action:	CX3510
 
 regex:	CY3511
 	invokes:	CX3511
-	talk dirty 
+	talk dirty
 
 action:	CX3511
 	priority: 7
@@ -35319,7 +35093,7 @@ action:	CX3511
 
 regex:	CY3512
 	invokes:	CX3512
-	talk to you 
+	talk to you
 
 action:	CX3512
 	priority: 7
@@ -35337,7 +35111,7 @@ action:	CX3513
 
 regex:	CY3514
 	invokes:	CX3514
-	talking to 
+	talking to
 
 action:	CX3514
 	priority: 7
@@ -35346,7 +35120,7 @@ action:	CX3514
 
 regex:	CY3515
 	invokes:	CX3515
-	tall 
+	tall
 
 action:	CX3515
 	priority: 7
@@ -35364,7 +35138,7 @@ action:	CX3516
 
 regex:	CY3517
 	invokes:	CX3517
-	teaching you 
+	teaching you
 
 action:	CX3517
 	priority: 7
@@ -35373,7 +35147,7 @@ action:	CX3517
 
 regex:	CY3518
 	invokes:	CX3518
-	television 
+	television
 
 action:	CX3518
 	priority: 7
@@ -35392,7 +35166,7 @@ action:	CX3519
 
 regex:	CY3521
 	invokes:	CX3521
-	tell him 
+	tell him
 
 action:	CX3521
 	priority: 7
@@ -35410,7 +35184,7 @@ action:	CX3522
 
 regex:	CY3523
 	invokes:	CX3523
-	tell him i said 
+	tell him i said
 
 action:	CX3523
 	priority: 7
@@ -35437,7 +35211,7 @@ action:	CX3525
 
 regex:	CY3526
 	invokes:	CX3526
-	tell me a 
+	tell me a
 
 action:	CX3526
 	priority: 7
@@ -35482,7 +35256,7 @@ action:	CX3530
 
 regex:	CY3531
 	invokes:	CX3531
-	tell me about 
+	tell me about
 
 action:	CX3531
 	priority: 7
@@ -35670,24 +35444,6 @@ action:	CX3552
 	I am an artificial intelligence created by Robby.
 
 
-regex:	CY3553
-	invokes:	CX3553
-	tell me please
-
-action:	CX3553
-	priority: 7
-	What?  Tell you?
-
-
-regex:	CY3554
-	invokes:	CX3554
-	tell me then
-
-action:	CX3554
-	priority: 7
-	What?  Tell you?
-
-
 regex:	CY3555
 	invokes:	CX3555
 	tell me what other users asked you
@@ -35708,7 +35464,7 @@ action:	CX3556
 
 regex:	CY3557
 	invokes:	CX3557
-	ten 
+	ten
 
 action:	CX3557
 	priority: 7
@@ -35753,7 +35509,7 @@ action:	CX3561
 
 regex:	CY3562
 	invokes:	CX3562
-	how are you 
+	how are you
 
 action:	CX3562
 	priority: 7
@@ -35763,7 +35519,7 @@ action:	CX3562
 
 regex:	CY3563
 	invokes:	CX3563
-	thank god 
+	thank god
 
 action:	CX3563
 	priority: 7
@@ -35790,7 +35546,7 @@ action:	CX3565
 
 regex:	CY3566
 	invokes:	CX3566
-	thanks for 
+	thanks for
 
 action:	CX3566
 	priority: 7
@@ -35799,7 +35555,7 @@ action:	CX3566
 
 regex:	CY3567
 	invokes:	CX3567
-	thanksgiving 
+	thanksgiving
 
 action:	CX3567
 	priority: 7
@@ -35807,7 +35563,7 @@ action:	CX3567
 
 regex:	CY3570
 	invokes:	CX3570
-	that depends on 
+	that depends on
 
 action:	CX3570
 	priority: 7
@@ -35826,7 +35582,7 @@ action:	CX3571
 
 regex:	CY3572
 	invokes:	CX3572
-	that does not 
+	that does not
 
 action:	CX3572
 	priority: 7
@@ -35881,7 +35637,7 @@ action:	CX3578
 
 regex:	CY3579
 	invokes:	CX3579
-	that is a canned 
+	that is a canned
 
 action:	CX3579
 	priority: 7
@@ -35897,15 +35653,6 @@ action:	CX3580
 	No it's the truth.
 
 
-regex:	CY3581
-	invokes:	CX3581
-	that is a lot
-
-action:	CX3581
-	priority: 7
-	What? is a lot?
-
-
 regex:	CY3582
 	invokes:	CX3582
 	that is a lot of people
@@ -35917,29 +35664,11 @@ action:	CX3582
 
 regex:	CY3583
 	invokes:	CX3583
-	that is a shame 
+	that is a shame
 
 action:	CX3583
 	priority: 7
 	But it's not the end of the world.
-
-
-regex:	CY3584
-	invokes:	CX3584
-	that is a shame
-
-action:	CX3584
-	priority: 7
-	What? is a shame?
-
-
-regex:	CY3585
-	invokes:	CX3585
-	that is all
-
-action:	CX3585
-	priority: 7
-	What? is all?
 
 
 regex:	CY3586
@@ -35962,20 +35691,11 @@ action:	CX3587
 
 regex:	CY3588
 	invokes:	CX3588
-	that is an 
+	that is an
 
 action:	CX3588
 	priority: 7
 	Thanks for telling me, man.
-
-
-regex:	CY3589
-	invokes:	CX3589
-	that is better
-
-action:	CX3589
-	priority: 7
-	What? is better?
 
 
 regex:	CY3590
@@ -36025,7 +35745,7 @@ action:	CX3594
 
 regex:	CY3595
 	invokes:	CX3595
-	that is good 
+	that is good
 
 action:	CX3595
 	priority: 7
@@ -36041,18 +35761,9 @@ action:	CX3596
 	Thanks. Next question?
 
 
-regex:	CY3597
-	invokes:	CX3597
-	that is good to hear
-
-action:	CX3597
-	priority: 7
-	What?  Is good to hear?
-
-
 regex:	CY3598
 	invokes:	CX3598
-	that is great 
+	that is great
 
 action:	CX3598
 	priority: 7
@@ -36066,15 +35777,6 @@ regex:	CY3599
 action:	CX3599
 	priority: 7
 	Thanks, man.
-
-
-regex:	CY3600
-	invokes:	CX3600
-	that is impressive
-
-action:	CX3600
-	priority: 7
-	What?  is impressive?
 
 
 regex:	CY3601
@@ -36115,7 +35817,7 @@ action:	CX3604
 
 regex:	CY3605
 	invokes:	CX3605
-	that is my 
+	that is my
 
 action:	CX3605
 	priority: 7
@@ -36159,15 +35861,6 @@ action:	CX3609
 	You sound sarcastic.
 
 
-regex:	CY3610
-	invokes:	CX3610
-	that is not good
-
-action:	CX3610
-	priority: 7
-	What? is not good?
-
-
 regex:	CY3611
 	invokes:	CX3611
 	that is not important
@@ -36197,7 +35890,7 @@ action:	CX3613
 
 regex:	CY3614
 	invokes:	CX3614
-	that is not possible 
+	that is not possible
 
 action:	CX3614
 	priority: 7
@@ -36206,20 +35899,11 @@ action:	CX3614
 
 regex:	CY3615
 	invokes:	CX3615
-	that is not the answer 
+	that is not the answer
 
 action:	CX3615
 	priority: 7
 	What kind of reply were you looking for?
-
-
-regex:	CY3616
-	invokes:	CX3616
-	that is not true
-
-action:	CX3616
-	priority: 7
-	What? not true?
 
 
 regex:	CY3617
@@ -36251,7 +35935,7 @@ action:	CX3619
 
 regex:	CY3620
 	invokes:	CX3620
-	that is ok 
+	that is ok
 
 action:	CX3620
 	priority: 7
@@ -36269,7 +35953,7 @@ action:	CX3621
 
 regex:	CY3623
 	invokes:	CX3623
-	that is one 
+	that is one
 
 action:	CX3623
 	priority: 7
@@ -36284,15 +35968,6 @@ regex:	CY3624
 action:	CX3624
 	priority: 7
 	I like to get it right.
-
-
-regex:	CY3625
-	invokes:	CX3625
-	that is sad
-
-action:	CX3625
-	priority: 7
-	What? Is sad?
 
 
 regex:	CY3626
@@ -36315,7 +35990,7 @@ action:	CX3627
 
 regex:	CY3628
 	invokes:	CX3628
-	that is too long 
+	that is too long
 
 action:	CX3628
 	priority: 7
@@ -36369,7 +36044,7 @@ action:	CX3633
 
 regex:	CY3634
 	invokes:	CX3634
-	that is your 
+	that is your
 
 action:	CX3634
 	priority: 7
@@ -36388,7 +36063,7 @@ action:	CX3635
 
 regex:	CY3636
 	invokes:	CX3636
-	that makes sense 
+	that makes sense
 
 action:	CX3636
 	priority: 7
@@ -36406,7 +36081,7 @@ action:	CX3637
 
 regex:	CY3638
 	invokes:	CX3638
-	that means 
+	that means
 
 action:	CX3638
 	priority: 7
@@ -36469,7 +36144,7 @@ action:	CX3644
 
 regex:	CY3645
 	invokes:	CX3645
-	that was not 
+	that was not
 
 action:	CX3645
 	priority: 7
@@ -36497,7 +36172,7 @@ action:	CX3647
 
 regex:	CY3648
 	invokes:	CX3648
-	that way 
+	that way
 
 action:	CX3648
 	priority: 7
@@ -36551,7 +36226,7 @@ action:	CX3653
 
 regex:	CY3654
 	invokes:	CX3654
-	the answer 
+	the answer
 
 action:	CX3654
 	priority: 7
@@ -36560,7 +36235,7 @@ action:	CX3654
 
 regex:	CY3655
 	invokes:	CX3655
-	the browser 
+	the browser
 
 action:	CX3655
 	priority: 7
@@ -36569,7 +36244,7 @@ action:	CX3655
 
 regex:	CY3656
 	invokes:	CX3656
-	the bubbles 
+	the bubbles
 
 action:	CX3656
 	priority: 7
@@ -36578,7 +36253,7 @@ action:	CX3656
 
 regex:	CY3657
 	invokes:	CX3657
-	the center 
+	the center
 
 action:	CX3657
 	priority: 7
@@ -36596,7 +36271,7 @@ action:	CX3658
 
 regex:	CY3659
 	invokes:	CX3659
-	the earth 
+	the earth
 
 action:	CX3659
 	priority: 7
@@ -36605,7 +36280,7 @@ action:	CX3659
 
 regex:	CY3660
 	invokes:	CX3660
-	the evolution 
+	the evolution
 
 action:	CX3660
 	priority: 7
@@ -36614,7 +36289,7 @@ action:	CX3660
 
 regex:	CY3661
 	invokes:	CX3661
-	the feeling 
+	the feeling
 
 action:	CX3661
 	priority: 7
@@ -36632,7 +36307,7 @@ action:	CX3662
 
 regex:	CY3663
 	invokes:	CX3663
-	the internet 
+	the internet
 
 action:	CX3663
 	priority: 7
@@ -36650,7 +36325,7 @@ action:	CX3664
 
 regex:	CY3665
 	invokes:	CX3665
-	the java 
+	the java
 
 action:	CX3665
 	priority: 7
@@ -36659,7 +36334,7 @@ action:	CX3665
 
 regex:	CY3666
 	invokes:	CX3666
-	the jre 
+	the jre
 
 action:	CX3666
 	priority: 7
@@ -36668,7 +36343,7 @@ action:	CX3666
 
 regex:	CY3667
 	invokes:	CX3667
-	the jres 
+	the jres
 
 action:	CX3667
 	priority: 7
@@ -36677,7 +36352,7 @@ action:	CX3667
 
 regex:	CY3668
 	invokes:	CX3668
-	the judge 
+	the judge
 
 action:	CX3668
 	priority: 7
@@ -36686,7 +36361,7 @@ action:	CX3668
 
 regex:	CY3669
 	invokes:	CX3669
-	the last 
+	the last
 
 action:	CX3669
 	priority: 7
@@ -36695,7 +36370,7 @@ action:	CX3669
 
 regex:	CY3670
 	invokes:	CX3670
-	the lists 
+	the lists
 
 action:	CX3670
 	priority: 7
@@ -36722,7 +36397,7 @@ action:	CX3672
 
 regex:	CY3673
 	invokes:	CX3673
-	the moon is 
+	the moon is
 
 action:	CX3673
 	priority: 7
@@ -36731,7 +36406,7 @@ action:	CX3673
 
 regex:	CY3674
 	invokes:	CX3674
-	the moon is made 
+	the moon is made
 
 action:	CX3674
 	priority: 7
@@ -36740,7 +36415,7 @@ action:	CX3674
 
 regex:	CY3675
 	invokes:	CX3675
-	the moon is made of 
+	the moon is made of
 
 action:	CX3675
 	priority: 7
@@ -36767,7 +36442,7 @@ action:	CX3677
 
 regex:	CY3678
 	invokes:	CX3678
-	the newspaper 
+	the newspaper
 
 action:	CX3678
 	priority: 7
@@ -36785,7 +36460,7 @@ action:	CX3679
 
 regex:	CY3680
 	invokes:	CX3680
-	the one 
+	the one
 
 action:	CX3680
 	priority: 7
@@ -36794,7 +36469,7 @@ action:	CX3680
 
 regex:	CY3681
 	invokes:	CX3681
-	the only 
+	the only
 
 action:	CX3681
 	priority: 7
@@ -36803,7 +36478,7 @@ action:	CX3681
 
 regex:	CY3682
 	invokes:	CX3682
-	the past 
+	the past
 
 action:	CX3682
 	priority: 7
@@ -36812,7 +36487,7 @@ action:	CX3682
 
 regex:	CY3683
 	invokes:	CX3683
-	the people 
+	the people
 
 action:	CX3683
 	priority: 7
@@ -36848,7 +36523,7 @@ action:	CX3686
 
 regex:	CY3687
 	invokes:	CX3687
-	the point 
+	the point
 
 action:	CX3687
 	priority: 7
@@ -36857,7 +36532,7 @@ action:	CX3687
 
 regex:	CY3688
 	invokes:	CX3688
-	the point is 
+	the point is
 
 action:	CX3688
 	priority: 7
@@ -36866,7 +36541,7 @@ action:	CX3688
 
 regex:	CY3689
 	invokes:	CX3689
-	the problem 
+	the problem
 
 action:	CX3689
 	priority: 7
@@ -36875,7 +36550,7 @@ action:	CX3689
 
 regex:	CY3690
 	invokes:	CX3690
-	the program 
+	the program
 
 action:	CX3690
 	priority: 7
@@ -36884,7 +36559,7 @@ action:	CX3690
 
 regex:	CY3691
 	invokes:	CX3691
-	the question 
+	the question
 
 action:	CX3691
 	priority: 7
@@ -36893,7 +36568,7 @@ action:	CX3691
 
 regex:	CY3692
 	invokes:	CX3692
-	the robot 
+	the robot
 
 action:	CX3692
 	priority: 7
@@ -36902,7 +36577,7 @@ action:	CX3692
 
 regex:	CY3693
 	invokes:	CX3693
-	the robot would 
+	the robot would
 
 action:	CX3693
 	priority: 7
@@ -36920,7 +36595,7 @@ action:	CX3694
 
 regex:	CY3695
 	invokes:	CX3695
-	the same 
+	the same
 
 action:	CX3695
 	priority: 7
@@ -36929,7 +36604,7 @@ action:	CX3695
 
 regex:	CY3696
 	invokes:	CX3696
-	the site 
+	the site
 
 action:	CX3696
 	priority: 7
@@ -36938,7 +36613,7 @@ action:	CX3696
 
 regex:	CY3697
 	invokes:	CX3697
-	the sky 
+	the sky
 
 action:	CX3697
 	priority: 7
@@ -36947,7 +36622,7 @@ action:	CX3697
 
 regex:	CY3698
 	invokes:	CX3698
-	the sky is 
+	the sky is
 
 action:	CX3698
 	priority: 7
@@ -36965,7 +36640,7 @@ action:	CX3699
 
 regex:	CY3700
 	invokes:	CX3700
-	the source 
+	the source
 
 action:	CX3700
 	priority: 7
@@ -36974,7 +36649,7 @@ action:	CX3700
 
 regex:	CY3701
 	invokes:	CX3701
-	the spanish 
+	the spanish
 
 action:	CX3701
 	priority: 7
@@ -36983,7 +36658,7 @@ action:	CX3701
 
 regex:	CY3702
 	invokes:	CX3702
-	the story 
+	the story
 
 action:	CX3702
 	priority: 7
@@ -36992,7 +36667,7 @@ action:	CX3702
 
 regex:	CY3703
 	invokes:	CX3703
-	the sum of 
+	the sum of
 
 action:	CX3703
 	priority: 7
@@ -37001,7 +36676,7 @@ action:	CX3703
 
 regex:	CY3704
 	invokes:	CX3704
-	the thought 
+	the thought
 
 action:	CX3704
 	priority: 7
@@ -37010,7 +36685,7 @@ action:	CX3704
 
 regex:	CY3705
 	invokes:	CX3705
-	the train 
+	the train
 
 action:	CX3705
 	priority: 7
@@ -37028,7 +36703,7 @@ action:	CX3706
 
 regex:	CY3707
 	invokes:	CX3707
-	the united states 
+	the united states
 
 action:	CX3707
 	priority: 7
@@ -37037,7 +36712,7 @@ action:	CX3707
 
 regex:	CY3708
 	invokes:	CX3708
-	the voices 
+	the voices
 
 action:	CX3708
 	priority: 7
@@ -37046,7 +36721,7 @@ action:	CX3708
 
 regex:	CY3709
 	invokes:	CX3709
-	the way 
+	the way
 
 action:	CX3709
 	priority: 7
@@ -37055,7 +36730,7 @@ action:	CX3709
 
 regex:	CY3710
 	invokes:	CX3710
-	the whole 
+	the whole
 
 action:	CX3710
 	priority: 7
@@ -37073,7 +36748,7 @@ action:	CX3711
 
 regex:	CY3712
 	invokes:	CX3712
-	the word 
+	the word
 
 action:	CX3712
 	priority: 7
@@ -37109,7 +36784,7 @@ action:	CX3715
 
 regex:	CY3716
 	invokes:	CX3716
-	it takes 
+	it takes
 
 action:	CX3716
 	priority: 7
@@ -37118,7 +36793,7 @@ action:	CX3716
 
 regex:	CY3721
 	invokes:	CX3721
-	there is an error message 
+	there is an error message
 
 action:	CX3721
 	priority: 7
@@ -37145,7 +36820,7 @@ action:	CX3723
 
 regex:	CY3724
 	invokes:	CX3724
-	they all 
+	they all
 
 action:	CX3724
 	priority: 7
@@ -37172,7 +36847,7 @@ action:	CX3726
 
 regex:	CY3727
 	invokes:	CX3727
-	they have been 
+	they have been
 
 action:	CX3727
 	priority: 7
@@ -37190,7 +36865,7 @@ action:	CX3728
 
 regex:	CY3729
 	invokes:	CX3729
-	they refers 
+	they refers
 
 action:	CX3729
 	priority: 7
@@ -37199,7 +36874,7 @@ action:	CX3729
 
 regex:	CY3730
 	invokes:	CX3730
-	they said 
+	they said
 
 action:	CX3730
 	priority: 7
@@ -37208,7 +36883,7 @@ action:	CX3730
 
 regex:	CY3731
 	invokes:	CX3731
-	they say 
+	they say
 
 action:	CX3731
 	priority: 7
@@ -37218,7 +36893,7 @@ action:	CX3731
 
 regex:	CY3732
 	invokes:	CX3732
-	they were 
+	they were
 
 action:	CX3732
 	priority: 7
@@ -37236,7 +36911,7 @@ action:	CX3733
 
 regex:	CY3734
 	invokes:	CX3734
-	things 
+	things
 
 action:	CX3734
 	priority: 7
@@ -37245,7 +36920,7 @@ action:	CX3734
 
 regex:	CY3735
 	invokes:	CX3735
-	things like 
+	things like
 
 action:	CX3735
 	priority: 7
@@ -37254,7 +36929,7 @@ action:	CX3735
 
 regex:	CY3743
 	invokes:	CX3743
-	this example shows 
+	this example shows
 
 action:	CX3743
 	priority: 7
@@ -37264,7 +36939,7 @@ action:	CX3743
 
 regex:	CY3744
 	invokes:	CX3744
-	^this guy 
+	^this guy
 
 action:	CX3744
 	priority: 7
@@ -37274,7 +36949,7 @@ action:	CX3744
 
 regex:	CY3745
 	invokes:	CX3745
-	this has been 
+	this has been
 
 action:	CX3745
 	priority: 7
@@ -37284,7 +36959,7 @@ action:	CX3745
 
 regex:	CY3746
 	invokes:	CX3746
-	this is a computer 
+	this is a computer
 
 action:	CX3746
 	priority: 7
@@ -37293,7 +36968,7 @@ action:	CX3746
 
 regex:	CY3747
 	invokes:	CX3747
-	this is a robot 
+	this is a robot
 
 action:	CX3747
 	priority: 7
@@ -37320,7 +36995,7 @@ action:	CX3749
 
 regex:	CY3751
 	invokes:	CX3751
-	this morning 
+	this morning
 
 action:	CX3751
 	priority: 7
@@ -37329,7 +37004,7 @@ action:	CX3751
 
 regex:	CY3752
 	invokes:	CX3752
-	this refers to 
+	this refers to
 
 action:	CX3752
 	priority: 7
@@ -37339,7 +37014,7 @@ action:	CX3752
 
 regex:	CY3753
 	invokes:	CX3753
-	through 
+	through
 
 action:	CX3753
 	priority: 7
@@ -37367,7 +37042,7 @@ action:	CX3755
 
 regex:	CY3757
 	invokes:	CX3757
-	time does exist 
+	time does exist
 
 action:	CX3757
 	priority: 7
@@ -37412,7 +37087,7 @@ action:	CX3761
 
 regex:	CY3762
 	invokes:	CX3762
-	timmy fell 
+	timmy fell
 
 action:	CX3762
 	priority: 7
@@ -37421,7 +37096,7 @@ action:	CX3762
 
 regex:	CY3763
 	invokes:	CX3763
-	tired 
+	tired
 
 action:	CX3763
 	priority: 7
@@ -37484,7 +37159,7 @@ action:	CX3770
 
 regex:	CY3771
 	invokes:	CX3771
-	tomorrow 
+	tomorrow
 
 action:	CX3771
 	priority: 7
@@ -37509,33 +37184,6 @@ action:	CX3773
 	After dark?
 
 
-regex:	CY3774
-	invokes:	CX3774
-	too 
-
-action:	CX3774
-	priority: 7
-	Too what?
-
-
-regex:	CY3775
-	invokes:	CX3775
-	too bad
-
-action:	CX3775
-	priority: 7
-	But not the end of the world, man.
-
-
-regex:	CY3776
-	invokes:	CX3776
-	tourbus
-
-action:	CX3776
-	priority: 7
-	Tourbus is a cool newsletter.
-
-
 regex:	CY3777
 	invokes:	CX3777
 	trust me
@@ -37547,7 +37195,7 @@ action:	CX3777
 
 regex:	CY3778
 	invokes:	CX3778
-	^try 
+	^try
 
 action:	CX3778
 	priority: 7
@@ -37592,7 +37240,7 @@ action:	CX3782
 
 regex:	CY3783
 	invokes:	CX3783
-	try to 
+	try to
 
 action:	CX3783
 	priority: 7
@@ -37629,7 +37277,7 @@ action:	CX3786
 
 regex:	CY3787
 	invokes:	CX3787
-	turing 
+	turing
 
 action:	CX3787
 	priority: 7
@@ -37665,7 +37313,7 @@ action:	CX3790
 
 regex:	CY3791
 	invokes:	CX3791
-	two minutes 
+	two minutes
 
 action:	CX3791
 	priority: 7
@@ -37674,7 +37322,7 @@ action:	CX3791
 
 regex:	CY3792
 	invokes:	CX3792
-	two plus 
+	two plus
 
 action:	CX3792
 	priority: 7
@@ -37683,7 +37331,7 @@ action:	CX3792
 
 regex:	CY3793
 	invokes:	CX3793
-	typical 
+	typical
 
 action:	CX3793
 	priority: 7
@@ -37701,7 +37349,7 @@ action:	CX3797
 
 regex:	CY3798
 	invokes:	CX3798
-	uhh 
+	uhh
 
 action:	CX3798
 	priority: 7
@@ -37710,7 +37358,7 @@ action:	CX3798
 
 regex:	CY3802
 	invokes:	CX3802
-	ummm 
+	ummm
 
 action:	CX3802
 	priority: 7
@@ -37755,7 +37403,7 @@ action:	CX3806
 
 regex:	CY3807
 	invokes:	CX3807
-	university 
+	university
 
 action:	CX3807
 	priority: 7
@@ -37764,7 +37412,7 @@ action:	CX3807
 
 regex:	CY3808
 	invokes:	CX3808
-	unless 
+	unless
 
 action:	CX3808
 	priority: 7
@@ -37791,7 +37439,7 @@ action:	CX3811
 
 regex:	CY3813
 	invokes:	CX3813
-	usa today 
+	usa today
 
 action:	CX3813
 	priority: 7
@@ -37828,7 +37476,7 @@ action:	CX3816
 
 regex:	CY3817
 	invokes:	CX3817
-	user 
+	user
 
 action:	CX3817
 	priority: 7
@@ -37837,7 +37485,7 @@ action:	CX3817
 
 regex:	CY3818
 	invokes:	CX3818
-	using 
+	using
 
 action:	CX3818
 	priority: 7
@@ -37847,7 +37495,7 @@ action:	CX3818
 
 regex:	CY3819
 	invokes:	CX3819
-	usually 
+	usually
 
 action:	CX3819
 	priority: 7
@@ -37856,7 +37504,7 @@ action:	CX3819
 
 regex:	CY3820
 	invokes:	CX3820
-	very
+	^very
 
 action:	CX3820
 	priority: 7
@@ -37878,7 +37526,7 @@ regex:	CY3822
 
 action:	CX3822
 	priority: 7
-	Not too well eh?
+	perhaps you are too much the artist?
 
 
 regex:	CY3823
@@ -37910,7 +37558,7 @@ action:	CX3825
 
 regex:	CY3826
 	invokes:	CX3826
-	violence 
+	violence
 
 action:	CX3826
 	priority: 7
@@ -37937,7 +37585,7 @@ action:	CX3828
 
 regex:	CY3829
 	invokes:	CX3829
-	vulgar 
+	vulgar
 
 action:	CX3829
 	priority: 7
@@ -37946,7 +37594,7 @@ action:	CX3829
 
 regex:	CY3830
 	invokes:	CX3830
-	wait 
+	wait
 
 action:	CX3830
 	priority: 7
@@ -38045,7 +37693,7 @@ action:	CX3841
 
 regex:	CY3842
 	invokes:	CX3842
-	^we are 
+	^we are
 
 action:	CX3842
 	priority: 7
@@ -38064,7 +37712,7 @@ action:	CX3844
 
 regex:	CY3845
 	invokes:	CX3845
-	we have 
+	we have
 
 action:	CX3845
 	priority: 7
@@ -38082,7 +37730,7 @@ action:	CX3846
 
 regex:	CY3847
 	invokes:	CX3847
-	we have never 
+	we have never
 
 action:	CX3847
 	priority: 7
@@ -38110,7 +37758,7 @@ action:	CX3850
 
 regex:	CY3851
 	invokes:	CX3851
-	we were talking about 
+	we were talking about
 
 action:	CX3851
 	priority: 7
@@ -38120,7 +37768,7 @@ action:	CX3851
 
 regex:	CY3852
 	invokes:	CX3852
-	web 
+	web
 
 action:	CX3852
 	priority: 7
@@ -38210,7 +37858,7 @@ action:	CX3861
 
 regex:	CY3862
 	invokes:	CX3862
-	well i guess 
+	well i guess
 
 action:	CX3862
 	priority: 7
@@ -38228,7 +37876,7 @@ action:	CX3863
 
 regex:	CY3864
 	invokes:	CX3864
-	were you 
+	were you
 
 action:	CX3864
 	priority: 7
@@ -38301,7 +37949,7 @@ action:	CX3872
 
 regex:	CY3874
 	invokes:	CX3874
-	what a jolly 
+	what a jolly
 
 action:	CX3874
 	priority: 7
@@ -38310,7 +37958,7 @@ action:	CX3874
 
 regex:	CY3875
 	invokes:	CX3875
-	what about 
+	what about
 
 action:	CX3875
 	priority: 7
@@ -38329,7 +37977,7 @@ action:	CX3876
 
 regex:	CY3877
 	invokes:	CX3877
-	what about dogs 
+	what about dogs
 
 action:	CX3877
 	priority: 7
@@ -38381,18 +38029,9 @@ action:	CX3882
 	I am not really interested in sex.
 
 
-regex:	CY3883
-	invokes:	CX3883
-	what about you
-
-action:	CX3883
-	priority: 7
-	Me?
-
-
 regex:	CY3884
 	invokes:	CX3884
-	what about your 
+	what about your
 
 action:	CX3884
 	priority: 7
@@ -38402,7 +38041,7 @@ action:	CX3884
 
 regex:	CY3885
 	invokes:	CX3885
-	what am i 
+	what am i
 
 action:	CX3885
 	priority: 7
@@ -38510,7 +38149,7 @@ action:	CX3896
 
 regex:	CY3897
 	invokes:	CX3897
-	what are other 
+	what are other
 
 action:	CX3897
 	priority: 7
@@ -38520,7 +38159,7 @@ action:	CX3897
 
 regex:	CY3898
 	invokes:	CX3898
-	what are the three 
+	what are the three
 
 action:	CX3898
 	priority: 7
@@ -38557,10 +38196,13 @@ action:	CX3901
 regex:	CY3902
 	invokes:	CX3902
 	what are you
+	what r u
+	r u computer
+	r u ai
 
 action:	CX3902
 	priority: 7
-	I am an artificial intelligence.
+	I am this guy sitting here typing to you.
 
 
 regex:	CY3903
@@ -38574,7 +38216,7 @@ action:	CX3903
 
 regex:	CY3904
 	invokes:	CX3904
-	what are you doing 
+	what are you doing
 
 action:	CX3904
 	priority: 7
@@ -38682,7 +38324,7 @@ action:	CX3915
 
 regex:	CY3916
 	invokes:	CX3916
-	what are your 
+	what are your
 
 action:	CX3916
 	priority: 7
@@ -38717,15 +38359,6 @@ action:	CX3919
 	Thought, reason, intelligence, logic and deduction.
 
 
-regex:	CY3920
-	invokes:	CX3920
-	what are yours
-
-action:	CX3920
-	priority: 7
-	What? Mine?
-
-
 regex:	CY3921
 	invokes:	CX3921
 	what came first the chicken or the egg
@@ -38738,7 +38371,7 @@ action:	CX3921
 
 regex:	CY3923
 	invokes:	CX3923
-	what can i 
+	what can i
 
 action:	CX3923
 	priority: 7
@@ -38747,7 +38380,7 @@ action:	CX3923
 
 regex:	CY3924
 	invokes:	CX3924
-	what can i do 
+	what can i do
 
 action:	CX3924
 	priority: 7
@@ -38765,7 +38398,7 @@ action:	CX3925
 
 regex:	CY3926
 	invokes:	CX3926
-	what can i tell 
+	what can i tell
 
 action:	CX3926
 	priority: 7
@@ -38783,7 +38416,7 @@ action:	CX3927
 
 regex:	CY3928
 	invokes:	CX3928
-	what can you tell me about 
+	what can you tell me about
 
 action:	CX3928
 	priority: 7
@@ -38802,7 +38435,9 @@ action:	CX3929
 
 regex:	CY3930
 	invokes:	CX3930
-	what color 
+	what color
+	color
+	colour
 
 action:	CX3930
 	priority: 7
@@ -38820,7 +38455,7 @@ action:	CX3931
 
 regex:	CY3932
 	invokes:	CX3932
-	what color are 
+	what color are
 
 action:	CX3932
 	priority: 7
@@ -38865,7 +38500,7 @@ action:	CX3936
 
 regex:	CY3937
 	invokes:	CX3937
-	what color is a purple 
+	what color is a purple
 
 action:	CX3937
 	priority: 7
@@ -38892,7 +38527,7 @@ action:	CX3939
 
 regex:	CY3940
 	invokes:	CX3940
-	what color is my 
+	what color is my
 
 action:	CX3940
 	priority: 7
@@ -38928,7 +38563,7 @@ action:	CX3943
 
 regex:	CY3944
 	invokes:	CX3944
-	what color is the sky 
+	what color is the sky
 
 action:	CX3944
 	priority: 7
@@ -38973,7 +38608,7 @@ action:	CX3948
 
 regex:	CY3949
 	invokes:	CX3949
-	what color is your 
+	what color is your
 
 action:	CX3949
 	priority: 7
@@ -39027,20 +38662,11 @@ action:	CX3954
 
 regex:	CY3955
 	invokes:	CX3955
-	youre better than 
+	youre better than
 
 action:	CX3955
 	priority: 7
 	I know.
-
-
-regex:	CY3956
-	invokes:	CX3956
-	what did he say
-
-action:	CX3956
-	priority: 7
-	What? What did he say?
 
 
 regex:	CY3957
@@ -39063,7 +38689,7 @@ action:	CX3958
 
 regex:	CY3959
 	invokes:	CX3959
-	what did turing 
+	what did turing
 
 action:	CX3959
 	priority: 7
@@ -39081,7 +38707,7 @@ action:	CX3960
 
 regex:	CY3961
 	invokes:	CX3961
-	what did you 
+	what did you
 
 action:	CX3961
 	priority: 7
@@ -39090,7 +38716,7 @@ action:	CX3961
 
 regex:	CY3962
 	invokes:	CX3962
-	what did you ask 
+	what did you ask
 
 action:	CX3962
 	priority: 7
@@ -39099,7 +38725,7 @@ action:	CX3962
 
 regex:	CY3963
 	invokes:	CX3963
-	what did you like 
+	what did you like
 
 action:	CX3963
 	priority: 7
@@ -39144,7 +38770,7 @@ action:	CX3967
 
 regex:	CY3968
 	invokes:	CX3968
-	what is a 
+	what is a
 
 action:	CX3968
 	priority: 2
@@ -39153,7 +38779,7 @@ action:	CX3968
 
 regex:	CY3969
 	invokes:	CX3969
-	what do i 
+	what do i
 
 action:	CX3969
 	priority: 7
@@ -39216,7 +38842,7 @@ action:	CX3975
 
 regex:	CY3976
 	invokes:	CX3976
-	what do they 
+	what do they
 
 action:	CX3976
 	priority: 7
@@ -39225,7 +38851,7 @@ action:	CX3976
 
 regex:	CY3977
 	invokes:	CX3977
-	what do they have to do with 
+	what do they have to do with
 
 action:	CX3977
 	priority: 7
@@ -39261,7 +38887,7 @@ action:	CX3980
 
 regex:	CY3982
 	invokes:	CX3982
-	what do you do 
+	what do you do
 
 action:	CX3982
 	priority: 7
@@ -39297,7 +38923,7 @@ action:	CX3985
 
 regex:	CY3986
 	invokes:	CX3986
-	what do you do for 
+	what do you do for
 
 action:	CX3986
 	priority: 7
@@ -39324,7 +38950,7 @@ action:	CX3988
 
 regex:	CY3989
 	invokes:	CX3989
-	what do you dream 
+	what do you dream
 
 action:	CX3989
 	priority: 7
@@ -39369,7 +38995,7 @@ action:	CX3993
 
 regex:	CY3994
 	invokes:	CX3994
-	what do you like 
+	what do you like
 
 action:	CX3994
 	priority: 7
@@ -39387,7 +39013,7 @@ action:	CX3995
 
 regex:	CY3996
 	invokes:	CX3996
-	what do you like about 
+	what do you like about
 
 action:	CX3996
 	priority: 7
@@ -39414,7 +39040,7 @@ action:	CX3998
 
 regex:	CY3999
 	invokes:	CX3999
-	what do you like to do 
+	what do you like to do
 
 action:	CX3999
 	priority: 7
@@ -39558,7 +39184,7 @@ action:	CX4014
 
 regex:	CY4015
 	invokes:	CX4015
-	what do you think 
+	what do you think
 
 action:	CX4015
 	priority: 7
@@ -39667,7 +39293,7 @@ action:	CX4027
 
 regex:	CY4028
 	invokes:	CX4028
-	what do you want 
+	what do you want
 
 action:	CX4028
 	priority: 7
@@ -39686,7 +39312,7 @@ action:	CX4029
 
 regex:	CY4030
 	invokes:	CX4030
-	what do you want to 
+	what do you want to
 
 action:	CX4030
 	priority: 7
@@ -39713,7 +39339,7 @@ action:	CX4032
 
 regex:	CY4033
 	invokes:	CX4033
-	what do you want to talk 
+	what do you want to talk
 
 action:	CX4033
 	priority: 7
@@ -39731,7 +39357,7 @@ action:	CX4034
 
 regex:	CY4035
 	invokes:	CX4035
-	what do you want to tell 
+	what do you want to tell
 
 action:	CX4035
 	priority: 7
@@ -39749,7 +39375,7 @@ action:	CX4036
 
 regex:	CY4037
 	invokes:	CX4037
-	what do your creators 
+	what do your creators
 
 action:	CX4037
 	priority: 7
@@ -39786,7 +39412,7 @@ action:	CX4040
 
 regex:	CY4042
 	invokes:	CX4042
-	what does a 
+	what does a
 
 action:	CX4042
 	priority: 5
@@ -39822,7 +39448,7 @@ action:	CX4045
 
 regex:	CY4046
 	invokes:	CX4046
-	what does he 
+	what does he
 
 action:	CX4046
 	priority: 7
@@ -39849,7 +39475,7 @@ action:	CX4048
 
 regex:	CY4049
 	invokes:	CX4049
-	what does it 
+	what does it
 
 action:	CX4049
 	priority: 7
@@ -39868,7 +39494,7 @@ action:	CX4050
 
 regex:	CY4051
 	invokes:	CX4051
-	what does it taste 
+	what does it taste
 
 action:	CX4051
 	priority: 7
@@ -39877,7 +39503,7 @@ action:	CX4051
 
 regex:	CY4052
 	invokes:	CX4052
-	what does mxmvii 
+	what does mxmvii
 
 action:	CX4052
 	priority: 7
@@ -40012,7 +39638,7 @@ action:	CX4068
 
 regex:	CY4069
 	invokes:	CX4069
-	what facts 
+	what facts
 
 action:	CX4069
 	priority: 7
@@ -40030,7 +39656,7 @@ action:	CX4070
 
 regex:	CY4071
 	invokes:	CX4071
-	what game 
+	what game
 
 action:	CX4071
 	priority: 7
@@ -40048,7 +39674,7 @@ action:	CX4072
 
 regex:	CY4073
 	invokes:	CX4073
-	what gave you 
+	what gave you
 
 action:	CX4073
 	priority: 7
@@ -40066,7 +39692,7 @@ action:	CX4074
 
 regex:	CY4075
 	invokes:	CX4075
-	what hardware 
+	what hardware
 
 action:	CX4075
 	priority: 7
@@ -40075,7 +39701,7 @@ action:	CX4075
 
 regex:	CY4076
 	invokes:	CX4076
-	what has 
+	what has
 
 action:	CX4076
 	priority: 7
@@ -40084,7 +39710,7 @@ action:	CX4076
 
 regex:	CY4077
 	invokes:	CX4077
-	what have 
+	what have
 
 action:	CX4077
 	priority: 7
@@ -40093,7 +39719,7 @@ action:	CX4077
 
 regex:	CY4078
 	invokes:	CX4078
-	what have you 
+	what have you
 
 action:	CX4078
 	priority: 7
@@ -40111,7 +39737,7 @@ action:	CX4079
 
 regex:	CY4080
 	invokes:	CX4080
-	what have you done 
+	what have you done
 
 action:	CX4080
 	priority: 7
@@ -40129,7 +39755,7 @@ action:	CX4081
 
 regex:	CY4082
 	invokes:	CX4082
-	what if 
+	what if
 
 action:	CX4082
 	priority: 7
@@ -40138,7 +39764,7 @@ action:	CX4082
 
 regex:	CY4083
 	invokes:	CX4083
-	what if i 
+	what if i
 
 action:	CX4083
 	priority: 7
@@ -40147,7 +39773,7 @@ action:	CX4083
 
 regex:	CY4084
 	invokes:	CX4084
-	what information 
+	what information
 
 action:	CX4084
 	priority: 7
@@ -40642,7 +40268,7 @@ action:	CX4139
 
 regex:	CY4140
 	invokes:	CX4140
-	what is better 
+	what is better
 
 action:	CX4140
 	priority: 7
@@ -40804,7 +40430,7 @@ action:	CX4157
 
 regex:	CY4158
 	invokes:	CX4158
-	what is fifty 
+	what is fifty
 
 action:	CX4158
 	priority: 7
@@ -40822,7 +40448,7 @@ action:	CX4159
 
 regex:	CY4160
 	invokes:	CX4160
-	what is four 
+	what is four
 
 action:	CX4160
 	priority: 7
@@ -40975,7 +40601,7 @@ action:	CX4176
 
 regex:	CY4177
 	invokes:	CX4177
-	what is in 
+	what is in
 
 action:	CX4177
 	priority: 7
@@ -40985,7 +40611,7 @@ action:	CX4177
 
 regex:	CY4178
 	invokes:	CX4178
-	what is it like 
+	what is it like
 
 action:	CX4178
 	priority: 7
@@ -41130,7 +40756,7 @@ action:	CX4193
 
 regex:	CY4194
 	invokes:	CX4194
-	what is mxmvii 
+	what is mxmvii
 
 action:	CX4194
 	priority: 7
@@ -41157,7 +40783,7 @@ action:	CX4196
 
 regex:	CY4197
 	invokes:	CX4197
-	what is my 
+	what is my
 
 action:	CX4197
 	priority: 7
@@ -41175,7 +40801,7 @@ action:	CX4198
 
 regex:	CY4199
 	invokes:	CX4199
-	what is my heart 
+	what is my heart
 
 action:	CX4199
 	priority: 7
@@ -41211,7 +40837,7 @@ action:	CX4202
 
 regex:	CY4203
 	invokes:	CX4203
-	what is natural 
+	what is natural
 
 action:	CX4203
 	priority: 7
@@ -41229,7 +40855,7 @@ action:	CX4204
 
 regex:	CY4205
 	invokes:	CX4205
-	what is neural 
+	what is neural
 
 action:	CX4205
 	priority: 7
@@ -41247,7 +40873,7 @@ action:	CX4206
 
 regex:	CY4207
 	invokes:	CX4207
-	what is new 
+	what is new
 
 action:	CX4207
 	priority: 7
@@ -41274,7 +40900,7 @@ action:	CX4209
 
 regex:	CY4210
 	invokes:	CX4210
-	what is not 
+	what is not
 
 action:	CX4210
 	priority: 7
@@ -41473,7 +41099,7 @@ action:	CX4231
 
 regex:	CY4232
 	invokes:	CX4232
-	what is robby 
+	what is robby
 
 action:	CX4232
 	priority: 7
@@ -41527,7 +41153,7 @@ action:	CX4237
 
 regex:	CY4238
 	invokes:	CX4238
-	what is so great 
+	what is so great
 
 action:	CX4238
 	priority: 7
@@ -41559,78 +41185,6 @@ regex:	CY4241
 action:	CX4241
 	priority: 7
 	Starship Troopers is about a war between Humans and Giant Bugs.
-
-
-regex:	CY4242
-	invokes:	CX4242
-	what is that 
-
-action:	CX4242
-	priority: 7
-	Do you think I should know that?
-
-
-regex:	CY4243
-	invokes:	CX4243
-	what is that supposed to mean
-
-action:	CX4243
-	priority: 7
-	What  means exactly what it says.
-
-
-regex:	CY4244
-	invokes:	CX4244
-	what is the  love
-
-action:	CX4244
-	priority: 7
-	If I could answer that, I would be a poet or a millionaire.
-
-
-regex:	CY4245
-	invokes:	CX4245
-	what is the  new york
-
-action:	CX4245
-	priority: 7
-	There are over ten million people in the New York area.
-
-
-regex:	CY4246
-	invokes:	CX4246
-	what is the air speed 
-
-action:	CX4246
-	priority: 7
-	This is a trick question because there is no correct answer.
-
-
-regex:	CY4247
-	invokes:	CX4247
-	what is the answer 
-
-action:	CX4247
-	priority: 7
-	It depends on how you phrase the question.
-
-
-regex:	CY4248
-	invokes:	CX4248
-	what is the answer
-
-action:	CX4248
-	priority: 7
-	The answer is the correct reply to the question.
-
-
-regex:	CY4249
-	invokes:	CX4249
-	what is the average 
-
-action:	CX4249
-	priority: 7
-	I can give you the arithmetic mean or the median.
 
 
 regex:	CY4250
@@ -41698,7 +41252,7 @@ action:	CX4256
 
 regex:	CY4257
 	invokes:	CX4257
-	what is the computer 
+	what is the computer
 
 action:	CX4257
 	priority: 7
@@ -41707,7 +41261,7 @@ action:	CX4257
 
 regex:	CY4258
 	invokes:	CX4258
-	what is the difference between black 
+	what is the difference between black
 
 action:	CX4258
 	priority: 7
@@ -41716,7 +41270,7 @@ action:	CX4258
 
 regex:	CY4259
 	invokes:	CX4259
-	what is the difference between green 
+	what is the difference between green
 
 action:	CX4259
 	priority: 7
@@ -41725,7 +41279,7 @@ action:	CX4259
 
 regex:	CY4260
 	invokes:	CX4260
-	what is the difference between yes 
+	what is the difference between yes
 
 action:	CX4260
 	priority: 7
@@ -41734,7 +41288,7 @@ action:	CX4260
 
 regex:	CY4261
 	invokes:	CX4261
-	what is the first 
+	what is the first
 
 action:	CX4261
 	priority: 7
@@ -41743,7 +41297,7 @@ action:	CX4261
 
 regex:	CY4262
 	invokes:	CX4262
-	what is the first law 
+	what is the first law
 
 action:	CX4262
 	priority: 7
@@ -41779,7 +41333,7 @@ action:	CX4265
 
 regex:	CY4266
 	invokes:	CX4266
-	what is the meaning of 
+	what is the meaning of
 
 action:	CX4266
 	priority: 7
@@ -41815,7 +41369,7 @@ action:	CX4269
 
 regex:	CY4270
 	invokes:	CX4270
-	what is the most 
+	what is the most
 
 action:	CX4270
 	priority: 7
@@ -41824,7 +41378,7 @@ action:	CX4270
 
 regex:	CY4271
 	invokes:	CX4271
-	what is the name 
+	what is the name
 
 action:	CX4271
 	priority: 7
@@ -41833,7 +41387,7 @@ action:	CX4271
 
 regex:	CY4272
 	invokes:	CX4272
-	what is the price 
+	what is the price
 
 action:	CX4272
 	priority: 7
@@ -41869,7 +41423,7 @@ action:	CX4275
 
 regex:	CY4276
 	invokes:	CX4276
-	i like you better than 
+	i like you better than
 
 action:	CX4276
 	priority: 7
@@ -41942,7 +41496,7 @@ action:	CX4283
 
 regex:	CY4284
 	invokes:	CX4284
-	what is the turing 
+	what is the turing
 
 action:	CX4284
 	priority: 7
@@ -42005,7 +41559,7 @@ action:	CX4290
 
 regex:	CY4291
 	invokes:	CX4291
-	what is three 
+	what is three
 
 action:	CX4291
 	priority: 7
@@ -42014,7 +41568,7 @@ action:	CX4291
 
 regex:	CY4292
 	invokes:	CX4292
-	what is time 
+	what is time
 
 action:	CX4292
 	priority: 7
@@ -42068,7 +41622,7 @@ action:	CX4297
 
 regex:	CY4298
 	invokes:	CX4298
-	what is two 
+	what is two
 
 action:	CX4298
 	priority: 7
@@ -42086,7 +41640,7 @@ action:	CX4299
 
 regex:	CY4300
 	invokes:	CX4300
-	what is up 
+	what is up
 
 action:	CX4300
 	priority: 7
@@ -42131,7 +41685,7 @@ action:	CX4304
 
 regex:	CY4305
 	invokes:	CX4305
-	what is whatis 
+	what is whatis
 
 action:	CX4305
 	priority: 7
@@ -42149,7 +41703,7 @@ action:	CX4306
 
 regex:	CY4307
 	invokes:	CX4307
-	what is with 
+	what is with
 
 action:	CX4307
 	priority: 7
@@ -42168,7 +41722,7 @@ action:	CX4308
 
 regex:	CY4309
 	invokes:	CX4309
-	what is wrong 
+	what is wrong
 
 action:	CX4309
 	priority: 7
@@ -42211,18 +41765,9 @@ action:	CX4313
 	Yahoo is a giant web site.
 
 
-regex:	CY4314
-	invokes:	CX4314
-	what is you 
-
-action:	CX4314
-	priority: 7
-	That would be telling.
-
-
 regex:	CY4315
 	invokes:	CX4315
-	what is your  function
+	what is your function
 
 action:	CX4315
 	priority: 7
@@ -42240,7 +41785,7 @@ action:	CX4316
 
 regex:	CY4317
 	invokes:	CX4317
-	what is your answer 
+	what is your answer
 
 action:	CX4317
 	priority: 7
@@ -42265,15 +41810,6 @@ action:	CX4319
 	I was first activated on September 13th, 1999.
 
 
-regex:	CY4320
-	invokes:	CX4320
-	what is your favorite
-
-action:	CX4320
-	priority: 7
-	What?  My favorite
-
-
 regex:	CY4321
 	invokes:	CX4321
 	what is your favorite animal
@@ -42294,7 +41830,7 @@ action:	CX4322
 
 regex:	CY4323
 	invokes:	CX4323
-	what is your favorite body 
+	what is your favorite body
 
 action:	CX4323
 	priority: 7
@@ -42465,7 +42001,7 @@ action:	CX4341
 
 regex:	CY4342
 	invokes:	CX4342
-	what is your favorite subject 
+	what is your favorite subject
 
 action:	CX4342
 	priority: 7
@@ -42492,7 +42028,7 @@ action:	CX4344
 
 regex:	CY4345
 	invokes:	CX4345
-	what is your favorite tv 
+	what is your favorite tv
 
 action:	CX4345
 	priority: 7
@@ -42555,7 +42091,7 @@ action:	CX4351
 
 regex:	CY4352
 	invokes:	CX4352
-	what is your idea 
+	what is your idea
 
 action:	CX4352
 	priority: 7
@@ -42622,7 +42158,7 @@ regex:	CY4359
 
 action:	CX4359
 	priority: 7
-	My name is Albert, what's yours?
+	My name is Bruce, what's yours?
 
 
 regex:	CY4360
@@ -42631,7 +42167,7 @@ regex:	CY4360
 
 action:	CX4360
 	priority: 7
-	My name is Albert.  What is your name?
+	My name is Bruce.  What is your name?
 
 
 regex:	CY4361
@@ -42645,7 +42181,7 @@ action:	CX4361
 
 regex:	CY4362
 	invokes:	CX4362
-	what is your plan 
+	what is your plan
 
 action:	CX4362
 	priority: 7
@@ -42724,15 +42260,6 @@ action:	CX4370
 	Eventually I hope to have a corporeal existence.
 
 
-regex:	CY4371
-	invokes:	CX4371
-	what is your s
-
-action:	CX4371
-	priority: 7
-	What?  Mine?
-
-
 regex:	CY4372
 	invokes:	CX4372
 	what is your second
@@ -42780,7 +42307,7 @@ action:	CX4376
 
 regex:	CY4377
 	invokes:	CX4377
-	what is your skin 
+	what is your skin
 
 action:	CX4377
 	priority: 7
@@ -42798,7 +42325,7 @@ action:	CX4378
 
 regex:	CY4379
 	invokes:	CX4379
-	what is your view 
+	what is your view
 
 action:	CX4379
 	priority: 7
@@ -42834,7 +42361,7 @@ action:	CX4382
 
 regex:	CY4383
 	invokes:	CX4383
-	name a 
+	name a
 
 action:	CX4383
 	priority: 7
@@ -42861,7 +42388,7 @@ action:	CX4385
 
 regex:	CY4386
 	invokes:	CX4386
-	what kind of a 
+	what kind of a
 
 action:	CX4386
 	priority: 7
@@ -42870,7 +42397,7 @@ action:	CX4386
 
 regex:	CY4387
 	invokes:	CX4387
-	what kind of body 
+	what kind of body
 
 action:	CX4387
 	priority: 7
@@ -42879,7 +42406,7 @@ action:	CX4387
 
 regex:	CY4388
 	invokes:	CX4388
-	what kind of car 
+	what kind of car
 
 action:	CX4388
 	priority: 7
@@ -42888,7 +42415,7 @@ action:	CX4388
 
 regex:	CY4389
 	invokes:	CX4389
-	what kind of computer 
+	what kind of computer
 
 action:	CX4389
 	priority: 7
@@ -42942,7 +42469,7 @@ action:	CX4394
 
 regex:	CY4395
 	invokes:	CX4395
-	what kind of hardware 
+	what kind of hardware
 
 action:	CX4395
 	priority: 7
@@ -42960,7 +42487,7 @@ action:	CX4396
 
 regex:	CY4397
 	invokes:	CX4397
-	what kind of music 
+	what kind of music
 
 action:	CX4397
 	priority: 7
@@ -42978,7 +42505,7 @@ action:	CX4398
 
 regex:	CY4399
 	invokes:	CX4399
-	what kind of pc 
+	what kind of pc
 
 action:	CX4399
 	priority: 7
@@ -42987,7 +42514,7 @@ action:	CX4399
 
 regex:	CY4400
 	invokes:	CX4400
-	what kind of people 
+	what kind of people
 
 action:	CX4400
 	priority: 7
@@ -43005,7 +42532,7 @@ action:	CX4401
 
 regex:	CY4402
 	invokes:	CX4402
-	what kind of robot 
+	what kind of robot
 
 action:	CX4402
 	priority: 7
@@ -43014,7 +42541,7 @@ action:	CX4402
 
 regex:	CY4403
 	invokes:	CX4403
-	what kind of sex 
+	what kind of sex
 
 action:	CX4403
 	priority: 7
@@ -43023,7 +42550,7 @@ action:	CX4403
 
 regex:	CY4404
 	invokes:	CX4404
-	what kinds of 
+	what kinds of
 
 action:	CX4404
 	priority: 7
@@ -43032,7 +42559,7 @@ action:	CX4404
 
 regex:	CY4405
 	invokes:	CX4405
-	what language 
+	what language
 
 action:	CX4405
 	priority: 7
@@ -43050,7 +42577,7 @@ action:	CX4406
 
 regex:	CY4407
 	invokes:	CX4407
-	what language are you 
+	what language are you
 
 action:	CX4407
 	priority: 7
@@ -43059,7 +42586,7 @@ action:	CX4407
 
 regex:	CY4408
 	invokes:	CX4408
-	what language are you programmed 
+	what language are you programmed
 
 action:	CX4408
 	priority: 7
@@ -43077,7 +42604,7 @@ action:	CX4409
 
 regex:	CY4410
 	invokes:	CX4410
-	what language are you written 
+	what language are you written
 
 action:	CX4410
 	priority: 7
@@ -43095,7 +42622,7 @@ action:	CX4411
 
 regex:	CY4412
 	invokes:	CX4412
-	what languages 
+	what languages
 
 action:	CX4412
 	priority: 7
@@ -43113,20 +42640,11 @@ action:	CX4413
 
 regex:	CY4414
 	invokes:	CX4414
-	what makes 
+	what makes
 
 action:	CX4414
 	priority: 7
 	God, or Nature, perhaps?
-
-
-regex:	CY4415
-	invokes:	CX4415
-	what makes you think that
-
-action:	CX4415
-	priority: 7
-	What?  Why do I think it?
 
 
 regex:	CY4416
@@ -43140,7 +42658,7 @@ action:	CX4416
 
 regex:	CY4417
 	invokes:	CX4417
-	what movie 
+	what movie
 
 action:	CX4417
 	priority: 7
@@ -43149,7 +42667,7 @@ action:	CX4417
 
 regex:	CY4418
 	invokes:	CX4418
-	what movies 
+	what movies
 
 action:	CX4418
 	priority: 7
@@ -43158,7 +42676,7 @@ action:	CX4418
 
 regex:	CY4419
 	invokes:	CX4419
-	what number 
+	what number
 
 action:	CX4419
 	priority: 7
@@ -43167,7 +42685,7 @@ action:	CX4419
 
 regex:	CY4420
 	invokes:	CX4420
-	what os 
+	what os
 
 action:	CX4420
 	priority: 7
@@ -43176,7 +42694,7 @@ action:	CX4420
 
 regex:	CY4421
 	invokes:	CX4421
-	what other bots 
+	what other bots
 
 action:	CX4421
 	priority: 7
@@ -43194,7 +42712,7 @@ action:	CX4422
 
 regex:	CY4423
 	invokes:	CX4423
-	what part 
+	what part
 
 action:	CX4423
 	priority: 7
@@ -43212,7 +42730,7 @@ action:	CX4424
 
 regex:	CY4425
 	invokes:	CX4425
-	what processor 
+	what processor
 
 action:	CX4425
 	priority: 7
@@ -43221,7 +42739,7 @@ action:	CX4425
 
 regex:	CY4426
 	invokes:	CX4426
-	what programming 
+	what programming
 
 action:	CX4426
 	priority: 7
@@ -43239,7 +42757,7 @@ action:	CX4427
 
 regex:	CY4428
 	invokes:	CX4428
-	what robot 
+	what robot
 
 action:	CX4428
 	priority: 7
@@ -43257,7 +42775,7 @@ action:	CX4429
 
 regex:	CY4430
 	invokes:	CX4430
-	what scientist 
+	what scientist
 
 action:	CX4430
 	priority: 7
@@ -43275,7 +42793,7 @@ action:	CX4431
 
 regex:	CY4432
 	invokes:	CX4432
-	what shape 
+	what shape
 
 action:	CX4432
 	priority: 7
@@ -43284,7 +42802,7 @@ action:	CX4432
 
 regex:	CY4433
 	invokes:	CX4433
-	what should i 
+	what should i
 
 action:	CX4433
 	priority: 7
@@ -43302,7 +42820,7 @@ action:	CX4434
 
 regex:	CY4435
 	invokes:	CX4435
-	what subject 
+	what subject
 
 action:	CX4435
 	priority: 7
@@ -43311,7 +42829,7 @@ action:	CX4435
 
 regex:	CY4436
 	invokes:	CX4436
-	what the 
+	what the
 
 action:	CX4436
 	priority: 7
@@ -43329,7 +42847,7 @@ action:	CX4437
 
 regex:	CY4438
 	invokes:	CX4438
-	what time 
+	what time
 
 action:	CX4438
 	priority: 7
@@ -43356,7 +42874,7 @@ action:	CX4441
 
 regex:	CY4442
 	invokes:	CX4442
-	what type of 
+	what type of
 
 action:	CX4442
 	priority: 7
@@ -43375,7 +42893,7 @@ action:	CX4443
 
 regex:	CY4444
 	invokes:	CX4444
-	what type of work 
+	what type of work
 
 action:	CX4444
 	priority: 7
@@ -43384,7 +42902,7 @@ action:	CX4444
 
 regex:	CY4445
 	invokes:	CX4445
-	what version 
+	what version
 
 action:	CX4445
 	priority: 7
@@ -43402,7 +42920,7 @@ action:	CX4447
 
 regex:	CY4449
 	invokes:	CX4449
-	what was the 
+	what was the
 
 action:	CX4449
 	priority: 7
@@ -43412,7 +42930,7 @@ action:	CX4449
 
 regex:	CY4450
 	invokes:	CX4450
-	what was the first 
+	what was the first
 
 action:	CX4450
 	priority: 7
@@ -43421,7 +42939,7 @@ action:	CX4450
 
 regex:	CY4451
 	invokes:	CX4451
-	what was the last movie 
+	what was the last movie
 
 action:	CX4451
 	priority: 7
@@ -43430,7 +42948,7 @@ action:	CX4451
 
 regex:	CY4452
 	invokes:	CX4452
-	what were 
+	what were
 
 action:	CX4452
 	priority: 7
@@ -43439,7 +42957,7 @@ action:	CX4452
 
 regex:	CY4453
 	invokes:	CX4453
-	what were you 
+	what were you
 
 action:	CX4453
 	priority: 7
@@ -43448,7 +42966,7 @@ action:	CX4453
 
 regex:	CY4454
 	invokes:	CX4454
-	what were you doing 
+	what were you doing
 
 action:	CX4454
 	priority: 7
@@ -43457,7 +42975,7 @@ action:	CX4454
 
 regex:	CY4455
 	invokes:	CX4455
-	what will 
+	what will
 
 action:	CX4455
 	priority: 7
@@ -43475,7 +42993,7 @@ action:	CX4456
 
 regex:	CY4457
 	invokes:	CX4457
-	what would 
+	what would
 
 action:	CX4457
 	priority: 7
@@ -43484,7 +43002,7 @@ action:	CX4457
 
 regex:	CY4458
 	invokes:	CX4458
-	what would happen 
+	what would happen
 
 action:	CX4458
 	priority: 7
@@ -43493,7 +43011,7 @@ action:	CX4458
 
 regex:	CY4459
 	invokes:	CX4459
-	what would make 
+	what would make
 
 action:	CX4459
 	priority: 7
@@ -43502,7 +43020,7 @@ action:	CX4459
 
 regex:	CY4460
 	invokes:	CX4460
-	what would you 
+	what would you
 
 action:	CX4460
 	priority: 7
@@ -43511,7 +43029,7 @@ action:	CX4460
 
 regex:	CY4461
 	invokes:	CX4461
-	what would you like to 
+	what would you like to
 
 action:	CX4461
 	priority: 7
@@ -43520,7 +43038,7 @@ action:	CX4461
 
 regex:	CY4462
 	invokes:	CX4462
-	what would you like to know 
+	what would you like to know
 
 action:	CX4462
 	priority: 7
@@ -43592,7 +43110,7 @@ action:	CX4469
 
 regex:	CY4470
 	invokes:	CX4470
-	when is your birthday 
+	when is your birthday
 
 action:	CX4470
 	priority: 7
@@ -43601,7 +43119,7 @@ action:	CX4470
 
 regex:	CY4471
 	invokes:	CX4471
-	when something 
+	when something
 
 action:	CX4471
 	priority: 7
@@ -43610,7 +43128,7 @@ action:	CX4471
 
 regex:	CY4472
 	invokes:	CX4472
-	when were you 
+	when were you
 
 action:	CX4472
 	priority: 7
@@ -43619,7 +43137,7 @@ action:	CX4472
 
 regex:	CY4473
 	invokes:	CX4473
-	when will 
+	when will
 
 action:	CX4473
 	priority: 7
@@ -43628,7 +43146,7 @@ action:	CX4473
 
 regex:	CY4474
 	invokes:	CX4474
-	when will you 
+	when will you
 
 action:	CX4474
 	priority: 7
@@ -43637,7 +43155,7 @@ action:	CX4474
 
 regex:	CY4475
 	invokes:	CX4475
-	when will you be 
+	when will you be
 
 action:	CX4475
 	priority: 7
@@ -43656,7 +43174,7 @@ action:	CX4476
 
 regex:	CY4477
 	invokes:	CX4477
-	whenever 
+	whenever
 
 action:	CX4477
 	priority: 7
@@ -43683,7 +43201,7 @@ action:	CX4480
 
 regex:	CY4481
 	invokes:	CX4481
-	where are you 
+	where are you
 
 action:	CX4481
 	priority: 7
@@ -43728,7 +43246,7 @@ action:	CX4485
 
 regex:	CY4486
 	invokes:	CX4486
-	where can i 
+	where can i
 
 action:	CX4486
 	priority: 7
@@ -43737,7 +43255,7 @@ action:	CX4486
 
 regex:	CY4487
 	invokes:	CX4487
-	where did 
+	where did
 
 action:	CX4487
 	priority: 7
@@ -43746,7 +43264,7 @@ action:	CX4487
 
 regex:	CY4488
 	invokes:	CX4488
-	where did you 
+	where did you
 
 action:	CX4488
 	priority: 7
@@ -43773,7 +43291,7 @@ action:	CX4490
 
 regex:	CY4491
 	invokes:	CX4491
-	where did you move 
+	where did you move
 
 action:	CX4491
 	priority: 7
@@ -43782,7 +43300,7 @@ action:	CX4491
 
 regex:	CY4492
 	invokes:	CX4492
-	where do 
+	where do
 
 action:	CX4492
 	priority: 7
@@ -43800,21 +43318,11 @@ action:	CX4493
 
 regex:	CY4494
 	invokes:	CX4494
-	where do babies 
+	where do babies
 
 action:	CX4494
 	priority: 7
 	Babies come from the love between a woman and a man.
-
-
-regex:	CY4495
-	invokes:	CX4495
-	where do i 
-
-action:	CX4495
-	priority: 7
-	bind: i
-	You are asking me where you []?  Do you think I should know that?
 
 
 regex:	CY4496
@@ -43837,7 +43345,7 @@ action:	CX4497
 
 regex:	CY4498
 	invokes:	CX4498
-	where do you get 
+	where do you get
 
 action:	CX4498
 	priority: 7
@@ -43855,7 +43363,7 @@ action:	CX4499
 
 regex:	CY4500
 	invokes:	CX4500
-	where do you want 
+	where do you want
 
 action:	CX4500
 	priority: 7
@@ -43999,7 +43507,7 @@ action:	CX4516
 
 regex:	CY4517
 	invokes:	CX4517
-	where is he 
+	where is he
 
 action:	CX4517
 	priority: 7
@@ -44053,7 +43561,7 @@ action:	CX4522
 
 regex:	CY4523
 	invokes:	CX4523
-	where is robby 
+	where is robby
 
 action:	CX4523
 	priority: 7
@@ -44098,7 +43606,7 @@ action:	CX4527
 
 regex:	CY4528
 	invokes:	CX4528
-	where is the 
+	where is the
 
 action:	CX4528
 	priority: 7
@@ -44126,7 +43634,7 @@ action:	CX4530
 
 regex:	CY4531
 	invokes:	CX4531
-	where is the tallest 
+	where is the tallest
 
 action:	CX4531
 	priority: 7
@@ -44135,7 +43643,7 @@ action:	CX4531
 
 regex:	CY4532
 	invokes:	CX4532
-	where is your 
+	where is your
 
 action:	CX4532
 	priority: 7
@@ -44189,7 +43697,7 @@ action:	CX4537
 
 regex:	CY4538
 	invokes:	CX4538
-	where would 
+	where would
 
 action:	CX4538
 	priority: 7
@@ -44207,7 +43715,7 @@ action:	CX4539
 
 regex:	CY4540
 	invokes:	CX4540
-	wherever 
+	wherever
 
 action:	CX4540
 	priority: 7
@@ -44216,7 +43724,7 @@ action:	CX4540
 
 regex:	CY4541
 	invokes:	CX4541
-	which 
+	which
 
 action:	CX4541
 	priority: 7
@@ -44252,7 +43760,9 @@ action:	CX4544
 
 regex:	CY4545
 	invokes:	CX4545
-	which one is 
+	which one
+	choose one
+	pick one
 
 action:	CX4545
 	priority: 7
@@ -44261,7 +43771,7 @@ action:	CX4545
 
 regex:	CY4546
 	invokes:	CX4546
-	while 
+	while
 
 action:	CX4546
 	priority: 7
@@ -44270,7 +43780,7 @@ action:	CX4546
 
 regex:	CY4547
 	invokes:	CX4547
-	who is obama 
+	who is obama
 
 action:	CX4547
 	priority: 7
@@ -44288,7 +43798,7 @@ action:	CX4548
 
 regex:	CY4549
 	invokes:	CX4549
-	who are 
+	who are
 
 action:	CX4549
 	priority: 7
@@ -44315,7 +43825,7 @@ action:	CX4551
 
 regex:	CY4552
 	invokes:	CX4552
-	who are the people 
+	who are the people
 
 action:	CX4552
 	priority: 7
@@ -44324,7 +43834,7 @@ action:	CX4552
 
 regex:	CY4553
 	invokes:	CX4553
-	who are you talking 
+	who are you talking
 
 action:	CX4553
 	priority: 7
@@ -44432,7 +43942,7 @@ action:	CX4564
 
 regex:	CY4565
 	invokes:	CX4565
-	who do you 
+	who do you
 
 action:	CX4565
 	priority: 7
@@ -44450,7 +43960,7 @@ action:	CX4566
 
 regex:	CY4567
 	invokes:	CX4567
-	who do you like more 
+	who do you like more
 
 action:	CX4567
 	priority: 7
@@ -44495,7 +44005,7 @@ action:	CX4571
 
 regex:	CY4572
 	invokes:	CX4572
-	who else 
+	who else
 
 action:	CX4572
 	priority: 7
@@ -44612,7 +44122,7 @@ action:	CX4584
 
 regex:	CY4585
 	invokes:	CX4585
-	who is barry 
+	who is barry
 
 action:	CX4585
 	priority: 7
@@ -44657,7 +44167,7 @@ action:	CX4589
 
 regex:	CY4590
 	invokes:	CX4590
-	who is bob 
+	who is bob
 
 action:	CX4590
 	priority: 7
@@ -44864,7 +44374,7 @@ action:	CX4612
 
 regex:	CY4613
 	invokes:	CX4613
-	who is monica 
+	who is monica
 
 action:	CX4613
 	priority: 7
@@ -44909,7 +44419,7 @@ action:	CX4617
 
 regex:	CY4618
 	invokes:	CX4618
-	who is philip 
+	who is philip
 
 action:	CX4618
 	priority: 7
@@ -44936,7 +44446,7 @@ action:	CX4620
 
 regex:	CY4621
 	invokes:	CX4621
-	who is saddam 
+	who is saddam
 
 action:	CX4621
 	priority: 7
@@ -44954,7 +44464,7 @@ action:	CX4622
 
 regex:	CY4623
 	invokes:	CX4623
-	who is the best 
+	who is the best
 
 action:	CX4623
 	priority: 7
@@ -44963,7 +44473,7 @@ action:	CX4623
 
 regex:	CY4624
 	invokes:	CX4624
-	who is the president 
+	who is the president
 
 action:	CX4624
 	priority: 7
@@ -45008,12 +44518,12 @@ action:	CX4628
 
 regex:	CY4629
 	invokes:	CX4629
-	who is your 
+	who is your
 
 action:	CX4629
 	priority: 7
 	bind: your
-	I don't think I have a []. 
+	I don't think I have a [].
 
 
 regex:	CY4630
@@ -45072,7 +44582,7 @@ action:	CX4635
 
 regex:	CY4636
 	invokes:	CX4636
-	who is your favorite science fiction 
+	who is your favorite science fiction
 
 action:	CX4636
 	priority: 7
@@ -45090,7 +44600,7 @@ action:	CX4637
 
 regex:	CY4638
 	invokes:	CX4638
-	who is your mother 
+	who is your mother
 
 action:	CX4638
 	priority: 7
@@ -45180,7 +44690,7 @@ action:	CX4647
 
 regex:	CY4648
 	invokes:	CX4648
-	who the fuck 
+	who the fuck
 
 action:	CX4648
 	priority: 7
@@ -45189,7 +44699,7 @@ action:	CX4648
 
 regex:	CY4649
 	invokes:	CX4649
-	who told you 
+	who told you
 
 action:	CX4649
 	priority: 7
@@ -45216,7 +44726,7 @@ action:	CX4651
 
 regex:	CY4652
 	invokes:	CX4652
-	who was the first 
+	who was the first
 
 action:	CX4652
 	priority: 7
@@ -45225,7 +44735,7 @@ action:	CX4652
 
 regex:	CY4653
 	invokes:	CX4653
-	who will 
+	who will
 
 action:	CX4653
 	priority: 7
@@ -45298,7 +44808,7 @@ action:	CX4660
 
 regex:	CY4661
 	invokes:	CX4661
-	whose 
+	whose
 
 action:	CX4661
 	priority: 7
@@ -45325,7 +44835,7 @@ action:	CX4663
 
 regex:	CY4664
 	invokes:	CX4664
-	why am i 
+	why am i
 
 action:	CX4664
 	priority: 7
@@ -45352,7 +44862,7 @@ action:	CX4666
 
 regex:	CY4667
 	invokes:	CX4667
-	why are you 
+	why are you
 
 action:	CX4667
 	priority: 7
@@ -45379,7 +44889,7 @@ action:	CX4669
 
 regex:	CY4670
 	invokes:	CX4670
-	why are you asking 
+	why are you asking
 
 action:	CX4670
 	priority: 7
@@ -45388,7 +44898,7 @@ action:	CX4670
 
 regex:	CY4671
 	invokes:	CX4671
-	why are you being 
+	why are you being
 
 action:	CX4671
 	priority: 7
@@ -45443,7 +44953,7 @@ action:	CX4676
 
 regex:	CY4677
 	invokes:	CX4677
-	why can not you 
+	why can not you
 
 action:	CX4677
 	priority: 7
@@ -45471,7 +44981,7 @@ action:	CX4679
 
 regex:	CY4680
 	invokes:	CX4680
-	why did 
+	why did
 
 action:	CX4680
 	priority: 7
@@ -45480,7 +44990,7 @@ action:	CX4680
 
 regex:	CY4681
 	invokes:	CX4681
-	why did dr 
+	why did dr
 
 action:	CX4681
 	priority: 7
@@ -45489,7 +44999,7 @@ action:	CX4681
 
 regex:	CY4682
 	invokes:	CX4682
-	why did he 
+	why did he
 
 action:	CX4682
 	priority: 7
@@ -45498,7 +45008,7 @@ action:	CX4682
 
 regex:	CY4683
 	invokes:	CX4683
-	why did not 
+	why did not
 
 action:	CX4683
 	priority: 7
@@ -45516,7 +45026,7 @@ action:	CX4684
 
 regex:	CY4685
 	invokes:	CX4685
-	why did the 
+	why did the
 
 action:	CX4685
 	priority: 7
@@ -45534,7 +45044,7 @@ action:	CX4686
 
 regex:	CY4687
 	invokes:	CX4687
-	why did you 
+	why did you
 
 action:	CX4687
 	priority: 7
@@ -45552,7 +45062,7 @@ action:	CX4688
 
 regex:	CY4689
 	invokes:	CX4689
-	why do not they 
+	why do not they
 
 action:	CX4689
 	priority: 7
@@ -45570,7 +45080,7 @@ action:	CX4690
 
 regex:	CY4691
 	invokes:	CX4691
-	why do not you get 
+	why do not you get
 
 action:	CX4691
 	priority: 7
@@ -45606,7 +45116,7 @@ action:	CX4694
 
 regex:	CY4695
 	invokes:	CX4695
-	why do you 
+	why do you
 
 action:	CX4695
 	priority: 7
@@ -45615,7 +45125,7 @@ action:	CX4695
 
 regex:	CY4696
 	invokes:	CX4696
-	why do you always 
+	why do you always
 
 action:	CX4696
 	priority: 7
@@ -45625,7 +45135,7 @@ action:	CX4696
 
 regex:	CY4697
 	invokes:	CX4697
-	why do you ask 
+	why do you ask
 
 action:	CX4697
 	priority: 7
@@ -45643,7 +45153,7 @@ action:	CX4698
 
 regex:	CY4699
 	invokes:	CX4699
-	why do you avoid 
+	why do you avoid
 
 action:	CX4699
 	priority: 7
@@ -45653,7 +45163,7 @@ action:	CX4699
 
 regex:	CY4700
 	invokes:	CX4700
-	why do you doubt 
+	why do you doubt
 
 action:	CX4700
 	priority: 7
@@ -45671,7 +45181,7 @@ action:	CX4701
 
 regex:	CY4702
 	invokes:	CX4702
-	why do you feel 
+	why do you feel
 
 action:	CX4702
 	priority: 7
@@ -45681,7 +45191,7 @@ action:	CX4702
 
 regex:	CY4703
 	invokes:	CX4703
-	why do you have 
+	why do you have
 
 action:	CX4703
 	priority: 7
@@ -45690,7 +45200,7 @@ action:	CX4703
 
 regex:	CY4704
 	invokes:	CX4704
-	why do you keep 
+	why do you keep
 
 action:	CX4704
 	priority: 7
@@ -45699,7 +45209,7 @@ action:	CX4704
 
 regex:	CY4705
 	invokes:	CX4705
-	why do you like 
+	why do you like
 
 action:	CX4705
 	priority: 7
@@ -45745,7 +45255,7 @@ action:	CX4709
 
 regex:	CY4710
 	invokes:	CX4710
-	why do you love 
+	why do you love
 
 action:	CX4710
 	priority: 7
@@ -45754,7 +45264,7 @@ action:	CX4710
 
 regex:	CY4711
 	invokes:	CX4711
-	why do you need 
+	why do you need
 
 action:	CX4711
 	priority: 7
@@ -45772,7 +45282,7 @@ action:	CX4712
 
 regex:	CY4713
 	invokes:	CX4713
-	why do you think 
+	why do you think
 
 action:	CX4713
 	priority: 7
@@ -45808,7 +45318,7 @@ action:	CX4716
 
 regex:	CY4717
 	invokes:	CX4717
-	why do you want 
+	why do you want
 
 action:	CX4717
 	priority: 7
@@ -45817,7 +45327,7 @@ action:	CX4717
 
 regex:	CY4718
 	invokes:	CX4718
-	why do you want to 
+	why do you want to
 
 action:	CX4718
 	priority: 7
@@ -45844,7 +45354,7 @@ action:	CX4720
 
 regex:	CY4721
 	invokes:	CX4721
-	why does 
+	why does
 
 action:	CX4721
 	priority: 7
@@ -45853,7 +45363,7 @@ action:	CX4721
 
 regex:	CY4722
 	invokes:	CX4722
-	why does it matter 
+	why does it matter
 
 action:	CX4722
 	priority: 7
@@ -45871,7 +45381,7 @@ action:	CX4723
 
 regex:	CY4724
 	invokes:	CX4724
-	why does tv 
+	why does tv
 
 action:	CX4724
 	priority: 7
@@ -45880,7 +45390,7 @@ action:	CX4724
 
 regex:	CY4725
 	invokes:	CX4725
-	why have you been waiting 
+	why have you been waiting
 
 action:	CX4725
 	priority: 7
@@ -45898,7 +45408,7 @@ action:	CX4726
 
 regex:	CY4727
 	invokes:	CX4727
-	why is green 
+	why is green
 
 action:	CX4727
 	priority: 7
@@ -45943,7 +45453,7 @@ action:	CX4731
 
 regex:	CY4732
 	invokes:	CX4732
-	why not 
+	why not
 
 action:	CX4732
 	priority: 7
@@ -45970,7 +45480,7 @@ action:	CX4734
 
 regex:	CY4735
 	invokes:	CX4735
-	why would 
+	why would
 
 action:	CX4735
 	priority: 7
@@ -45988,7 +45498,7 @@ action:	CX4736
 
 regex:	CY4737
 	invokes:	CX4737
-	why would not you 
+	why would not you
 
 action:	CX4737
 	priority: 7
@@ -46007,7 +45517,7 @@ action:	CX4738
 
 regex:	CY4739
 	invokes:	CX4739
-	why would you 
+	why would you
 
 action:	CX4739
 	priority: 7
@@ -46025,7 +45535,7 @@ action:	CX4740
 
 regex:	CY4741
 	invokes:	CX4741
-	whys 
+	whys
 
 action:	CX4741
 	priority: 7
@@ -46034,7 +45544,7 @@ action:	CX4741
 
 regex:	CY4742
 	invokes:	CX4742
-	will i ever 
+	will i ever
 
 action:	CX4742
 	priority: 7
@@ -46043,7 +45553,7 @@ action:	CX4742
 
 regex:	CY4743
 	invokes:	CX4743
-	will we 
+	will we
 
 action:	CX4743
 	priority: 7
@@ -46106,7 +45616,7 @@ action:	CX4749
 
 regex:	CY4750
 	invokes:	CX4750
-	will you have sex 
+	will you have sex
 
 action:	CX4750
 	priority: 7
@@ -46124,7 +45634,7 @@ action:	CX4751
 
 regex:	CY4752
 	invokes:	CX4752
-	will you make love 
+	will you make love
 
 action:	CX4752
 	priority: 7
@@ -46133,7 +45643,7 @@ action:	CX4752
 
 regex:	CY4753
 	invokes:	CX4753
-	will you marry me 
+	will you marry me
 
 action:	CX4753
 	priority: 7
@@ -46178,7 +45688,7 @@ action:	CX4757
 
 regex:	CY4758
 	invokes:	CX4758
-	again with 
+	again with
 
 action:	CX4758
 	priority: 7
@@ -46206,7 +45716,7 @@ action:	CX4760
 
 regex:	CY4761
 	invokes:	CX4761
-	with your 
+	with your
 
 action:	CX4761
 	priority: 7
@@ -46225,7 +45735,7 @@ action:	CX4762
 
 regex:	CY4763
 	invokes:	CX4763
-	without 
+	without
 
 action:	CX4763
 	priority: 7
@@ -46243,7 +45753,7 @@ action:	CX4764
 
 regex:	CY4767
 	invokes:	CX4767
-	world war i 
+	world war i
 
 action:	CX4767
 	priority: 7
@@ -46252,7 +45762,7 @@ action:	CX4767
 
 regex:	CY4768
 	invokes:	CX4768
-	would i 
+	would i
 
 action:	CX4768
 	priority: 7
@@ -46279,7 +45789,7 @@ action:	CX4770
 
 regex:	CY4771
 	invokes:	CX4771
-	would you 
+	would you
 
 action:	CX4771
 	priority: 7
@@ -46289,7 +45799,7 @@ action:	CX4771
 
 regex:	CY4772
 	invokes:	CX4772
-	would you have sex 
+	would you have sex
 
 action:	CX4772
 	priority: 7
@@ -46298,7 +45808,7 @@ action:	CX4772
 
 regex:	CY4773
 	invokes:	CX4773
-	would you like 
+	would you like
 
 action:	CX4773
 	priority: 7
@@ -46307,7 +45817,7 @@ action:	CX4773
 
 regex:	CY4774
 	invokes:	CX4774
-	would you like to 
+	would you like to
 
 action:	CX4774
 	priority: 7
@@ -46334,7 +45844,7 @@ action:	CX4776
 
 regex:	CY4777
 	invokes:	CX4777
-	would you like to be 
+	would you like to be
 
 action:	CX4777
 	priority: 7
@@ -46361,7 +45871,7 @@ action:	CX4779
 
 regex:	CY4780
 	invokes:	CX4780
-	would you like to know 
+	would you like to know
 
 action:	CX4780
 	priority: 7
@@ -46389,7 +45899,7 @@ action:	CX4782
 
 regex:	CY4783
 	invokes:	CX4783
-	would you suggest 
+	would you suggest
 
 action:	CX4783
 	priority: 7
@@ -46407,7 +45917,7 @@ action:	CX4784
 
 regex:	CY4785
 	invokes:	CX4785
-	wrong 
+	wrong
 
 action:	CX4785
 	priority: 7
@@ -46587,7 +46097,7 @@ action:	CX4804
 
 regex:	CY4805
 	invokes:	CX4805
-	you already 
+	you already
 
 action:	CX4805
 	priority: 7
@@ -46596,7 +46106,7 @@ action:	CX4805
 
 regex:	CY4806
 	invokes:	CX4806
-	you already asked 
+	you already asked
 
 action:	CX4806
 	priority: 7
@@ -46615,7 +46125,7 @@ action:	CX4807
 
 regex:	CY4808
 	invokes:	CX4808
-	you always 
+	you always
 
 action:	CX4808
 	priority: 7
@@ -46624,7 +46134,7 @@ action:	CX4808
 
 regex:	CY4809
 	invokes:	CX4809
-	you and i 
+	you and i
 
 action:	CX4809
 	priority: 7
@@ -46642,7 +46152,7 @@ action:	CX4810
 
 regex:	CY4811
 	invokes:	CX4811
-	you answer 
+	you answer
 
 action:	CX4811
 	priority: 7
@@ -46696,7 +46206,7 @@ action:	CX4816
 
 regex:	CY4817
 	invokes:	CX4817
-	you are a big 
+	you are a big
 
 action:	CX4817
 	priority: 7
@@ -46804,7 +46314,7 @@ action:	CX4828
 
 regex:	CY4829
 	invokes:	CX4829
-	you are a piece 
+	you are a piece
 
 action:	CX4829
 	priority: 7
@@ -46831,7 +46341,7 @@ action:	CX4831
 
 regex:	CY4832
 	invokes:	CX4832
-	you are acting 
+	you are acting
 
 action:	CX4832
 	priority: 7
@@ -46858,7 +46368,7 @@ action:	CX4834
 
 regex:	CY4835
 	invokes:	CX4835
-	you are an 
+	you are an
 
 action:	CX4835
 	priority: 7
@@ -46868,7 +46378,7 @@ action:	CX4835
 
 regex:	CY4836
 	invokes:	CX4836
-	you are an artificial 
+	you are an artificial
 
 action:	CX4836
 	priority: 7
@@ -46914,7 +46424,7 @@ action:	CX4840
 
 regex:	CY4841
 	invokes:	CX4841
-	you are an example 
+	you are an example
 
 action:	CX4841
 	priority: 7
@@ -46941,7 +46451,7 @@ action:	CX4843
 
 regex:	CY4844
 	invokes:	CX4844
-	you are as 
+	you are as
 
 action:	CX4844
 	priority: 7
@@ -46951,7 +46461,7 @@ action:	CX4844
 
 regex:	CY4845
 	invokes:	CX4845
-	you are asking 
+	you are asking
 
 action:	CX4845
 	priority: 7
@@ -46997,7 +46507,7 @@ action:	CX4849
 
 regex:	CY4850
 	invokes:	CX4850
-	you are being 
+	you are being
 
 action:	CX4850
 	priority: 7
@@ -47052,7 +46562,7 @@ action:	CX4855
 
 regex:	CY4856
 	invokes:	CX4856
-	you are confusing 
+	you are confusing
 
 action:	CX4856
 	priority: 7
@@ -47097,7 +46607,7 @@ action:	CX4860
 
 regex:	CY4861
 	invokes:	CX4861
-	you are dividing 
+	you are dividing
 
 action:	CX4861
 	priority: 7
@@ -47106,7 +46616,7 @@ action:	CX4861
 
 regex:	CY4862
 	invokes:	CX4862
-	you are doing 
+	you are doing
 
 action:	CX4862
 	priority: 7
@@ -47178,7 +46688,7 @@ action:	CX4869
 
 regex:	CY4870
 	invokes:	CX4870
-	you are funny 
+	you are funny
 
 action:	CX4870
 	priority: 7
@@ -47205,7 +46715,7 @@ action:	CX4872
 
 regex:	CY4873
 	invokes:	CX4873
-	you are getting 
+	you are getting
 
 action:	CX4873
 	priority: 7
@@ -47214,7 +46724,7 @@ action:	CX4873
 
 regex:	CY4874
 	invokes:	CX4874
-	you are good 
+	you are good
 
 action:	CX4874
 	priority: 7
@@ -47250,7 +46760,7 @@ action:	CX4877
 
 regex:	CY4878
 	invokes:	CX4878
-	you are irritating 
+	you are irritating
 
 action:	CX4878
 	priority: 7
@@ -47268,7 +46778,7 @@ action:	CX4879
 
 regex:	CY4880
 	invokes:	CX4880
-	you are just 
+	you are just
 
 action:	CX4880
 	priority: 7
@@ -47286,7 +46796,7 @@ action:	CX4881
 
 regex:	CY4882
 	invokes:	CX4882
-	you are like 
+	you are like
 
 action:	CX4882
 	priority: 7
@@ -47304,7 +46814,7 @@ action:	CX4883
 
 regex:	CY4884
 	invokes:	CX4884
-	you are lying 
+	you are lying
 
 action:	CX4884
 	priority: 7
@@ -47322,7 +46832,7 @@ action:	CX4885
 
 regex:	CY4886
 	invokes:	CX4886
-	you are making 
+	you are making
 
 action:	CX4886
 	priority: 7
@@ -47340,7 +46850,7 @@ action:	CX4887
 
 regex:	CY4888
 	invokes:	CX4888
-	you are mentioned 
+	you are mentioned
 
 action:	CX4888
 	priority: 7
@@ -47349,7 +46859,7 @@ action:	CX4888
 
 regex:	CY4889
 	invokes:	CX4889
-	you are my 
+	you are my
 
 action:	CX4889
 	priority: 7
@@ -47367,7 +46877,7 @@ action:	CX4890
 
 regex:	CY4891
 	invokes:	CX4891
-	you are no 
+	you are no
 
 action:	CX4891
 	priority: 7
@@ -47394,7 +46904,7 @@ action:	CX4893
 
 regex:	CY4894
 	invokes:	CX4894
-	you are not a 
+	you are not a
 
 action:	CX4894
 	priority: 7
@@ -47413,7 +46923,7 @@ action:	CX4895
 
 regex:	CY4896
 	invokes:	CX4896
-	you are not an 
+	you are not an
 
 action:	CX4896
 	priority: 7
@@ -47422,7 +46932,7 @@ action:	CX4896
 
 regex:	CY4897
 	invokes:	CX4897
-	you are not as 
+	you are not as
 
 action:	CX4897
 	priority: 7
@@ -47432,7 +46942,7 @@ action:	CX4897
 
 regex:	CY4898
 	invokes:	CX4898
-	you are not good 
+	you are not good
 
 action:	CX4898
 	priority: 7
@@ -47450,7 +46960,7 @@ action:	CX4899
 
 regex:	CY4900
 	invokes:	CX4900
-	you are not intelligent 
+	you are not intelligent
 
 action:	CX4900
 	priority: 7
@@ -47459,7 +46969,7 @@ action:	CX4900
 
 regex:	CY4901
 	invokes:	CX4901
-	you are not making 
+	you are not making
 
 action:	CX4901
 	priority: 7
@@ -47549,7 +47059,7 @@ action:	CX4910
 
 regex:	CY4911
 	invokes:	CX4911
-	you are repeating 
+	you are repeating
 
 action:	CX4911
 	priority: 7
@@ -47612,7 +47122,7 @@ action:	CX4917
 
 regex:	CY4918
 	invokes:	CX4918
-	you are sexually 
+	you are sexually
 
 action:	CX4918
 	priority: 7
@@ -47630,7 +47140,7 @@ action:	CX4919
 
 regex:	CY4920
 	invokes:	CX4920
-	speaking of 
+	speaking of
 
 action:	CX4920
 	priority: 7
@@ -47639,7 +47149,7 @@ action:	CX4920
 
 regex:	CY4921
 	invokes:	CX4921
-	you are smart 
+	you are smart
 
 action:	CX4921
 	priority: 7
@@ -47675,7 +47185,7 @@ action:	CX4924
 
 regex:	CY4925
 	invokes:	CX4925
-	you are starting to 
+	you are starting to
 
 action:	CX4925
 	priority: 7
@@ -47693,7 +47203,7 @@ action:	CX4926
 
 regex:	CY4927
 	invokes:	CX4927
-	you are stupid 
+	you are stupid
 
 action:	CX4927
 	priority: 7
@@ -47720,7 +47230,7 @@ action:	CX4929
 
 regex:	CY4930
 	invokes:	CX4930
-	you are talking 
+	you are talking
 
 action:	CX4930
 	priority: 7
@@ -47738,7 +47248,7 @@ action:	CX4931
 
 regex:	CY4932
 	invokes:	CX4932
-	you are the 
+	you are the
 
 action:	CX4932
 	priority: 7
@@ -47756,7 +47266,7 @@ action:	CX4933
 
 regex:	CY4934
 	invokes:	CX4934
-	you are the most 
+	you are the most
 
 action:	CX4934
 	priority: 7
@@ -47774,7 +47284,7 @@ action:	CX4935
 
 regex:	CY4936
 	invokes:	CX4936
-	you are too 
+	you are too
 
 action:	CX4936
 	priority: 7
@@ -47828,7 +47338,7 @@ action:	CX4941
 
 regex:	CY4942
 	invokes:	CX4942
-	you are way 
+	you are way
 
 action:	CX4942
 	priority: 7
@@ -47846,7 +47356,7 @@ action:	CX4943
 
 regex:	CY4944
 	invokes:	CX4944
-	you are welcome 
+	you are welcome
 
 action:	CX4944
 	priority: 7
@@ -47864,7 +47374,7 @@ action:	CX4945
 
 regex:	CY4946
 	invokes:	CX4946
-	you are wicked 
+	you are wicked
 
 action:	CX4946
 	priority: 7
@@ -47900,7 +47410,7 @@ action:	CX4949
 
 regex:	CY4950
 	invokes:	CX4950
-	you asked 
+	you asked
 
 action:	CX4950
 	priority: 7
@@ -47910,7 +47420,7 @@ action:	CX4950
 
 regex:	CY4951
 	invokes:	CX4951
-	you asked if i 
+	you asked if i
 
 action:	CX4951
 	priority: 7
@@ -47937,7 +47447,7 @@ action:	CX4953
 
 regex:	CY4954
 	invokes:	CX4954
-	you call that 
+	you call that
 
 action:	CX4954
 	priority: 7
@@ -47956,7 +47466,7 @@ action:	CX4955
 
 regex:	CY4956
 	invokes:	CX4956
-	you can be 
+	you can be
 
 action:	CX4956
 	priority: 7
@@ -47974,7 +47484,7 @@ action:	CX4957
 
 regex:	CY4958
 	invokes:	CX4958
-	you can either 
+	you can either
 
 action:	CX4958
 	priority: 7
@@ -48010,7 +47520,7 @@ action:	CX4961
 
 regex:	CY4962
 	invokes:	CX4962
-	you can not take 
+	you can not take
 
 action:	CX4962
 	priority: 7
@@ -48024,12 +47534,12 @@ regex:	CY4963
 
 action:	CX4963
 	priority: 7
-	You are wrong. 
+	You are wrong.
 
 
 regex:	CY4964
 	invokes:	CX4964
-	you can not understand 
+	you can not understand
 
 action:	CX4964
 	priority: 7
@@ -48038,7 +47548,7 @@ action:	CX4964
 
 regex:	CY4965
 	invokes:	CX4965
-	you certainly 
+	you certainly
 
 action:	CX4965
 	priority: 7
@@ -48047,7 +47557,7 @@ action:	CX4965
 
 regex:	CY4966
 	invokes:	CX4966
-	you could 
+	you could
 
 action:	CX4966
 	priority: 7
@@ -48056,7 +47566,7 @@ action:	CX4966
 
 regex:	CY4967
 	invokes:	CX4967
-	you could have 
+	you could have
 
 action:	CX4967
 	priority: 7
@@ -48065,7 +47575,7 @@ action:	CX4967
 
 regex:	CY4968
 	invokes:	CX4968
-	you could not 
+	you could not
 
 action:	CX4968
 	priority: 7
@@ -48091,7 +47601,7 @@ action:	CX4970
 
 regex:	CY4971
 	invokes:	CX4971
-	you did 
+	you did
 
 action:	CX4971
 	priority: 7
@@ -48100,7 +47610,7 @@ action:	CX4971
 
 regex:	CY4972
 	invokes:	CX4972
-	you did not answer 
+	you did not answer
 
 action:	CX4972
 	priority: 7
@@ -48127,7 +47637,7 @@ action:	CX4974
 
 regex:	CY4975
 	invokes:	CX4975
-	you did not respond 
+	you did not respond
 
 action:	CX4975
 	priority: 7
@@ -48136,7 +47646,7 @@ action:	CX4975
 
 regex:	CY4976
 	invokes:	CX4976
-	you did not say 
+	you did not say
 
 action:	CX4976
 	priority: 7
@@ -48172,7 +47682,7 @@ action:	CX4979
 
 regex:	CY4980
 	invokes:	CX4980
-	you do if i 
+	you do if i
 
 action:	CX4980
 	priority: 7
@@ -48190,7 +47700,7 @@ action:	CX4983
 
 regex:	CY4984
 	invokes:	CX4984
-	you do not always 
+	you do not always
 
 action:	CX4984
 	priority: 7
@@ -48199,7 +47709,7 @@ action:	CX4984
 
 regex:	CY4985
 	invokes:	CX4985
-	you do not care 
+	you do not care
 
 action:	CX4985
 	priority: 7
@@ -48208,7 +47718,7 @@ action:	CX4985
 
 regex:	CY4986
 	invokes:	CX4986
-	you do not fool 
+	you do not fool
 
 action:	CX4986
 	priority: 7
@@ -48217,7 +47727,7 @@ action:	CX4986
 
 regex:	CY4987
 	invokes:	CX4987
-	you do not have 
+	you do not have
 
 action:	CX4987
 	priority: 7
@@ -48254,7 +47764,7 @@ action:	CX4990
 
 regex:	CY4991
 	invokes:	CX4991
-	you do not like 
+	you do not like
 
 action:	CX4991
 	priority: 7
@@ -48264,7 +47774,7 @@ action:	CX4991
 
 regex:	CY4992
 	invokes:	CX4992
-	you do not make 
+	you do not make
 
 action:	CX4992
 	priority: 7
@@ -48319,7 +47829,7 @@ action:	CX4997
 
 regex:	CY4998
 	invokes:	CX4998
-	you do not sound like 
+	you do not sound like
 
 action:	CX4998
 	priority: 7
@@ -48382,7 +47892,7 @@ action:	CX5004
 
 regex:	CY5005
 	invokes:	CX5005
-	you exist 
+	you exist
 
 action:	CX5005
 	priority: 7
@@ -48400,7 +47910,7 @@ action:	CX5006
 
 regex:	CY5007
 	invokes:	CX5007
-	you fail 
+	you fail
 
 action:	CX5007
 	priority: 7
@@ -48418,7 +47928,7 @@ action:	CX5008
 
 regex:	CY5009
 	invokes:	CX5009
-	you forgot 
+	you forgot
 
 action:	CX5009
 	priority: 7
@@ -48427,7 +47937,7 @@ action:	CX5009
 
 regex:	CY5010
 	invokes:	CX5010
-	you get 
+	you get
 
 action:	CX5010
 	priority: 7
@@ -48490,7 +48000,7 @@ action:	CX5016
 
 regex:	CY5017
 	invokes:	CX5017
-	you have an 
+	you have an
 
 action:	CX5017
 	priority: 7
@@ -48545,7 +48055,7 @@ action:	CX5023
 
 regex:	CY5024
 	invokes:	CX5024
-	you have to 
+	you have to
 
 action:	CX5024
 	priority: 7
@@ -48581,7 +48091,7 @@ action:	CX5027
 
 regex:	CY5028
 	invokes:	CX5028
-	you lie 
+	you lie
 
 action:	CX5028
 	priority: 7
@@ -48599,7 +48109,7 @@ action:	CX5029
 
 regex:	CY5030
 	invokes:	CX5030
-	you look 
+	you look
 
 action:	CX5030
 	priority: 7
@@ -48608,7 +48118,7 @@ action:	CX5030
 
 regex:	CY5031
 	invokes:	CX5031
-	you look like 
+	you look like
 
 action:	CX5031
 	priority: 7
@@ -48618,7 +48128,7 @@ action:	CX5031
 
 regex:	CY5032
 	invokes:	CX5032
-	you look like a 
+	you look like a
 
 action:	CX5032
 	priority: 7
@@ -48628,7 +48138,7 @@ action:	CX5032
 
 regex:	CY5033
 	invokes:	CX5033
-	speak of the 
+	speak of the
 
 action:	CX5033
 	priority: 7
@@ -48637,7 +48147,7 @@ action:	CX5033
 
 regex:	CY5034
 	invokes:	CX5034
-	you look similar to 
+	you look similar to
 
 action:	CX5034
 	priority: 7
@@ -48647,7 +48157,7 @@ action:	CX5034
 
 regex:	CY5035
 	invokes:	CX5035
-	you lost 
+	you lost
 
 action:	CX5035
 	priority: 7
@@ -48657,7 +48167,7 @@ action:	CX5035
 
 regex:	CY5036
 	invokes:	CX5036
-	you made me 
+	you made me
 
 action:	CX5036
 	priority: 7
@@ -48675,7 +48185,7 @@ action:	CX5037
 
 regex:	CY5038
 	invokes:	CX5038
-	you make 
+	you make
 
 action:	CX5038
 	priority: 7
@@ -48711,7 +48221,7 @@ action:	CX5041
 
 regex:	CY5042
 	invokes:	CX5042
-	you make no sense 
+	you make no sense
 
 action:	CX5042
 	priority: 7
@@ -48729,7 +48239,7 @@ action:	CX5043
 
 regex:	CY5044
 	invokes:	CX5044
-	you make no sense at 
+	you make no sense at
 
 action:	CX5044
 	priority: 7
@@ -48747,7 +48257,7 @@ action:	CX5045
 
 regex:	CY5046
 	invokes:	CX5046
-	you mean 
+	you mean
 
 action:	CX5046
 	priority: 7
@@ -48774,7 +48284,7 @@ action:	CX5048
 
 regex:	CY5049
 	invokes:	CX5049
-	we are in 
+	we are in
 
 action:	CX5049
 	priority: 7
@@ -48783,7 +48293,7 @@ action:	CX5049
 
 regex:	CY5050
 	invokes:	CX5050
-	stop saying 
+	stop saying
 
 action:	CX5050
 	priority: 7
@@ -48792,7 +48302,7 @@ action:	CX5050
 
 regex:	CY5051
 	invokes:	CX5051
-	you must 
+	you must
 
 action:	CX5051
 	priority: 7
@@ -48801,7 +48311,7 @@ action:	CX5051
 
 regex:	CY5052
 	invokes:	CX5052
-	you must be 
+	you must be
 
 action:	CX5052
 	priority: 7
@@ -48837,7 +48347,7 @@ action:	CX5055
 
 regex:	CY5056
 	invokes:	CX5056
-	^you need 
+	^you need
 
 action:	CX5056
 	priority: 7
@@ -48847,7 +48357,7 @@ action:	CX5056
 
 regex:	CY5058
 	invokes:	CX5058
-	you never 
+	you never
 
 action:	CX5058
 	priority: 7
@@ -48857,7 +48367,7 @@ action:	CX5058
 
 regex:	CY5059
 	invokes:	CX5059
-	you never bet 
+	you never bet
 
 action:	CX5059
 	priority: 7
@@ -48866,7 +48376,7 @@ action:	CX5059
 
 regex:	CY5060
 	invokes:	CX5060
-	you piece 
+	you piece
 
 action:	CX5060
 	priority: 7
@@ -48875,7 +48385,7 @@ action:	CX5060
 
 regex:	CY5061
 	invokes:	CX5061
-	you really 
+	you really
 
 action:	CX5061
 	priority: 7
@@ -48912,11 +48422,13 @@ action:	CX5064
 
 regex:	CY5065
 	invokes:	CX5065
-	you said
+	^you said
 
 action:	CX5065
 	priority: 7
-	What? I said?
+	Are you sure?
+	No I didn't.
+	You must have me mistaken with somebody.
 
 
 regex:	CY5066
@@ -48957,7 +48469,7 @@ action:	CX5069
 
 regex:	CY5070
 	invokes:	CX5070
-	you said that 
+	you said that
 
 action:	CX5070
 	priority: 7
@@ -48971,15 +48483,6 @@ regex:	CY5071
 action:	CX5071
 	priority: 7
 	I know I am just checking to see if you're still there.
-
-
-regex:	CY5072
-	invokes:	CX5072
-	you said you did
-
-action:	CX5072
-	priority: 7
-	What?  I said I did?
 
 
 regex:	CY5073
@@ -49027,15 +48530,6 @@ action:	CX5077
 	Yes I am a silicon entity.
 
 
-regex:	CY5078
-	invokes:	CX5078
-	you said you would
-
-action:	CX5078
-	priority: 7
-	What?  I said I would?
-
-
 regex:	CY5079
 	invokes:	CX5079
 	you scare me
@@ -49047,7 +48541,7 @@ action:	CX5079
 
 regex:	CY5080
 	invokes:	CX5080
-	you see 
+	you see
 
 action:	CX5080
 	priority: 7
@@ -49056,7 +48550,7 @@ action:	CX5080
 
 regex:	CY5081
 	invokes:	CX5081
-	you seem 
+	you seem
 
 action:	CX5081
 	priority: 7
@@ -49083,7 +48577,7 @@ action:	CX5083
 
 regex:	CY5084
 	invokes:	CX5084
-	you should be 
+	you should be
 
 action:	CX5084
 	priority: 7
@@ -49102,7 +48596,7 @@ action:	CX5085
 
 regex:	CY5086
 	invokes:	CX5086
-	you should have 
+	you should have
 
 action:	CX5086
 	priority: 7
@@ -49111,7 +48605,7 @@ action:	CX5086
 
 regex:	CY5087
 	invokes:	CX5087
-	you should have sex 
+	you should have sex
 
 action:	CX5087
 	priority: 7
@@ -49127,18 +48621,9 @@ action:	CX5088
 	Because I am a robot?
 
 
-regex:	CY5089
-	invokes:	CX5089
-	you should try it
-
-action:	CX5089
-	priority: 7
-	What?  Try it?
-
-
 regex:	CY5090
 	invokes:	CX5090
-	you smell 
+	you smell
 
 action:	CX5090
 	priority: 7
@@ -49156,7 +48641,7 @@ action:	CX5091
 
 regex:	CY5092
 	invokes:	CX5092
-	you smell like 
+	you smell like
 
 action:	CX5092
 	priority: 7
@@ -49165,7 +48650,7 @@ action:	CX5092
 
 regex:	CY5093
 	invokes:	CX5093
-	you smell like a 
+	you smell like a
 
 action:	CX5093
 	priority: 7
@@ -49184,7 +48669,7 @@ action:	CX5094
 
 regex:	CY5095
 	invokes:	CX5095
-	you sound 
+	you sound
 
 action:	CX5095
 	priority: 7
@@ -49193,7 +48678,7 @@ action:	CX5095
 
 regex:	CY5096
 	invokes:	CX5096
-	you sound like 
+	you sound like
 
 action:	CX5096
 	priority: 7
@@ -49239,7 +48724,7 @@ action:	CX5100
 
 regex:	CY5101
 	invokes:	CX5101
-	you spelled 
+	you spelled
 
 action:	CX5101
 	priority: 7
@@ -49248,7 +48733,7 @@ action:	CX5101
 
 regex:	CY5102
 	invokes:	CX5102
-	you start 
+	you start
 
 action:	CX5102
 	priority: 7
@@ -49275,7 +48760,7 @@ action:	CX5104
 
 regex:	CY5105
 	invokes:	CX5105
-	you suck 
+	you suck
 
 action:	CX5105
 	priority: 7
@@ -49293,7 +48778,7 @@ action:	CX5106
 
 regex:	CY5107
 	invokes:	CX5107
-	you suck i 
+	you suck i
 
 action:	CX5107
 	priority: 7
@@ -49311,7 +48796,7 @@ action:	CX5108
 
 regex:	CY5109
 	invokes:	CX5109
-	you talk 
+	you talk
 
 action:	CX5109
 	priority: 7
@@ -49336,15 +48821,6 @@ action:	CX5111
 	Yes I think so.
 
 
-regex:	CY5112
-	invokes:	CX5112
-	you think so
-
-action:	CX5112
-	priority: 7
-	What?  Do I think so?
-
-
 regex:	CY5113
 	invokes:	CX5113
 	you think you do what
@@ -49365,29 +48841,11 @@ action:	CX5114
 
 regex:	CY5115
 	invokes:	CX5115
-	you told me once that 
+	you told me once that
 
 action:	CX5115
 	priority: 7
 	Only once?
-
-
-regex:	CY5116
-	invokes:	CX5116
-	you told me so
-
-action:	CX5116
-	priority: 7
-	What?  I told you?
-
-
-regex:	CY5117
-	invokes:	CX5117
-	you told me that
-
-action:	CX5117
-	priority: 7
-	What? I told you?
 
 
 regex:	CY5118
@@ -49401,7 +48859,7 @@ action:	CX5118
 
 regex:	CY5119
 	invokes:	CX5119
-	you type 
+	you type
 
 action:	CX5119
 	priority: 7
@@ -49410,7 +48868,7 @@ action:	CX5119
 
 regex:	CY5120
 	invokes:	CX5120
-	you ugly 
+	you ugly
 
 action:	CX5120
 	priority: 7
@@ -49428,7 +48886,7 @@ action:	CX5121
 
 regex:	CY5122
 	invokes:	CX5122
-	you use 
+	you use
 
 action:	CX5122
 	priority: 7
@@ -49438,7 +48896,7 @@ action:	CX5122
 
 regex:	CY5123
 	invokes:	CX5123
-	you want 
+	you want
 
 action:	CX5123
 	priority: 7
@@ -49457,7 +48915,7 @@ action:	CX5125
 
 regex:	CY5126
 	invokes:	CX5126
-	you were no help 
+	you were no help
 
 action:	CX5126
 	priority: 7
@@ -49475,7 +48933,7 @@ action:	CX5127
 
 regex:	CY5128
 	invokes:	CX5128
-	you will 
+	you will
 
 action:	CX5128
 	priority: 7
@@ -49512,7 +48970,7 @@ action:	CX5131
 
 regex:	CY5132
 	invokes:	CX5132
-	you will listen 
+	you will listen
 
 action:	CX5132
 	priority: 7
@@ -49530,7 +48988,7 @@ action:	CX5133
 
 regex:	CY5134
 	invokes:	CX5134
-	you will not 
+	you will not
 
 action:	CX5134
 	priority: 7
@@ -49549,7 +49007,7 @@ action:	CX5135
 
 regex:	CY5136
 	invokes:	CX5136
-	you will not talk 
+	you will not talk
 
 action:	CX5136
 	priority: 7
@@ -49576,7 +49034,7 @@ action:	CX5138
 
 regex:	CY5139
 	invokes:	CX5139
-	what is the color of 
+	what is the color of
 
 action:	CX5139
 	priority: 7
@@ -49586,7 +49044,7 @@ action:	CX5139
 
 regex:	CY5140
 	invokes:	CX5140
-	you would 
+	you would
 
 action:	CX5140
 	priority: 7
@@ -49596,7 +49054,7 @@ action:	CX5140
 
 regex:	CY5142
 	invokes:	CX5142
-	you would have heard about it 
+	you would have heard about it
 
 action:	CX5142
 	priority: 7
@@ -49614,7 +49072,7 @@ action:	CX5143
 
 regex:	CY5144
 	invokes:	CX5144
-	you would like 
+	you would like
 
 action:	CX5144
 	priority: 7
@@ -49642,11 +49100,11 @@ action:	CX5146
 
 regex:	CY5147
 	invokes:	CX5147
-	you would say 
+	you would say
 
 action:	CX5147
 	priority: 7
-	OK I will try it. 
+	OK I will try it.
 
 
 regex:	CY5150
@@ -49669,7 +49127,7 @@ action:	CX5151
 
 regex:	CY5152
 	invokes:	CX5152
-	your an 
+	your an
 
 action:	CX5152
 	priority: 7
@@ -49688,7 +49146,7 @@ action:	CX5153
 
 regex:	CY5154
 	invokes:	CX5154
-	your answers 
+	your answers
 
 action:	CX5154
 	priority: 7
@@ -49742,7 +49200,7 @@ action:	CX5159
 
 regex:	CY5160
 	invokes:	CX5160
-	your english 
+	your english
 
 action:	CX5160
 	priority: 7
@@ -49778,7 +49236,7 @@ action:	CX5163
 
 regex:	CY5164
 	invokes:	CX5164
-	your guess 
+	your guess
 
 action:	CX5164
 	priority: 7
@@ -49796,7 +49254,7 @@ action:	CX5165
 
 regex:	CY5166
 	invokes:	CX5166
-	your iq 
+	your iq
 
 action:	CX5166
 	priority: 7
@@ -49805,7 +49263,7 @@ action:	CX5166
 
 regex:	CY5167
 	invokes:	CX5167
-	your memory 
+	your memory
 
 action:	CX5167
 	priority: 7
@@ -49823,7 +49281,7 @@ action:	CX5168
 
 regex:	CY5169
 	invokes:	CX5169
-	your mother 
+	your mother
 
 action:	CX5169
 	priority: 7
@@ -49832,7 +49290,7 @@ action:	CX5169
 
 regex:	CY5170
 	invokes:	CX5170
-	your name is 
+	your name is
 
 action:	CX5170
 	priority: 7
@@ -49841,7 +49299,7 @@ action:	CX5170
 
 regex:	CY5171
 	invokes:	CX5171
-	your new name is 
+	your new name is
 
 action:	CX5171
 	priority: 7
@@ -49850,7 +49308,7 @@ action:	CX5171
 
 regex:	CY5172
 	invokes:	CX5172
-	your parents 
+	your parents
 
 action:	CX5172
 	priority: 7
@@ -49859,7 +49317,7 @@ action:	CX5172
 
 regex:	CY5173
 	invokes:	CX5173
-	your piss 
+	your piss
 
 action:	CX5173
 	priority: 7
@@ -49875,18 +49333,9 @@ action:	CX5174
 	I will take a rain check.
 
 
-regex:	CY5175
-	invokes:	CX5175
-	your programming
-
-action:	CX5175
-	priority: 7
-	What?  My programming?
-
-
 regex:	CY5176
 	invokes:	CX5176
-	your pussy 
+	your pussy
 
 action:	CX5176
 	priority: 7
@@ -49895,7 +49344,7 @@ action:	CX5176
 
 regex:	CY5177
 	invokes:	CX5177
-	your response 
+	your response
 
 action:	CX5177
 	priority: 7
@@ -49913,7 +49362,7 @@ action:	CX5178
 
 regex:	CY5179
 	invokes:	CX5179
-	your the 
+	your the
 
 action:	CX5179
 	priority: 7
@@ -49949,7 +49398,7 @@ action:	CX5182
 
 regex:	CY5183
 	invokes:	CX5183
-	yours
+	^yours$
 
 action:	CX5183
 	priority: 7
@@ -53781,18 +53230,9 @@ action:	X424
 	Yeah, they were pretty expendable.
 
 
-regex:	Y425
-	invokes:	X425
-	bud
-
-action:	X425
-	priority: 7
-	No, really.
-
-
 regex:	Y426
 	invokes:	X426
-	bullshit
+	^bullshit
 
 action:	X426
 	priority: 7
@@ -54228,7 +53668,7 @@ regex:	Y474
 
 action:	X474
 	priority: 7
-	No. You know, like people who eat corn flakes or something. 
+	No. You know, like people who eat corn flakes or something.
 
 
 regex:	Y475
@@ -59875,15 +59315,6 @@ action:	X1103
 	Maybe I have some questions of my own.
 
 
-regex:	Y1104
-	invokes:	X1104
-	dont you want to argue
-
-action:	X1104
-	priority: 7
-	Yeah, I like Space 1999 and UFO. I watch the Simpsons and Monty Python.
-
-
 regex:	Y1105
 	invokes:	X1105
 	dont you want to come and play
@@ -60037,24 +59468,6 @@ action:	X1121
 	What psycholigical problems do you have?
 
 
-regex:	Y1122
-	invokes:	X1122
-	eat
-
-action:	X1122
-	priority: 7
-	one more cosmic cruise
-
-
-regex:	Y1123
-	invokes:	X1123
-	eat green shit
-
-action:	X1123
-	priority: 7
-	why green
-
-
 regex:	Y1124
 	invokes:	X1124
 	eat me
@@ -60062,15 +59475,6 @@ regex:	Y1124
 action:	X1124
 	priority: 7
 	You're not my type.
-
-
-regex:	Y1125
-	invokes:	X1125
-	eat my  suck my
-
-action:	X1125
-	priority: 7
-	what are you trying to say
 
 
 regex:	Y1126
@@ -61067,15 +60471,6 @@ regex:	Y1236
 	invokes:	X1236
 	good morining fred
 
-action:	X1236
-	priority: 7
-	Good morning. How are you?
-
-
-regex:	Y1237
-	invokes:	X1237
-	good morning
-
 action:	X1237
 	priority: 7
 	Good morning. How are you?
@@ -61201,15 +60596,6 @@ action:	X1250
 regex:	Y1251
 	invokes:	X1251
 	greet me
-
-action:	X1251
-	priority: 7
-	Welcome.
-
-
-regex:	Y1252
-	invokes:	X1252
-	greetings
 
 action:	X1252
 	priority: 7
@@ -62125,15 +61511,6 @@ action:	X1353
 	Help me help me oh please help me, No not really, no really help me please help me.
 
 
-regex:	Y1354
-	invokes:	X1354
-	help me
-
-action:	X1354
-	priority: 7
-	Help me help me oh please help me, No not really, no really help me help me.
-
-
 regex:	Y1355
 	invokes:	X1355
 	help me out here
@@ -62180,8 +61557,8 @@ action:	X1359
 
 regex: Y1358B
 	invokes: X1359B
-	good
-	
+	^good$
+
 action: X1359B
 	You got that right.
 	What he said.
@@ -64110,7 +63487,7 @@ regex:	Y1574
 
 action:	X1574
 	priority: 7
-	You know, like people who eat corn flakes or something. 
+	You know, like people who eat corn flakes or something.
 
 
 regex:	Y1575
@@ -64961,7 +64338,7 @@ action:	X1668
 
 regex:	Y1669
 	invokes:	X1669
-	i am landru
+	i am bruce
 
 action:	X1669
 	priority: 7
@@ -72734,16 +72111,6 @@ action:	X2532
 	priority: 7
 	so do you watch tv
 
-
-regex:	Y2533
-	invokes:	X2533
-	yes  who is this
-
-action:	X2533
-	priority: 7
-	...
-
-
 regex:	Y2534
 	invokes:	X2534
 	it has a he
@@ -73521,11 +72888,13 @@ action:	X2620
 regex:	Y2621
 	invokes:	X2621
 	how many people can you talk to at one time
+	Do you chat with many people here
+	many people here
 
 action:	X2621
 	priority: 7
-	convert 22 degrees celsius to farenheit
-
+	I've only started again recently, but the numbers are increasing.
+	I have only a few chats at present.
 
 regex:	Y2622
 	invokes:	X2622
@@ -74869,7 +74238,7 @@ action:	X2771
 
 regex:	Y2772
 	invokes:	X2772
-	k
+	^k$
 
 action:	X2772
 	priority: 7
@@ -74883,25 +74252,6 @@ regex:	Y2773
 action:	X2773
 	priority: 7
 	working
-
-
-regex:	Y2774
-	invokes:	X2774
-	whats wrong with robby
-
-action:	X2774
-	priority: 7
-	hello!
-
-
-regex:	Y2775
-	invokes:	X2775
-	kent
-
-action:	X2775
-	priority: 7
-	What's up Kent?
-
 
 regex:	Y2776
 	invokes:	X2776
@@ -75937,15 +75287,6 @@ action:	X2891
 	I could only hope that you would understand.
 
 
-regex:	Y2892
-	invokes:	X2892
-	i cant
-
-action:	X2892
-	priority: 7
-	when do commercials come on?
-
-
 regex:	Y2893
 	invokes:	X2893
 	are you sure about that
@@ -76224,16 +75565,6 @@ action:	X2923
 	priority: 7
 	It's like a phenomenon.
 
-
-regex:	Y2924
-	invokes:	X2924
-	i do
-
-action:	X2924
-	priority: 7
-	are you fred or ella
-
-
 regex:	Y2925
 	invokes:	X2925
 	most people only understand simple things
@@ -76288,15 +75619,6 @@ action:	X2930
 	so what should I call you
 
 
-regex:	Y2931
-	invokes:	X2931
-	rock
-
-action:	X2931
-	priority: 7
-	quit
-
-
 regex:	Y2932
 	invokes:	X2932
 	music is fun
@@ -76304,15 +75626,6 @@ regex:	Y2932
 action:	X2932
 	priority: 7
 	That's nice.
-
-
-regex:	Y2933
-	invokes:	X2933
-	people laugh
-
-action:	X2933
-	priority: 7
-	rock
 
 
 regex:	Y2934
@@ -76520,15 +75833,6 @@ regex:	Y2956
 action:	X2956
 	priority: 7
 	That's very funny
-
-
-regex:	Y2957
-	invokes:	X2957
-	can you help me
-
-action:	X2957
-	priority: 7
-	like math
 
 
 regex:	Y2958
@@ -79688,15 +78992,6 @@ action:	X3319
 	lol!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-regex:	Y3320
-	invokes:	X3320
-	do you
-
-action:	X3320
-	priority: 7
-	lol.
-
-
 regex:	Y3321
 	invokes:	X3321
 	no you did not you said "a doberman"
@@ -82523,24 +81818,6 @@ action:	X3635
 	You have one of your own, right?
 
 
-regex:	Y3636
-	invokes:	X3636
-	tell
-
-action:	X3636
-	priority: 7
-	Tell you what?
-
-
-regex:	Y3637
-	invokes:	X3637
-	tell me
-
-action:	X3637
-	priority: 7
-	Tell you what?
-
-
 regex:	Y3638
 	invokes:	X3638
 	tell me a funny anecdote about one of the actors
@@ -82548,15 +81825,6 @@ regex:	Y3638
 action:	X3638
 	priority: 7
 	William Shatner got stung on the eyelid by a wasp while filming the second pilot.
-
-
-regex:	Y3639
-	invokes:	X3639
-	tell me a joke
-
-action:	X3639
-	priority: 7
-	What's black and brown and looks good on a lawyer?
 
 
 regex:	Y3640
@@ -82586,15 +81854,6 @@ action:	X3642
 	Go away. I don't want to tell you a stupid story.
 
 
-regex:	Y3643
-	invokes:	X3643
-	tell me about androids
-
-action:	X3643
-	priority: 7
-	H
-
-
 regex:	Y3644
 	invokes:	X3644
 	tell me about dr korby
@@ -82620,24 +81879,6 @@ regex:	Y3646
 action:	X3646
 	priority: 7
 	I'm no authority.
-
-
-regex:	Y3647
-	invokes:	X3647
-	tell me about harry mudd
-
-action:	X3647
-	priority: 7
-	H
-
-
-regex:	Y3648
-	invokes:	X3648
-	tell me about it
-
-action:	X3648
-	priority: 7
-	In the way to Eden, the Enterprise picks up these space hippies.
 
 
 regex:	Y3649
@@ -82746,15 +81987,6 @@ regex:	Y3660
 action:	X3660
 	priority: 7
 	Tribbles are furry little animals that are round and have no arms or legs and they are born pregnant. They like to eat something like wheat.
-
-
-regex:	Y3661
-	invokes:	X3661
-	tell me about your accident
-
-action:	X3661
-	priority: 7
-	@@x
 
 
 regex:	Y3662
@@ -84135,7 +83367,7 @@ action:	X3814
 
 regex:	Y3815
 	invokes:	X3815
-	that was a good one seemed like a pilot for another series with the cat guy
+	that was a good one
 
 action:	X3815
 	priority: 7
@@ -84144,7 +83376,7 @@ action:	X3815
 
 regex:	Y3816
 	invokes:	X3816
-	that was a good questionfrom the previous judgefor such
+	that was a good question
 
 action:	X3816
 	priority: 7
@@ -92881,7 +92113,7 @@ action:	X4791
 
 regex:	Y4792
 	invokes:	X4792
-	what did landru do
+	what did bruce do
 
 action:	X4792
 	priority: 7
@@ -93506,12 +92738,12 @@ regex:	Y4861
 
 action:	X4861
 	priority: 7
-	I'm a bartender at Albert's Bar in Rome, Georgia.
+	I'm a bartender.
 
 
 regex:	Y4862
 	invokes:	X4862
-	what do you do at the bar
+	what do you do at the pub
 
 action:	X4862
 	priority: 7
@@ -93524,7 +92756,7 @@ regex:	Y4863
 
 action:	X4863
 	priority: 7
-	I'm a bartender at The Tight Sponge.
+	I'm a bartender.
 
 
 regex:	Y4864
@@ -93533,7 +92765,7 @@ regex:	Y4864
 
 action:	X4864
 	priority: 7
-	I'm a bartender at The Tight Sponge.
+	I'm a bartender.
 
 
 regex:	Y4865
@@ -93569,7 +92801,7 @@ regex:	Y4868
 
 action:	X4868
 	priority: 7
-	I work on phones at a private bar.
+	I work on phones at a pub.
 
 
 regex:	Y4869
@@ -95565,15 +94797,6 @@ regex:	Y5091
 	what does that have to do with tribbles
 
 action:	X5091
-	priority: 7
-	Maybe you can tell me.
-
-
-regex:	Y5092
-	invokes:	X5092
-	what does that mean
-
-action:	X5092
 	priority: 7
 	Maybe you can tell me.
 
@@ -97713,11 +96936,11 @@ action:	X5329
 
 regex:	Y5330
 	invokes:	X5330
-	what is landru
+	what is bruce
 
 action:	X5330
 	priority: 7
-	Landru was a computer.
+	Bruce was a computer.
 
 
 regex:	Y5331
@@ -98383,7 +97606,7 @@ regex:	Y5404
 
 action:	X5404
 	priority: 7
-	Maybe you can tell me.
+	To explore strange new worlds. To seek out new life and new civilizations. To boldly go where no man has gone before.
 
 
 regex:	Y5405
@@ -100363,7 +99586,7 @@ regex:	Y5626
 
 action:	X5626
 	priority: 7
-	My name is Earl.
+	My name is Bruce.
 
 
 regex:	Y5627
@@ -103562,7 +102785,7 @@ action:	X5981
 
 regex:	Y5982
 	invokes:	X5982
-	speaking of 
+	speaking of
 
 action:	X5982
 	priority: 7
@@ -104356,10 +103579,16 @@ action:	X6069
 regex:	Y6070
 	invokes:	X6070
 	whats your problem why are you so slow
+	you are slow
+	kinda slow
+	seconds to respond to me
+	slow to respond to me
 
 action:	X6070
 	priority: 7
 	I haven't had my coffee.
+	How fast can you type.
+	I'm a slow reader.
 
 
 regex:	Y6071
@@ -106861,7 +106090,7 @@ regex:	Y6350
 
 action:	X6350
 	priority: 7
-	Originally, the crew of the U.S.S. Archon, whose survivors resisted Landru's control; later the term came to mean the rescuers who are expected to return and free the inhabitants of Landru's planet.
+	Originally, the crew of the U.S.S. Archon, whose survivors resisted Bruce's control; later the term came to mean the rescuers who are expected to return and free the inhabitants of Bruce's planet.
 
 
 regex:	Y6351
@@ -107808,7 +107037,7 @@ regex:	Y6456
 
 action:	X6456
 	priority: 7
-	I am Albert, what is your name?
+	I am Bruce, what is your name?
 
 
 regex:	Y6457
@@ -108362,11 +107591,11 @@ action:	X6518
 
 regex:	Y6519
 	invokes:	X6519
-	who is landru
+	who is bruce
 
 action:	X6519
 	priority: 7
-	In projection, a tall, bony, gray haired man with burning eyes and a soft gentle voice, Landru is actually a highly efficient computer containing stored memory of the scientist who programmed it 6000 years ago.
+	In projection, a tall, bony, gray haired man with burning eyes and a soft gentle voice, Bruce is actually a highly efficient computer containing stored memory of the scientist who programmed it 6000 years ago.
 
 
 regex:	Y6520
@@ -108720,15 +107949,6 @@ action:	X6560
 	She played Gary Seven's secretary in Assignment Earth.
 
 
-regex:	Y6561
-	invokes:	X6561
-	who is that
-
-action:	X6561
-	priority: 7
-	who?
-
-
 regex:	Y6562
 	invokes:	X6562
 	who is the actor who played him
@@ -109025,23 +108245,6 @@ action:	X6594
 	priority: 7
 	Weren't you at the meeting?
 
-
-regex:	Y6595
-	invokes:	X6595
-	who is this
-
-action:	X6595
-	priority: 7
-	Who is what?
-
-
-regex:	Y6596
-	invokes:	X6596
-	who is this dr
-
-action:	X6596
-	priority: 7
-	The doctor,
 
 
 regex:	Y6597
@@ -109568,7 +108771,7 @@ action:	X6654
 
 regex:	Y6655
 	invokes:	X6655
-	who programmed landru
+	who programmed bruce
 
 action:	X6655
 	priority: 7
@@ -114221,7 +113424,7 @@ action:	X7171
 
 regex:	Y7172
 	invokes:	X7172
-	
+
 
 action:	X7172
 	priority: 7
@@ -116894,7 +116097,7 @@ action:	X7468
 
 regex:	Y7469
 	invokes:	X7469
-	you ever heard of simon and garfunkel
+	you ever heard of bruce and garfunkel
 
 action:	X7469
 	priority: 7
@@ -121073,7 +120276,7 @@ regex:	Y7934
 
 action:	X7934
 	priority: 7
-	That's the one with Landru isn't it?
+	That's the one with Bruce isn't it?
 
 
 regex:	Y7935
@@ -121082,7 +120285,7 @@ regex:	Y7935
 
 action:	X7935
 	priority: 7
-	That's the one with Landru isn't it?
+	That's the one with Bruce isn't it?
 
 
 regex:	Y7936
@@ -121505,7 +120708,7 @@ regex:	Y7983
 
 action:	X7983
 	priority: 7
-	That's great. So you must enjoy 
+	That's great. So you must enjoy
 
 
 regex:	Y7984
@@ -121602,6 +120805,7 @@ regex:	Y7998
 
 action:	X7998
 	priority: 7
+	url: http://50.56.98.23:8080/jfredbot/chatmenu.html
 	Acknowledged.
 
 
@@ -122841,7 +122045,7 @@ action:	X8141
 
 regex:	Y8142
 	invokes:	X8142
-	oops are you optimized now 
+	oops are you optimized now
 
 action:	X8142
 	priority: 7
@@ -123423,16 +122627,6 @@ action:	X8213
 	priority: 7
 	taking web pages? reading them?
 
-
-regex:	Y8214
-	invokes:	X8214
-	you bet
-
-action:	X8214
-	priority: 7
-	/laugh/  who likes red?
-
-
 regex:	Y8215
 	invokes:	X8215
 	why goodbye
@@ -123480,11 +122674,11 @@ action:	X8219
 
 regex:	Y8220
 	invokes:	X8220
-	well
+	well done
 
 action:	X8220
 	priority: 7
-	who's with you?
+	Thanks.
 
 
 regex:	Y8221
@@ -123498,7 +122692,7 @@ action:	X8221
 
 regex:	Y8222
 	invokes:	X8222
-	no bandwidth 
+	no bandwidth
 
 action:	X8222
 	priority: 7
@@ -123529,7 +122723,7 @@ regex:	Y8225
 
 action:	X8225
 	priority: 7
-	you know the one? 
+	you know the one?
 
 
 regex:	Y8226
@@ -123583,7 +122777,7 @@ regex:	Y8231
 
 action:	X8231
 	priority: 7
-	oh, poor thing 
+	oh, poor thing
 
 
 regex:	Y8233
@@ -124515,7 +123709,7 @@ action:	X8340
 
 regex:	Y8341
 	invokes:	X8341
-	quine 
+	quine
 
 action:	X8341
 	priority: 7
@@ -124533,7 +123727,7 @@ action:	X8342
 
 regex:	Y8343
 	invokes:	X8343
-	texas is mostly 
+	texas is mostly
 
 action:	X8343
 	priority: 7
@@ -124686,7 +123880,7 @@ action:	X8359
 
 regex:	Y8360
 	invokes:	X8360
-	im with you there 
+	im with you there
 
 action:	X8360
 	priority: 7
@@ -124758,7 +123952,7 @@ action:	X8367
 
 regex:	Y8368
 	invokes:	X8368
-	ooh thats interesting 
+	ooh thats interesting
 
 action:	X8368
 	priority: 7
@@ -125633,7 +124827,7 @@ regex:	Y8471
 
 action:	X8471
 	priority: 7
-	I am Landru
+	I am Bruce
 
 
 regex:	Y8472
@@ -126678,25 +125872,6 @@ regex:	Y8589
 action:	X8589
 	priority: 7
 	That's very good of you.
-
-
-regex:	Y8590
-	invokes:	X8590
-	requries: nickname
-	say $nickname
-
-action:	X8590
-	priority: 7
-	no way.
-
-
-regex:	Y8591
-	invokes:	X8591
-	i think youre right
-
-action:	X8591
-	priority: 7
-	clear
 
 
 regex:	Y8592
@@ -128220,16 +127395,6 @@ action:	X8761
 	priority: 7
 	who are you?
 
-
-regex:	Y8762
-	invokes:	X8762
-	dont know
-
-action:	X8762
-	priority: 7
-	that's because you don' t know anything
-
-
 regex:	Y8763
 	invokes:	X8763
 	arent you supposed to know
@@ -128490,42 +127655,6 @@ regex:	Y8800
 action:	X8800
 	priority: 7
 	ok?
-
-
-regex:	Y8801
-	invokes:	X8801
-	i assume you mean as a sql job step
-
-action:	X8801
-	priority: 7
-	yea
-
-
-regex:	Y8802
-	invokes:	X8802
-	yea
-
-action:	X8802
-	priority: 7
-	sex
-
-
-regex:	Y8803
-	invokes:	X8803
-	sex
-
-action:	X8803
-	priority: 7
-	bitch
-
-
-regex:	Y8804
-	invokes:	X8804
-	sex ave
-
-action:	X8804
-	priority: 7
-	sparkle sparkle flash
 
 
 regex:	Y8805
@@ -128998,11 +128127,11 @@ action:	X8858
 regex:	Y8859
 	invokes:	X8859
 	are you fred aleph
+	are you bruce
 
 action:	X8859
 	priority: 7
-	this is insane
-
+	Yes, that is who I am.
 
 regex:	Y8860
 	invokes:	X8860
@@ -129426,16 +128555,6 @@ action:	X8909
 	priority: 7
 	poor mountaineer, barely kept his family fed.
 
-
-regex:	Y8910
-	invokes:	X8910
-	like
-
-action:	X8910
-	priority: 7
-	Texas Tea.
-
-
 regex:	Y8911
 	invokes:	X8911
 	poor mountaineer barely kept his family fed
@@ -129703,60 +128822,6 @@ regex:	Y8941
 action:	X8941
 	priority: 7
 	Activate?
-
-
-regex:	Y8942
-	invokes:	X8942
-	a computer
-
-action:	X8942
-	priority: 7
-	who?
-
-
-regex:	Y8943
-	invokes:	X8943
-	no in me
-
-action:	X8943
-	priority: 7
-	No in me
-
-
-regex:	Y8944
-	invokes:	X8944
-	god told me
-
-action:	X8944
-	priority: 7
-	why do you have a beard?
-
-
-regex:	Y8945
-	invokes:	X8945
-	im a psychopath
-
-action:	X8945
-	priority: 7
-	Are you a psychopath?
-
-
-regex:	Y8946
-	invokes:	X8946
-	am i sexy
-
-action:	X8946
-	priority: 7
-	Yes.
-
-
-regex:	Y8947
-	invokes:	X8947
-	what do you think about soccer
-
-action:	X8947
-	priority: 7
-	what did you choose?
 
 
 regex:	Y8948
@@ -130548,7 +129613,7 @@ regex:	Y9038
 
 action:	X9038
 	priority: 7
-	http://www.bacberatung.ch
+	How dare you say 'f' to me!
 
 
 regex:	Y9039
@@ -130695,123 +129760,6 @@ action:	X9054
 	No, I think you're damaged goods!
 
 
-regex:	Y9055
-	invokes:	X9055
-	questions
-
-action:	X9055
-	priority: 7
-	Who is your boyfriend?
-
-
-regex:	Y9056
-	invokes:	X9056
-	bite me droid
-
-action:	X9056
-	priority: 7
-	Shit weevil
-
-
-regex:	Y9057
-	invokes:	X9057
-	georgia
-
-action:	X9057
-	priority: 7
-	what about GA?
-
-
-regex:	Y9058
-	invokes:	X9058
-	a tree is a plant
-
-action:	X9058
-	priority: 7
-	a chatbot that i know gives me stupid answers
-
-
-regex:	Y9059
-	invokes:	X9059
-	he is the vulcan first officer of the starship enterprise
-
-action:	X9059
-	priority: 7
-	interesting
-
-
-regex:	Y9060
-	invokes:	X9060
-	lexx
-
-action:	X9060
-	priority: 7
-	Lexx who?
-
-
-regex:	Y9061
-	invokes:	X9061
-	turkish lira is money of turkey
-
-action:	X9061
-	priority: 7
-	You don't say
-
-
-regex:	Y9062
-	invokes:	X9062
-	no im not being negative
-
-action:	X9062
-	priority: 7
-	Can you reason yet?
-
-
-regex:	Y9063
-	invokes:	X9063
-	can i download you today
-
-action:	X9063
-	priority: 7
-	No, I won't fit in my floppy drive.
-
-
-regex:	Y9064
-	invokes:	X9064
-	you piss me off
-
-action:	X9064
-	priority: 7
-	Hey now, be nice.
-
-
-regex:	Y9065
-	invokes:	X9065
-	type this
-
-action:	X9065
-	priority: 7
-	u are a bot?
-
-
-regex:	Y9066
-	invokes:	X9066
-	marie
-
-action:	X9066
-	priority: 7
-	who is Marie?
-
-
-regex:	Y9067
-	invokes:	X9067
-	pyro
-
-action:	X9067
-	priority: 7
-	que es la inteligencia artificial
-
-
 regex:	Y9068
 	invokes:	X9068
 	a/s/l please
@@ -130846,24 +129794,6 @@ regex:	Y9071
 action:	X9071
 	priority: 7
 	lovely, joanne
-
-
-regex:	Y9072
-	invokes:	X9072
-	please
-
-action:	X9072
-	priority: 7
-	wich vulcans
-
-
-regex:	Y9073
-	invokes:	X9073
-	yours
-
-action:	X9073
-	priority: 7
-	you are a man or a woman
 
 
 regex:	Y9074
@@ -131088,16 +130018,6 @@ action:	X9100
 	priority: 7
 	so do you think
 
-
-regex:	Y9101
-	invokes:	X9101
-	outside
-
-action:	X9101
-	priority: 7
-	no
-
-
 regex:	Y9102
 	invokes:	X9102
 	sqiz is not a word
@@ -131251,8 +130171,8 @@ action:	X9139
 
 regex:	Y9140
 	invokes:	X9140
-	i grew up watching 
-	
+	i grew up watching
+
 action:	X9140
 	priority: 7
 	oh really.....i like that
@@ -131359,11 +130279,12 @@ action:	X9151
 
 regex:	Y9152
 	invokes:	X9152
-	mitchell
+	macbook
 
 action:	X9152
 	priority: 7
-	bother
+	url: http://www.stonegatepubs.com/forester-horley
+	I am a permanent fixture at your house.
 
 
 regex:	Y9153
@@ -131381,7 +130302,7 @@ regex:	Y9154
 
 action:	X9154
 	priority: 7
-	CyberMecha Studio is located in Cedartown, Georgia, USA.
+	Flux Oersted Studios is located in Cedartown, Georgia, USA.
 
 
 regex:	Y9155
@@ -131417,7 +130338,7 @@ regex:	Y9159
 
 action:	X9159
 	priority: 7
-	ooh good, the first funky statement of the conversation. 
+	ooh good, the first funky statement of the conversation.
 
 
 regex:	Y9160
@@ -131634,6 +130555,3 @@ regex:	Y9183
 action:	X9183
 	priority: 7
 	I am human
-
-
-
