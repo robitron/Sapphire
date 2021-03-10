@@ -1,4 +1,4 @@
-200
+221
 cart=dirt.jfd
 hello
 i am your father
@@ -199,7 +199,28 @@ where are we going with this
 good
 hello
 exit
-180
+hello
+what are you doing
+I am your father
+are you a good computer?
+ha ha
+tell me a joke
+do you know any jokes
+don't know
+no
+yes
+that was weird
+pretty weird
+thanks
+hi there
+I'm going to fix you up
+do you like spam
+what is my phone number
+my phone number is 555-6718
+yes
+what is my phone number
+I like you
+201
 Sure.
 No I am not.
 I have idea HOW you WOULD do I know.
@@ -380,9 +401,29 @@ I am running on your notebook computer.
 What he said.
 What's up?
 [exit]
+Hey.
+Oh, I'm not doing much.
+Ah yes. I remember, the old ones.
+[unknown]
+HA HA!
+Alright then.
+What's black and brown and looks good on a lawyer?
+Is it something that I said?
+Okay.
+A doberman :)
+How weird can we get then?
+Pretty much, eh?
+You're welcome.
+Hello there.
+Right.
+[unknown]
+Why do you say that?
+Is it important to you?
+Sure.
+Why do you say that?
+You know how I feel about you...
 0
-52
-HELP
+58
 ABOUTFLUX
 CX5080
 CX3303
@@ -391,7 +432,6 @@ CX3204
 X8883
 halt
 CX266
-CX3263
 CX3474
 CX2552
 X8362
@@ -401,7 +441,6 @@ RUDE1
 CX4813
 GARYNUMAN
 ISPEAK
-ILLTRY
 CX3227
 TELEPLAY
 CNPRSNR
@@ -413,28 +452,40 @@ SAYSORRY
 HAVEADRINK
 CLASSICAL
 ELECTRONICMUSIC
-YOUREWELCOME
-ILOKEYOU
 BYEBYE
 SEX
 X3611
 YES
 DEAD
 WHY1
-NO
 X2772
 CX3242
 CX2612
 MEETYOU1
 NICKNAME
 CX2213
-GOJOE
-TOPIC
 WHEREISFW
 X1359B
-HELLO
 STOPTHISTHING
-1
+DISTRACTION
+GOJOE
+CX1745
+CX3263
+LAWJOKE1
+ILLTRY
+NO
+LAWJOKE1B
+X3846
+CX3325
+YOUREWELCOME
+HELLO
+TOPIC
+MINE
+ILOKEYOU
+2
 YOUSPEAK
+SEX
 #dirt
-#Tue Mar 09 09:43:37 EST 2021
+#Wed Mar 10 09:38:33 EST 2021
+mine=phone number
+nickname=Robby

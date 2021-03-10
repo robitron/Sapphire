@@ -587,9 +587,9 @@ public class sapphire extends Applet implements Runnable {
      else
      {
           try {
-		         //if (System.getProperty("os.name").equals("Mac OS X")) MRJFileUtils.openURL(com);
+		         //NB: for mac   if (System.getProperty("os.name").equals("Mac OS X")) MRJFileUtils.openURL(com);
              P1 = Runtime.getRuntime().exec("C:/Program Files/Internet Explorer/iexplore.exe " + com);
-               //P1 = Runtime.getRuntime().exec("xdg-open " + com);
+               //NB: for linux   P1 = Runtime.getRuntime().exec("xdg-open " + com);
 
           }
              catch (Exception e) {
@@ -1221,7 +1221,7 @@ public static String execCmd(String cmd) {
 
       if (speak==1) {
       try {
-	       //P1 = Runtime.getRuntime().exec( "/usr/bin/say \" " + line + "\"" );
+	       //NB: for mac  P1 = Runtime.getRuntime().exec( "/usr/bin/say \" " + line + "\"" );
          P1 = Runtime.getRuntime().exec( "cscript say.vbs \"" + line + "\"" );
 
 	      //P1.waitFor();
