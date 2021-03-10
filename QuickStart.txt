@@ -1,7 +1,7 @@
 JRL programming QuickStart Revision 09/09/99
 Copyright (C) 1999 Robby Glen Garner
 
-See the file jfred.dat for examples of JFRED programming.
+See the file eagle.erl for examples of EARL programming.
 
 Rule Types:
 
