@@ -1,5 +1,5 @@
 ###
-### JFRED (C) 1997-2006 Robby Glen Garner
+### JFRED (C) 1997-2006 Robby Glen Garner and Paco Xander Nathan
 ###
 ### Landru Edition May 18th, 2009.
 ###
