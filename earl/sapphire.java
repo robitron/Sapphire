@@ -267,7 +267,7 @@ public class sapphire extends Applet implements Runnable {
 			"have you ever heard of ",
 			"do you know of ",
 			"do you know about ",
-            		"what is the meaning of ",
+            "what is the meaning of ",
 			"end-of-list"};
 
 	    setupDatabaseConnection();
