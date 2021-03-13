@@ -73,7 +73,7 @@ public class earl extends Applet implements Runnable {
     // setup rules
 
     grammar = new Grammar();
-    eagle = new EARL(grammar, true, "eagle.erl");
+    eagle = new EARL(grammar, true, "eagle.jrl");
 
     // setup cart, loading an existing cart, if given
 
