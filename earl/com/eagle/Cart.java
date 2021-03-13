@@ -390,10 +390,6 @@ public class Cart extends Properties {
     catch (FileNotFoundException t) {
       f = null;
     }
-    catch (IOException e) {
-      System.err.println(e.getMessage());
-      e.printStackTrace();
-    }
     finally {
       return f;
     }

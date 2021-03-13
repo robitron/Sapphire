@@ -154,7 +154,7 @@ public class sapphire extends Applet implements Runnable {
       setVisible(true);
     }
     else {
-      frame.setTitle("sapphire console");
+      frame.setTitle("Sapphire console");
       frame.add("Center", this);
       frame.pack();
       frame.setSize(900, 500);
@@ -175,8 +175,8 @@ public class sapphire extends Applet implements Runnable {
     System.out.print("loading tight sponge...");
 
     try {
-
-	hal.addDocument("file:///Users/Robby/sapphire/earl/sponge.txt");
+        String halFile = "file://" + dir + System.getProperty("file.separator") + "sponge.txt";
+	    hal.addDocument(halFile);
 
     }
       catch (IOException e) {
@@ -199,8 +199,9 @@ public class sapphire extends Applet implements Runnable {
         } catch (IOException e) {
         }
 
+    OS = System.getProperty("os.name");
 
-    displayString = new String("Operating.\n" + person + " connected.\n\nOperating System: " +  System.getProperty("os.name") + "." );
+    displayString = new String("Operating.\n" + person + " connected.\n\nOperating System: " + OS + "." );
     recordLine(displayString);
     input.setText("");
     input.requestFocus();
@@ -587,10 +588,9 @@ public class sapphire extends Applet implements Runnable {
      else
      {
           try {
-		         //NB: for mac   if (System.getProperty("os.name").equals("Mac OS X")) MRJFileUtils.openURL(com);
-             P1 = Runtime.getRuntime().exec("C:/Program Files/Internet Explorer/iexplore.exe " + com);
-               //NB: for linux   P1 = Runtime.getRuntime().exec("xdg-open " + com);
-
+              if (System.getProperty("os.name").equals("Mac OS X")) P1 = Runtime.getRuntime().exec("open + " + com);
+              else if (System.getProperty("os.name").equals("Linux")) P1 = Runtime.getRuntime().exec("xdg-open " + com);
+              else P1 = Runtime.getRuntime().exec("C:/Program Files/Internet Explorer/iexplore.exe " + com);
           }
              catch (Exception e) {
              System.err.println(e);
@@ -1219,10 +1219,13 @@ public static String execCmd(String cmd) {
     record.setSelectionStart(text.length());
     record.setSelectionEnd(text.length());
 
+    // C3P0
+
       if (speak==1) {
       try {
-	       //NB: for mac  P1 = Runtime.getRuntime().exec( "/usr/bin/say \" " + line + "\"" );
-         P1 = Runtime.getRuntime().exec( "cscript say.vbs \"" + line + "\"" );
+          if (System.getProperty("os.name").equals("Mac OS X")) P1 = Runtime.getRuntime().exec( "say \" " + line + "\"" );
+          else if (System.getProperty("os.name").equals("Linux")) P1 = Runtime.getRuntime().exec( "/usr/bin/say \" " + line + "\"" );
+          else P1 = Runtime.getRuntime().exec( "cscript say.vbs \"" + line + "\"" );
 
 	      //P1.waitFor();
        }
