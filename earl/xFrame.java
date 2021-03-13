@@ -15,8 +15,4 @@ public class xFrame extends Frame {
         });
     }
 
-    public static void main(String[] args) {
-        new xFrame();
-
-    }
 }
