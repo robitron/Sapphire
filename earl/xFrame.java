@@ -1,26 +1,22 @@
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowAdapter;
+public class xFrame extends Frame {
 
-public class xFrame extends Frame 
-{
-   public xFrame () {
-     super();
-   }
 
-   public xFrame(String title) {
-      super(title);
-   }
+    xFrame() {
 
-   public boolean handleEvent(Event evt) {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                System.exit(0);
+            }
+        });
+    }
 
-     if (evt.id==Event.WINDOW_DESTROY) {
-        Component c[]=getComponents();
-        for (int x=0;x<c.length;x++)
-           c[x].handleEvent(evt);
-           dispose();
-           System.exit(0);
-           return false;
-     }
-     
-     return super.handleEvent(evt);
-  }
+    public static void main(String[] args) {
+        new xFrame();
+
+    }
 }
