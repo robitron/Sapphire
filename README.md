@@ -8,7 +8,7 @@ Sapphire is based on EARL and JFRED by Paco Xander Nathan ( https://github.com/c
 Java sapphire, the main program.
 
 # Portable
-This release is optimized for Windows 10. With small editing, works fine in linux and Mac OS X. The Browser_Spawn method in sapphire.java uses Internet Explorer. See remarks to change this for linux or Mac OS X on your computer. Also, the text to speech is set for Windows, but will also work in linux and Mac OS X by editing sapphire.java so that speech is performed from the command line as sapphire runs.
+This release works fine in linux, Mac OS X, and Windows 10. There is a known bug in loading the JMegaHal source text in Windows 10.
 
 # Description
 sapphire.java is a multi-threaded Java application for desktop.
