@@ -588,7 +588,7 @@ public class sapphire extends Applet implements Runnable {
      else
      {
           try {
-              if (System.getProperty("os.name").equals("Mac OS X")) P1 = Runtime.getRuntime().exec("open + " + com);
+              if (System.getProperty("os.name").equals("Mac OS X")) P1 = Runtime.getRuntime().exec("open " + com);
               else if (System.getProperty("os.name").equals("Linux")) P1 = Runtime.getRuntime().exec("xdg-open " + com);
               else P1 = Runtime.getRuntime().exec("C:/Program Files/Internet Explorer/iexplore.exe " + com);
           }
