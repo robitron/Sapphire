@@ -175,13 +175,17 @@ public class sapphire extends Applet implements Runnable {
     System.out.print("loading tight sponge...");
 
     try {
-        String halFile = "file://" + dir + System.getProperty("file.separator") + "sponge.txt";
+          String halFile = "file://" + dir + "/sponge.txt";
+          if (System.getProperty("os.name").contains("Windows")) {
+            halFile = stringreplace(halFile, "C:", "");
+            halFile = stringreplace(halFile, "\\", "/");
+          }
+        System.out.println(halFile);
 	    hal.addDocument(halFile);
-
     }
-      catch (IOException e) {
-	  System.err.println("Hal: I/O error - " + e.getMessage());
-	  e.printStackTrace();
+    catch (IOException e) {
+	     System.err.println("Hal: I/O error - " + e.getMessage());
+	     e.printStackTrace();
     }
 
     System.out.println("Finished.\n");
@@ -588,7 +592,7 @@ public class sapphire extends Applet implements Runnable {
      else
      {
           try {
-              if (System.getProperty("os.name").equals("Mac OS X")) P1 = Runtime.getRuntime().exec("open " + com);
+              if (System.getProperty("os.name").equals("Mac OS X")) P1 = Runtime.getRuntime().exec("open + " + com);
               else if (System.getProperty("os.name").equals("Linux")) P1 = Runtime.getRuntime().exec("xdg-open " + com);
               else P1 = Runtime.getRuntime().exec("C:/Program Files/Internet Explorer/iexplore.exe " + com);
           }
