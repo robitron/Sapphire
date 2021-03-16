@@ -8,7 +8,7 @@ Sapphire is based on EARL and JFRED by Paco Xander Nathan ( https://github.com/c
 Java sapphire, the main program.
 
 # Portable
-This release works fine in linux, Mac OS X, and Windows 10. There is a known bug in loading the JMegaHal source text in Windows 10.
+This release works fine in linux, Mac OS X, and Windows.
 
 # Description
 sapphire.java is a multi-threaded Java application for desktop.
