@@ -462,7 +462,7 @@ public class sapphire extends Applet implements Runnable {
     	response = earlRez;
     	status = earlRez;
     }
-    else response = earlRez += " " + response;
+
 
 
 
