@@ -1,5 +1,5 @@
 # Sapphire
-Sapphire Expect and Respond Language. A chat bot written by Robby Garner.
+Sapphire Expect and Respond Language. A chat bot written by Robby Garner. Prototype for the Pocket Pen Pal series.
 
 # Credits
 Sapphire is based on EARL and JFRED by Paco Xander Nathan ( https://github.com/ceteri ) and Robby Glen Garner.
