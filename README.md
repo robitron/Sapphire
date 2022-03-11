@@ -3,6 +3,7 @@ Sapphire Expect and Respond Language. A chat bot written by Robby Garner. Protot
 
 # Credits
 Sapphire is based on EARL and JFRED by Paco Xander Nathan ( https://github.com/ceteri ) and Robby Glen Garner.
+EARL is a product of Institute of Mimetic Sciences, Inc.
 
 # Usage
 Java sapphire, the main program.
